@@ -1,0 +1,9 @@
+import { UserAttribute } from './../interface/attribute.interface';
+import { BaseRepository } from './../base/BaseRepository';
+import { EntityRepository } from "typeorm";
+import { User } from "../entity/User.entity";
+
+@EntityRepository(User)
+export class UserRepository extends BaseRepository<User, UserAttribute>  {
+
+}
