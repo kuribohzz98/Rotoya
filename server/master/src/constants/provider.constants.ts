@@ -1,3 +1,3 @@
 export enum ProviderRepository {
-    USER_REPOSITORY = "USER_REPOSITORY"
+    PRC_REDIS_PROVIDER = "PRC_REDIS_PROVIDER"
 }

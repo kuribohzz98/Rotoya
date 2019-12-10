@@ -1,14 +1,14 @@
-import { UserAttribute } from './../interface/attribute.interface';
 import { UserService } from './../service/user.service';
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller()
+@ApiTags('User')
+@Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService
   ) {}
 
-  // @Post('/auth/signUp')
   // async signUp(@Body() userAttribute: UserAttribute) {
   //   const user = await this.userService.signUp(userAttribute);
   //   if (!user) {
