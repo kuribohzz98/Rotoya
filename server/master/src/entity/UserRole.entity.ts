@@ -1,7 +1,7 @@
 import { UserRoleAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
 import { Role } from './Role.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, PrimaryColumn } from "typeorm";
 import { User } from './User.entity';
 
 @Entity()
@@ -9,14 +9,14 @@ export class UserRole extends BaseEntity<UserRoleAttribute> implements UserRoleA
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({
+    @PrimaryColumn({
         type: 'int',
         width: 11,
         nullable: false
     })
     userId: number;
 
-    @Column({
+    @PrimaryColumn({
         type: 'int',
         width: 11,
         nullable: false
@@ -31,8 +31,10 @@ export class UserRole extends BaseEntity<UserRoleAttribute> implements UserRoleA
     createdAt: Date;
 
     @ManyToOne(type => Role, role => role.userRoles)
+    @JoinColumn({ name: "roleId" })
     role: Role;
 
     @ManyToOne(type => User, user => user.userRoles)
+    @JoinColumn({ name: "userId" })
     user: User;
 }

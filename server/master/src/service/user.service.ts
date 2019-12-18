@@ -1,3 +1,4 @@
+import { UserAttribute } from './../interface/attribute.interface';
 import { UserRepository } from './../repository/user.repository';
 import { Injectable } from '@nestjs/common';
 
@@ -9,5 +10,9 @@ export class UserService {
 
     async getUserByName(username: any) {
         return this.userRepository.getOneByOptions({ username });
+    }
+
+    async getInfoUser(userAttribute: UserAttribute) {
+        return this.userRepository.getInfoUser(userAttribute);
     }
 }

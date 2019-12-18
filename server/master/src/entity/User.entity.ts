@@ -1,7 +1,8 @@
+import { SportCentre } from './SportCentre.entity';
 import { BaseEntity } from './../base/BaseEntity';
 import { UserAttribute } from '../interface/attribute.interface';
 import { UserRole } from './UserRole.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany, JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { EUserStatus } from "./db.type";
 import { UserInfo } from "./UserInfo.entity";
 import { Role } from "./Role.entity";
@@ -37,7 +38,7 @@ export class User extends BaseEntity<UserAttribute> implements UserAttribute {
     @Column({
         type: 'enum',
         enum: EUserStatus,
-        nullable: false,
+        nullable: true,
         default: EUserStatus.ACTIVE
     })
     status: EUserStatus;
@@ -68,15 +69,29 @@ export class User extends BaseEntity<UserAttribute> implements UserAttribute {
     })
     updatedAt: Date;
 
-    @OneToOne(type => UserInfo)
-    // @JoinColumn()
+    @OneToOne(type => UserInfo, userInfo => userInfo.user)
     userInfo: UserInfo;
 
-    @OneToOne(type => UserMeta)
-    // @JoinColumn()
+    @OneToOne(type => UserMeta, userMeta => userMeta.user)
     userMeta: UserMeta;
 
-    @OneToMany(type => Role, role => role)
+    @ManyToMany(type => Role, role => role.users)
+    @JoinTable({
+        name: "user_role",
+        // joinColumn: {
+        //     name: "role",
+        //     referencedColumnName: "id"
+        // },
+        // inverseJoinColumn: {
+        //     name: "user",
+        //     referencedColumnName: "id"
+        // }
+    })
+    roles: Role[];
+
+    @OneToMany(type => UserRole, userRole => userRole.user)
     userRoles: UserRole[];
 
+    @OneToMany(type => SportCentre, sportCentre => sportCentre.user)
+    sportCentres: SportCentre[];
 }

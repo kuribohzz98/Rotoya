@@ -1,4 +1,4 @@
-import { UserLoginDto } from './../dto/user.dto';
+import { UserLoginDto, UserProfileDto } from './../dto/user.dto';
 import { EUserStatus } from './../entity/db.type';
 import { UserAttribute } from './../interface/attribute.interface';
 import { UserService } from './../service/user.service';
@@ -15,7 +15,8 @@ export class AuthService {
 
   async login(userLogin: UserLoginDto) {
     try {
-      const user = await this.userService.getUserByName(userLogin.username);
+      const user = await this.userService.getInfoUser({ username: userLogin.username });
+      console.log(user);
       if (!user) {
         throw new Error('User not found');
       }
@@ -25,6 +26,7 @@ export class AuthService {
       const payload = { username: user.username, sub: user.id };
       return {
         access_token: this.jwtService.sign(payload),
+        user: new UserProfileDto(user)
       };
     }
     catch (e) {

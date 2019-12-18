@@ -1,6 +1,7 @@
+import { Module } from '@nestjs/common';
+import { MapModule } from './module/map.module';
 import { RpcModule } from './module/prc.module';
 import { ConfigService } from './config/config.service';
-import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,7 +15,8 @@ import { UserModule } from './module/user.module';
     TypeOrmModule.forRoot(),
     AuthModule,
     UserModule,
-    RpcModule
+    RpcModule,
+    MapModule
   ],
   controllers: [AppController],
   providers: [

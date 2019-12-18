@@ -8,10 +8,10 @@
    "entities": [
       "src/**/*.entity{.ts,.js}"
    ],
-   "synchronize": true,
+   "synchronize": false,
    "migrationsTableName": "custom_migration_table",
    "migrations": [
-      "src/migration/*.ts"
+      "src/migration/*{.ts,.js}"
    ],
    "cli": {
       "migrationsDir": "src/migration",

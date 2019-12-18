@@ -4,7 +4,7 @@ import { Transport } from '@nestjs/common/enums/transport.enum';
 
 async function bootstrap() {
   const nestApp = await NestFactory.create(AppModule);
-  // nestApp.listen(3000);
+  nestApp.listen(3001);
   const urlRedis = nestApp.get('URL_REDIS');
   const app = nestApp.connectMicroservice({
     transport: Transport.REDIS,

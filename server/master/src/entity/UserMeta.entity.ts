@@ -1,6 +1,6 @@
 import { UserMetaAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, PrimaryColumn } from "typeorm";
 import { User } from "./User.entity";
 
 @Entity()
@@ -8,7 +8,7 @@ export class UserMeta extends BaseEntity<UserMetaAttribute> implements UserMetaA
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({
+    @PrimaryColumn({
         type: 'int',
         width: 11,
         unique: true,
@@ -35,6 +35,7 @@ export class UserMeta extends BaseEntity<UserMetaAttribute> implements UserMetaA
     })
     updatedAt: Date;
 
-    @OneToOne(type => User)
+    @OneToOne(type => User, user => user.userMeta)
+    @JoinColumn({name: 'userId'})
     user: User;
 }

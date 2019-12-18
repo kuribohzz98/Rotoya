@@ -1,5 +1,6 @@
+import { ModelConstants } from './../constants/model.constants';
 import { BaseEntity } from './BaseEntity';
-import { Repository, ObjectLiteral, Connection } from "typeorm";
+import { Repository, ObjectLiteral, Connection, Brackets } from "typeorm";
 
 export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> extends Repository<T> {
     constructor(
@@ -10,6 +11,10 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
 
     getRepository(entity: string) {
         return this.connection.getRepository(entity);
+    }
+
+    get models() {
+        return ModelConstants;
     }
 
     async getById(id: number): Promise<T> {

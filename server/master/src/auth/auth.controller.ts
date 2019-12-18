@@ -26,6 +26,7 @@ export class AuthController {
 
     @Post('login')
     async login(@Body() userLogin: UserLoginDto) {
+        console.log(userLogin);
         const user = await this.authService.login(userLogin);
         if (!user.access_token) {
             throw new HttpException({

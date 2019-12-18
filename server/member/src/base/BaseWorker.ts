@@ -3,6 +3,7 @@ import {
     isMainThread,
     MessageChannel
 } from 'worker_threads';
+import { TypeWorkerData } from './../interface/type.interface';
 const { port1, port2 } = new MessageChannel();
 import * as path from 'path';
 
@@ -11,11 +12,13 @@ export type TypeFilePathChild = {
     __path: string;
 }
 
-export abstract class BaseWorker {
+export abstract class BaseWorker<T = any> {
     private _filePathChild: string;
+    public _workerData: T;
 
-    constructor() {
+    constructor(data?: T) {
         this._filePathChild = this.initPath();
+        this._workerData = data;
         this.init();
     }
 
@@ -38,9 +41,10 @@ export abstract class BaseWorker {
         worker.once('exit', this.handlerExit.bind(this));
     }
 
-    protected initWorkerData() {
+    protected initWorkerData(): TypeWorkerData<T> {
         return {
-            path: this._filePathChild
+            path: this._filePathChild,
+            data: this._workerData
         };
     }
 

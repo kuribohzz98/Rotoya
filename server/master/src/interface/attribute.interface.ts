@@ -44,3 +44,59 @@ export interface UserRoleAttribute {
     roleId?: number;
     createdAt?: Date;
 }
+
+export interface SportAttribute {
+    id?: number;
+    name?: string;
+    code?: string;
+    createdAt?: Date;
+}
+
+export interface SportCentreAttribute {
+    id?: number;
+    userId?: number;
+    name?: string;
+    code?: string;
+    country?: string;
+    city?: string;
+    district?: string;
+    commune?: string;
+    address?: string;
+    latitude?: number;
+    longitude?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface SportGroundAttribute {
+    id?: number;
+    sportCentreId?: number;
+    sportId?: number;
+    name?: string;
+    code?: string;
+    type?: string;
+    avatar?: string;
+    quantity?: number;
+    quantityInStock?: number;
+    description?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface SportEquipmentAttribute {
+    id?: number;
+    sportCentreId?: number;
+    name?: string;
+    description?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface SportGroundEquipmentAttribute {
+    id?: number;
+    sportEquipmentId?: number;
+    sportGroundId?: number;
+    quantity?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+}

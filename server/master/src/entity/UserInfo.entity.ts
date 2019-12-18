@@ -1,6 +1,7 @@
+import { EUserInfoGender } from './db.type';
 import { UserInfoAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, PrimaryColumn } from "typeorm";
 import { User } from "./User.entity";
 
 @Entity()
@@ -8,7 +9,7 @@ export class UserInfo extends BaseEntity<UserInfoAttribute> implements UserInfoA
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({
+    @PrimaryColumn({
         type: 'int',
         width: 11,
         unique: true,
@@ -29,6 +30,13 @@ export class UserInfo extends BaseEntity<UserInfoAttribute> implements UserInfoA
         nullable: false
     })
     lastName: string;
+
+    @Column({
+        type: 'enum',
+        enum: EUserInfoGender,
+        nullable: true,
+        default: EUserInfoGender.Other
+    })
 
     @Column({
         type: 'int',
@@ -63,6 +71,7 @@ export class UserInfo extends BaseEntity<UserInfoAttribute> implements UserInfoA
     })
     updatedAt: Date;
 
-    @OneToOne(type => User)
+    @OneToOne(type => User, user => user.userInfo)
+    @JoinColumn({name: 'userId'})
     user: User;
 }

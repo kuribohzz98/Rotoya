@@ -2,6 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { TestWorker } from './worker/TestWorker';
 import { MessagePattern } from '@nestjs/microservices';
+
 @Controller()
 export class AppController {
   constructor(

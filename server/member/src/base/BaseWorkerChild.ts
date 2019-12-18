@@ -1,11 +1,12 @@
+import { TypeWorkerData } from './../interface/type.interface';
 import {
     isMainThread,
     workerData,
     parentPort
 } from 'worker_threads';
 
-export class BaseWorkerChild {
-    private _workerData: any;
+export class BaseWorkerChild<T = any> {
+    private _workerData: TypeWorkerData<T>;
 
     constructor() {
         this._workerData = workerData;

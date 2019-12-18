@@ -1,9 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class createTableUser1575451934332 implements MigrationInterface {
+export class createTableSportCentre1576608865717 implements MigrationInterface {
+
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
-            name: "user",
+            name: "sport_centre",
             columns: [
                 {
                     name: "id",
@@ -15,40 +16,65 @@ export class createTableUser1575451934332 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "username",
-                    type: "varchar",
-                    length: "45",
-                    isUnique: true,
-                    isNullable: false
-                },
-                {
-                    name: "password",
-                    type: "varchar",
-                    length: "255",
-                    isNullable: false
-                },
-                {
-                    name: "type",
-                    type: "varchar",
-                    length: "45",
-                    isNullable: true
-                },
-                {
-                    name: "status",
-                    type: "enum",
-                    enum: ["ACTIVE", "DEACTIVE"],
-                    isNullable: true
-                },
-                {
-                    name: "salt",
-                    type: "varchar",
-                    length: "255",
-                    isNullable: true
-                },
-                {
-                    name: "iterations",
+                    name: "userId",
                     type: "int",
                     width: 11,
+                    isNullable: false
+                },
+                {
+                    name: "name",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: false
+                },
+                {
+                    name: "code",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: true
+                },
+                {
+                    name: "country",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: false
+                },
+                {
+                    name: "city",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: false
+                },
+                {
+                    name: "district",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: false
+                },
+                {
+                    name: "commune",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: true
+                },
+                {
+                    name: "address",
+                    type: "varchar",
+                    length: "255",
+                    isNullable: true
+                },
+                {
+                    name: "latitude",
+                    type: "float",
+                    precision: 12,
+                    scale: 8,
+                    isNullable: true
+                },
+                {
+                    name: "longitude",
+                    type: "float",
+                    precision: 12,
+                    scale: 8,
                     isNullable: true
                 },
                 {
@@ -63,12 +89,20 @@ export class createTableUser1575451934332 implements MigrationInterface {
                     isNullable: false,
                     default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
                 }
+            ],
+            foreignKeys: [
+                {
+                    name: 'user-sport_centre',
+                    columnNames: ['userId'],
+                    referencedTableName: 'user',
+                    referencedColumnNames: ['id']
+                }
             ]
-        }), true);
+        }), true)
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropTable("user", true, true);
+        await queryRunner.dropTable("sport_centre", true, true);
     }
 
 }

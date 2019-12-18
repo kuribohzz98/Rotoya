@@ -1,3 +1,4 @@
+import { MapModule } from './module/map.module';
 import { ConfigService } from './config/config.service';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from './config/config.module';
@@ -9,7 +10,8 @@ import { TestWorker } from './worker/TestWorker';
 @Module({
   imports: [
     ConfigModule,
-    DatabaseModule
+    DatabaseModule,
+    MapModule
     // MongooseModule.forRootAsync('mongodb://0.0.0.0:27017/rotoya', {useNewUrlParser: true})
   ],
   controllers: [AppController],

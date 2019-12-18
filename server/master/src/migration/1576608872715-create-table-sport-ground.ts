@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class createTableUserInfo1575461374375 implements MigrationInterface {
+export class createTableSportGround1576608872715 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
-            name: "user_info",
+            name: "sport_ground",
             columns: [
                 {
                     name: "id",
@@ -16,44 +16,57 @@ export class createTableUserInfo1575461374375 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "userId",
+                    name: "sportCentreId",
                     type: "int",
                     width: 11,
-                    isUnique: true,
                     isNullable: false
                 },
                 {
-                    name: "firstName",
+                    name: "sportId",
+                    type: "int",
+                    width: 11,
+                    isNullable: false
+                },
+                {
+                    name: "name",
                     type: "varchar",
                     length: "45",
                     isNullable: false
                 },
                 {
-                    name: "lastName",
+                    name: "code",
                     type: "varchar",
                     length: "45",
-                    isNullable: false
-                },
-                {
-                    name: "gender",
-                    type: "enum",
-                    enum: ["Other", "Male", "Female"],
                     isNullable: true
                 },
                 {
-                    name: "phone",
-                    type: "int",
-                    width: 11,
+                    name: "type",
+                    type: "varchar",
+                    length: "45",
                     isNullable: true
                 },
                 {
-                    name: "address",
+                    name: "avatar",
                     type: "varchar",
                     length: "255",
                     isNullable: true
                 },
                 {
-                    name: "email",
+                    name: "quantity",
+                    type: "int",
+                    width: 4,
+                    isNullable: false,
+                    default: 0
+                },
+                {
+                    name: "quantityInStock",
+                    type: "int",
+                    width: 4,
+                    isNullable: false,
+                    default: 0
+                },
+                {
+                    name: "description",
                     type: "varchar",
                     length: "255",
                     isNullable: true
@@ -73,9 +86,15 @@ export class createTableUserInfo1575461374375 implements MigrationInterface {
             ],
             foreignKeys: [
                 {
-                    name: 'user-user_info',
-                    columnNames: ['userId'],
-                    referencedTableName: 'user',
+                    name: 'sport_centre-sport_ground',
+                    columnNames: ['sportCentreId'],
+                    referencedTableName: 'sport_centre',
+                    referencedColumnNames: ['id']
+                },
+                {
+                    name: 'sport-sport_ground',
+                    columnNames: ['sportId'],
+                    referencedTableName: 'sport',
                     referencedColumnNames: ['id']
                 }
             ]
@@ -83,7 +102,7 @@ export class createTableUserInfo1575461374375 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropTable('user_info', true, true);
+        await queryRunner.dropTable("sport_ground", true, true);
     }
 
 }

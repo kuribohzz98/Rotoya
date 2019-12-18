@@ -1,8 +1,9 @@
 import { BaseWorkerChild } from '../base/BaseWorkerChild';
+import { toRadian } from 'src/helper/fomular';
 
 class TestWorkerChild extends BaseWorkerChild {
   init () {
-    this.dataExit('__hihi___');
+    this.dataExit(toRadian(16));
   }
 
 }
