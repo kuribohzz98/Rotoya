@@ -1,10 +1,16 @@
 import { RoleAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToMany,
+    ManyToMany
+} from "typeorm";
 import { UserRole } from './UserRole.entity';
 import { User } from './User.entity';
 
-@Entity()
+@Entity({ name: 'role' })
 export class Role extends BaseEntity<RoleAttribute> implements RoleAttribute {
     @PrimaryGeneratedColumn()
     id: number;

@@ -16,7 +16,7 @@ export class createTableSportEquipment1576615308131 implements MigrationInterfac
                     isNullable: false
                 },
                 {
-                    name: "sportCentreId",
+                    name: "sportCenterId",
                     type: "int",
                     width: 11,
                     isNullable: false
@@ -48,9 +48,9 @@ export class createTableSportEquipment1576615308131 implements MigrationInterfac
             ],
             foreignKeys: [
                 {
-                    name: 'sport_centre-sport_equipment',
-                    columnNames: ['sportCentreId'],
-                    referencedTableName: 'sport_centre',
+                    name: 'sport_center-sport_equipment',
+                    columnNames: ['sportCenterId'],
+                    referencedTableName: 'sport_center',
                     referencedColumnNames: ['id']
                 }
             ]

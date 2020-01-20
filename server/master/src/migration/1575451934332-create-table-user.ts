@@ -37,7 +37,8 @@ export class createTableUser1575451934332 implements MigrationInterface {
                     name: "status",
                     type: "enum",
                     enum: ["ACTIVE", "DEACTIVE"],
-                    isNullable: true
+                    isNullable: true,
+                    default: "'ACTIVE'"
                 },
                 {
                     name: "salt",

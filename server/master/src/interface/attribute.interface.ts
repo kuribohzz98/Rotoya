@@ -19,6 +19,7 @@ export interface UserInfoAttribute {
     lastName?: string;
     phone?: number;
     address?: string;
+    gender?: string;
     email?: string;
     createdAt?: Date;
     updatedAt?: Date;
@@ -52,7 +53,7 @@ export interface SportAttribute {
     createdAt?: Date;
 }
 
-export interface SportCentreAttribute {
+export interface SportCenterAttribute {
     id?: number;
     userId?: number;
     name?: string;
@@ -62,15 +63,18 @@ export interface SportCentreAttribute {
     district?: string;
     commune?: string;
     address?: string;
+    avatar?: string;
     latitude?: number;
     longitude?: number;
+    timeOpen?: number;
+    timeClose?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
 
 export interface SportGroundAttribute {
     id?: number;
-    sportCentreId?: number;
+    sportCenterId?: number;
     sportId?: number;
     name?: string;
     code?: string;
@@ -85,7 +89,7 @@ export interface SportGroundAttribute {
 
 export interface SportEquipmentAttribute {
     id?: number;
-    sportCentreId?: number;
+    sportCenterId?: number;
     name?: string;
     description?: string;
     createdAt?: Date;
@@ -97,6 +101,46 @@ export interface SportGroundEquipmentAttribute {
     sportEquipmentId?: number;
     sportGroundId?: number;
     quantity?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface SportCenterSportAttribute {
+    id?: number;
+    sportCenterId?: number;
+    sportId?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface SportGroundTimeSlotAttribute {
+    id?: number;
+    sportGroundId?: number;
+    quantity?: number;
+    startTime?: number;
+    endTime?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface BookingAttribute {
+    id?: number;
+    userId?: number;
+    sportGroundId?: number;
+    sportCenterId?: number;
+    timeSlotId?: number;
+    detail?: string;
+    equipment?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface PaymentAttribute {
+    id?: number;
+    bookingId?: number;
+    amount?: number;
+    currency?: string;
+    qrCode?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }

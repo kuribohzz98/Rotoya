@@ -4,7 +4,7 @@ export class createTableSportCentre1576608865717 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
-            name: "sport_centre",
+            name: "sport_center",
             columns: [
                 {
                     name: "id",
@@ -64,6 +64,12 @@ export class createTableSportCentre1576608865717 implements MigrationInterface {
                     isNullable: true
                 },
                 {
+                    name: "avatar",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: true
+                },
+                {
                     name: "latitude",
                     type: "float",
                     precision: 12,
@@ -76,6 +82,22 @@ export class createTableSportCentre1576608865717 implements MigrationInterface {
                     precision: 12,
                     scale: 8,
                     isNullable: true
+                },
+                {
+                    name: "timeOpen",
+                    type: "float",
+                    precision: 4,
+                    scale: 2,
+                    isNullable: false,
+                    default: "'0.00'"
+                },
+                {
+                    name: "timeClose",
+                    type: "float",
+                    precision: 4,
+                    scale: 2,
+                    isNullable: false,
+                    default: "'0.00'"
                 },
                 {
                     name: "createdAt",
@@ -92,7 +114,7 @@ export class createTableSportCentre1576608865717 implements MigrationInterface {
             ],
             foreignKeys: [
                 {
-                    name: 'user-sport_centre',
+                    name: 'user-sport_center',
                     columnNames: ['userId'],
                     referencedTableName: 'user',
                     referencedColumnNames: ['id']
@@ -102,7 +124,7 @@ export class createTableSportCentre1576608865717 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropTable("sport_centre", true, true);
+        await queryRunner.dropTable("sport_center", true, true);
     }
 
 }

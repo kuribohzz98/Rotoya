@@ -38,6 +38,9 @@ class UserInfo extends DtoMapper {
 
     @MapFrom()
     email: string;
+
+    @MapFrom()
+    gender: string;
 }
 
 class UserMeta extends DtoMapper {

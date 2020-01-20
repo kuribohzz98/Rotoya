@@ -38,7 +38,8 @@ export class createTableUserInfo1575461374375 implements MigrationInterface {
                     name: "gender",
                     type: "enum",
                     enum: ["Other", "Male", "Female"],
-                    isNullable: true
+                    isNullable: true,
+                    default: "'Other'"
                 },
                 {
                     name: "phone",

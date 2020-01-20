@@ -1,3 +1,4 @@
+import { ConfigService } from './../config/config.service';
 import { UserLoginDto, UserProfileDto } from './../dto/user.dto';
 import { EUserStatus } from './../entity/db.type';
 import { UserAttribute } from './../interface/attribute.interface';
@@ -5,12 +6,14 @@ import { UserService } from './../service/user.service';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
+import * as fs from 'fs';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private readonly configService: ConfigService
   ) { }
 
   async login(userLogin: UserLoginDto) {
@@ -24,9 +27,16 @@ export class AuthService {
         throw new Error('Incorrect password');
       }
       const payload = { username: user.username, sub: user.id };
+      const userProfile = new UserProfileDto(user);
+      if (userProfile.userMeta.avatar) {
+        const img = fs.readFileSync(this.configService.get('path_file_upload') + userProfile.userMeta.avatar);
+        if (img) {
+          userProfile.userMeta.avatar = img.toString('base64');
+        }
+      }
       return {
         access_token: this.jwtService.sign(payload),
-        user: new UserProfileDto(user)
+        user: userProfile
       };
     }
     catch (e) {

@@ -17,9 +17,12 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
       // signOptions: { expiresIn: '60s' },
     }),
-    UserModule,
+    UserModule
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [
+    AuthService,
+    JwtStrategy
+  ],
   controllers: [AuthController],
   exports: [AuthService]
 })

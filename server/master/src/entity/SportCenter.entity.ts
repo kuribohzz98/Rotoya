@@ -1,12 +1,25 @@
 import { SportEquipment } from './SportEquipment.entity';
 import { SportGround } from './SportGround.entity';
 import { User } from './User.entity';
-import { SportCentreAttribute } from './../interface/attribute.interface';
-import { BaseEntity } from './../base/BaseEntity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, PrimaryColumn } from "typeorm";
+import { SportCenterAttribute } from '../interface/attribute.interface';
+import { BaseEntity } from '../base/BaseEntity';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    OneToMany,
+    JoinColumn,
+    PrimaryColumn,
+    ManyToMany,
+    JoinTable
+} from "typeorm";
+import { Sport } from './Sport.entity';
+import { SportCenterSport } from './SportCenterSport.entity';
+import { Booking } from './Booking.entity';
 
-@Entity()
-export class SportCentre extends BaseEntity<SportCentreAttribute> implements SportCentreAttribute {
+@Entity({ name: 'sport_center' })
+export class SportCenter extends BaseEntity<SportCenterAttribute> implements SportCenterAttribute {
     @PrimaryGeneratedColumn()
     id?: number;
 
@@ -67,6 +80,13 @@ export class SportCentre extends BaseEntity<SportCentreAttribute> implements Spo
     address?: string;
 
     @Column({
+        type: 'varchar',
+        length: '45',
+        nullable: true
+    })
+    avatar?: string;
+
+    @Column({
         type: 'float',
         precision: 12,
         scale: 8,
@@ -83,6 +103,24 @@ export class SportCentre extends BaseEntity<SportCentreAttribute> implements Spo
     longitude?: number;
 
     @Column({
+        type: 'float',
+        precision: 4,
+        scale: 2,
+        nullable: false,
+        default: "'0.00'"
+    })
+    timeOpen?: number;
+
+    @Column({
+        type: 'float',
+        precision: 4,
+        scale: 2,
+        nullable: false,
+        default: "'0.00'"
+    })
+    timeClose?: number;
+
+    @Column({
         type: 'datetime',
         default: () => 'CURRENT_TIMESTAMP'
     })
@@ -94,14 +132,29 @@ export class SportCentre extends BaseEntity<SportCentreAttribute> implements Spo
     })
     updatedAt: Date;
 
-    @ManyToOne(type => User, user => user.sportCentres)
+    @ManyToOne(type => User, user => user.sportCenters)
     @JoinColumn({ name: 'userId' })
     user: User;
 
-    @OneToMany(type => SportGround, sportGround => sportGround.sportCentre)
+    @OneToMany(type => SportGround, sportGround => sportGround.sportCenter)
     sportGrounds: SportGround[];
 
-    @OneToMany(type => SportEquipment, sportEquipment => sportEquipment.sportCentre)
+    @OneToMany(type => SportEquipment, sportEquipment => sportEquipment.sportCenter)
     sportEquipments: SportEquipment[];
 
+    @ManyToMany(type => Sport, sport => sport.sportCenters)
+    @JoinTable({
+        name: "sport_sportcenter",
+        joinColumn: {
+            name: 'sportCenterId',
+            referencedColumnName: 'id'
+        }
+    })
+    sports: Sport[];
+
+    @OneToMany(type => SportCenterSport, sportCenterSport => sportCenterSport.sportCenter)
+    sportCenterSports: SportCenterSport[];
+
+    @OneToMany(type => Booking, booking => booking.sportCenter)
+    bookings: Booking[];
 }

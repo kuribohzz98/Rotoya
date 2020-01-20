@@ -1,9 +1,16 @@
 import { UserMetaAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, PrimaryColumn } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToOne,
+    JoinColumn,
+    PrimaryColumn
+} from "typeorm";
 import { User } from "./User.entity";
 
-@Entity()
+@Entity({ name: 'user_meta' })
 export class UserMeta extends BaseEntity<UserMetaAttribute> implements UserMetaAttribute {
     @PrimaryGeneratedColumn()
     id: number;
@@ -36,6 +43,6 @@ export class UserMeta extends BaseEntity<UserMetaAttribute> implements UserMetaA
     updatedAt: Date;
 
     @OneToOne(type => User, user => user.userMeta)
-    @JoinColumn({name: 'userId'})
+    @JoinColumn({ name: 'userId' })
     user: User;
 }

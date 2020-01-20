@@ -1,14 +1,23 @@
-import { SportCentre } from './SportCentre.entity';
+import { SportCenter } from './SportCenter.entity';
 import { BaseEntity } from './../base/BaseEntity';
 import { UserAttribute } from '../interface/attribute.interface';
 import { UserRole } from './UserRole.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany, JoinTable, ManyToMany, ManyToOne } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToOne,
+    OneToMany,
+    JoinTable,
+    ManyToMany
+} from "typeorm";
 import { EUserStatus } from "./db.type";
 import { UserInfo } from "./UserInfo.entity";
 import { Role } from "./Role.entity";
 import { UserMeta } from './UserMeta.entity';
+import { Booking } from './Booking.entity';
 
-@Entity()
+@Entity({ name: 'user' })
 export class User extends BaseEntity<UserAttribute> implements UserAttribute {
     @PrimaryGeneratedColumn()
     id: number;
@@ -78,10 +87,10 @@ export class User extends BaseEntity<UserAttribute> implements UserAttribute {
     @ManyToMany(type => Role, role => role.users)
     @JoinTable({
         name: "user_role",
-        // joinColumn: {
-        //     name: "role",
-        //     referencedColumnName: "id"
-        // },
+        joinColumn: {
+            name: 'userId',
+            referencedColumnName: 'id'
+        }
         // inverseJoinColumn: {
         //     name: "user",
         //     referencedColumnName: "id"
@@ -92,6 +101,9 @@ export class User extends BaseEntity<UserAttribute> implements UserAttribute {
     @OneToMany(type => UserRole, userRole => userRole.user)
     userRoles: UserRole[];
 
-    @OneToMany(type => SportCentre, sportCentre => sportCentre.user)
-    sportCentres: SportCentre[];
+    @OneToMany(type => SportCenter, sportCenter => sportCenter.user)
+    sportCenters: SportCenter[];
+
+    @OneToMany(type => Booking, booking => booking.user)
+    bookings: Booking[];
 }

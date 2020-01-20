@@ -4,6 +4,7 @@ import { initSwagger } from './swagger/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('/api/rotoya');
   initSwagger(app);
   const port = app.get('PORT');
   await app.listen(port);

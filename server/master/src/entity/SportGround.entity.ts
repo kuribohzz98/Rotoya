@@ -1,12 +1,25 @@
+import { SportGroundTimeSlot } from './SportGroundTimeSlot.entity';
 import { SportEquipment } from './SportEquipment.entity';
-import { SportCentre } from './SportCentre.entity';
+import { SportCenter } from './SportCenter.entity';
 import { Sport } from './Sport.entity';
 import { SportGroundAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToMany, PrimaryColumn } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToOne,
+    ManyToOne,
+    JoinColumn,
+    ManyToMany,
+    JoinTable,
+    OneToMany,
+    PrimaryColumn
+} from "typeorm";
 import { SportGroundEquipment } from './SportGroundEquipment.entity';
+import { Booking } from './Booking.entity';
 
-@Entity()
+@Entity({ name: 'sport_ground' })
 export class SportGround extends BaseEntity<SportGroundAttribute> implements SportGroundAttribute {
     @PrimaryGeneratedColumn()
     id?: number;
@@ -16,7 +29,7 @@ export class SportGround extends BaseEntity<SportGroundAttribute> implements Spo
         width: 11,
         nullable: false
     })
-    sportCentreId?: number;
+    sportCenterId?: number;
 
     @PrimaryColumn({
         type: 'int',
@@ -91,17 +104,17 @@ export class SportGround extends BaseEntity<SportGroundAttribute> implements Spo
     @OneToOne(type => Sport, sport => sport.sportGround)
     sport: Sport;
 
-    @ManyToOne(type => SportCentre, sportCentre => sportCentre.sportGrounds)
-    @JoinColumn({name: 'sportCentreId'})
-    sportCentre: SportCentre;
+    @ManyToOne(type => SportCenter, sportCenter => sportCenter.sportGrounds)
+    @JoinColumn({ name: 'sportCenterId' })
+    sportCenter: SportCenter;
 
     @ManyToMany(type => SportEquipment, sportEquipment => sportEquipment.sportGrounds)
     @JoinTable({
         name: "sport_ground_equipment",
-        // joinColumn: {
-        //     name: "sportGround",
-        //     referencedColumnName: "id"
-        // },
+        joinColumn: {
+            name: "sportGroundId",
+            referencedColumnName: "id"
+        },
         // inverseJoinColumn: {
         //     name: "sportEquipment",
         //     referencedColumnName: "id"
@@ -111,4 +124,10 @@ export class SportGround extends BaseEntity<SportGroundAttribute> implements Spo
 
     @OneToMany(type => SportGroundEquipment, sportGroundEquipment => sportGroundEquipment.sportGround)
     sportGroundEquipments: SportGroundEquipment[];
+
+    @OneToMany(type => SportGroundTimeSlot, sportGroundTimeSlot => sportGroundTimeSlot.sportGround)
+    sportGroundTimeSlots: SportGroundTimeSlot[];
+
+    @OneToMany(type => Booking, booking => booking.sportGround)
+    bookings: Booking[];
 }

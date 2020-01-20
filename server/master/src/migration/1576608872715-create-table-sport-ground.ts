@@ -16,7 +16,7 @@ export class createTableSportGround1576608872715 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "sportCentreId",
+                    name: "sportCenterId",
                     type: "int",
                     width: 11,
                     isNullable: false
@@ -86,9 +86,9 @@ export class createTableSportGround1576608872715 implements MigrationInterface {
             ],
             foreignKeys: [
                 {
-                    name: 'sport_centre-sport_ground',
-                    columnNames: ['sportCentreId'],
-                    referencedTableName: 'sport_centre',
+                    name: 'sport_center-sport_ground',
+                    columnNames: ['sportCenterId'],
+                    referencedTableName: 'sport_center',
                     referencedColumnNames: ['id']
                 },
                 {

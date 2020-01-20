@@ -1,9 +1,18 @@
+import { SportCenterSport } from './SportCenterSport.entity';
 import { SportAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToOne,
+    ManyToMany,
+    OneToMany
+} from "typeorm";
 import { SportGround } from './SportGround.entity';
+import { SportCenter } from './SportCenter.entity';
 
-@Entity()
+@Entity({ name: 'sport' })
 export class Sport extends BaseEntity<SportAttribute> implements SportAttribute {
     @PrimaryGeneratedColumn()
     id?: number;
@@ -33,4 +42,9 @@ export class Sport extends BaseEntity<SportAttribute> implements SportAttribute 
     @OneToOne(type => SportGround, sportGround => sportGround.sport)
     sportGround: SportGround;
 
+    @ManyToMany(type => SportCenter, sportCenter => sportCenter.sports)
+    sportCenters: SportCenter[];
+
+    @OneToMany(type => SportCenterSport, sportCenterSport => sportCenterSport.sport)
+    sportCenterSports: SportCenterSport[];
 }

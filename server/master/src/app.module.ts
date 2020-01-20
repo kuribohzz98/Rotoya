@@ -1,22 +1,24 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { SportModule } from './module/sport.module';
 import { MapModule } from './module/map.module';
 import { RpcModule } from './module/prc.module';
 import { ConfigService } from './config/config.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from './config/config.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './module/user.module';
 
 @Module({
   imports: [
-    ConfigModule,
     TypeOrmModule.forRoot(),
+    ConfigModule,
     AuthModule,
     UserModule,
     RpcModule,
-    MapModule
+    MapModule,
+    SportModule
   ],
   controllers: [AppController],
   providers: [
@@ -28,6 +30,6 @@ import { UserModule } from './module/user.module';
       },
       inject: [ConfigService]
     },
-  ],
+  ]
 })
-export class AppModule {}
+export class AppModule { }

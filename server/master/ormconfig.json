@@ -6,12 +6,13 @@
    "password": "kuriboh",
    "database": "rotoya",
    "entities": [
-      "src/**/*.entity{.ts,.js}"
+      "dist/**/*.entity{.ts,.js}"
    ],
+   "logging": true,
    "synchronize": false,
    "migrationsTableName": "custom_migration_table",
    "migrations": [
-      "src/migration/*{.ts,.js}"
+      "dist/migration/*{.ts,.js}"
    ],
    "cli": {
       "migrationsDir": "src/migration",

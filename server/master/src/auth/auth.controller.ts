@@ -10,7 +10,7 @@ export class AuthController {
         private readonly authService: AuthService
     ) { }
 
-    @Post('signUp')
+    @Post('register')
     async signUp(@Body() userCreate: UserCreateDto) {
         const user = await this.authService.signUp(userCreate);
         if (!user) {

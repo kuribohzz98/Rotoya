@@ -1,11 +1,19 @@
 import { SportGround } from './SportGround.entity';
-import { SportCentre } from './SportCentre.entity';
+import { SportCenter } from './SportCenter.entity';
 import { SportEquipmentAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, OneToMany, PrimaryColumn } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    ManyToMany,
+    OneToMany,
+    PrimaryColumn
+} from "typeorm";
 import { SportGroundEquipment } from './SportGroundEquipment.entity';
 
-@Entity()
+@Entity({ name: 'sport_equipment' })
 export class SportEquipment extends BaseEntity<SportEquipmentAttribute> implements SportEquipmentAttribute {
     @PrimaryGeneratedColumn()
     id?: number;
@@ -15,7 +23,7 @@ export class SportEquipment extends BaseEntity<SportEquipmentAttribute> implemen
         width: 11,
         nullable: false
     })
-    sportCentreId?: number;
+    sportCenterId?: number;
 
     @Column({
         type: 'varchar',
@@ -43,8 +51,8 @@ export class SportEquipment extends BaseEntity<SportEquipmentAttribute> implemen
     })
     updatedAt: Date;
 
-    @ManyToOne(type => SportCentre, sportCentre => sportCentre.sportEquipments)
-    sportCentre: SportCentre;
+    @ManyToOne(type => SportCenter, sportCenter => sportCenter.sportEquipments)
+    sportCenter: SportCenter;
 
     @ManyToMany(type => SportGround, sportGround => sportGround.sportEquipments)
     sportGrounds: SportGround[];

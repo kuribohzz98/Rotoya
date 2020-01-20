@@ -3,7 +3,7 @@ import { BaseWorkerChild } from './../../base/BaseWorkerChild';
 import {
     destinationPointGivenDistanceAndBearingFromStartPoint,
     toRadian
-} from 'src/helper/fomular';
+} from '../../helper/fomular';
 
 class MapWorkerChild extends BaseWorkerChild<TypePositionMapAndDistance> {
     init() {

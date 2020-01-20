@@ -2,9 +2,16 @@ import { SportEquipment } from './SportEquipment.entity';
 import { SportGround } from './SportGround.entity';
 import { SportGroundEquipmentAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, PrimaryColumn } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    JoinColumn,
+    PrimaryColumn
+} from "typeorm";
 
-@Entity()
+@Entity({ name: 'sport_ground_equipment' })
 export class SportGroundEquipment extends BaseEntity<SportGroundEquipmentAttribute> implements SportGroundEquipmentAttribute {
     @PrimaryGeneratedColumn()
     id?: number;
@@ -44,10 +51,10 @@ export class SportGroundEquipment extends BaseEntity<SportGroundEquipmentAttribu
     updatedAt: Date;
 
     @ManyToOne(type => SportGround, sportGround => sportGround.sportGroundEquipments)
-    @JoinColumn({name: 'sportGroundId'})
+    @JoinColumn({ name: 'sportGroundId' })
     sportGround: SportGround;
 
     @ManyToOne(type => SportEquipment, sportEquipment => sportEquipment.sportGroundEquipments)
-    @JoinColumn({name: 'sportEquipmentId'})
+    @JoinColumn({ name: 'sportEquipmentId' })
     sportEquipment: SportEquipment;
 }
