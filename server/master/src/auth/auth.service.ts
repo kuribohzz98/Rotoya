@@ -6,8 +6,7 @@ import { UserService } from './../service/user.service';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
-import * as fs from 'fs';
-
+import { readFileImg } from '../helper/tools/file';
 @Injectable()
 export class AuthService {
   constructor(
@@ -29,10 +28,7 @@ export class AuthService {
       const payload = { username: user.username, sub: user.id };
       const userProfile = new UserProfileDto(user);
       if (userProfile.userMeta.avatar) {
-        const img = fs.readFileSync(this.configService.get('path_file_upload') + userProfile.userMeta.avatar);
-        if (img) {
-          userProfile.userMeta.avatar = img.toString('base64');
-        }
+        userProfile.userMeta.avatar = readFileImg(this.configService.get('path_file_upload') + userProfile.userMeta.avatar);
       }
       return {
         access_token: this.jwtService.sign(payload),

@@ -10,20 +10,18 @@ import {
     ManyToOne,
     OneToMany,
     JoinColumn,
-    PrimaryColumn,
     ManyToMany,
     JoinTable
 } from "typeorm";
 import { Sport } from './Sport.entity';
 import { SportCenterSport } from './SportCenterSport.entity';
-import { Booking } from './Booking.entity';
 
 @Entity({ name: 'sport_center' })
 export class SportCenter extends BaseEntity<SportCenterAttribute> implements SportCenterAttribute {
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false
@@ -154,7 +152,4 @@ export class SportCenter extends BaseEntity<SportCenterAttribute> implements Spo
 
     @OneToMany(type => SportCenterSport, sportCenterSport => sportCenterSport.sportCenter)
     sportCenterSports: SportCenterSport[];
-
-    @OneToMany(type => Booking, booking => booking.sportCenter)
-    bookings: Booking[];
 }

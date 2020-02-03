@@ -1,21 +1,21 @@
 import { ModelConstants, AliasQuery } from './../constants/model.constants';
 import { BaseEntity } from './BaseEntity';
-import { Repository, ObjectLiteral, Connection, Brackets, JoinOptions } from "typeorm";
+import { Repository, ObjectLiteral, Connection, Brackets, JoinOptions, FindManyOptions } from "typeorm";
 
-export interface DeepQueryOptions<T> {
-    firstWhere?: boolean;
-    andWhere?: DeepQueryOptions<T>;
-    orWhere?: DeepQueryOptions<T>;
-    whereAttribute?: WhereOptions<T>;
-}
+// export interface DeepQueryOptions<T> {
+//     firstWhere?: boolean;
+//     andWhere?: DeepQueryOptions<T>;
+//     orWhere?: DeepQueryOptions<T>;
+//     whereAttribute?: WhereOptions<T>;
+// }
 
-export interface WhereOptions<T> {
-    equals: T;
-    moreThan: T;
-    moreThanE: T;
-    lessThan: T;
-    lessThanE: T;
-}
+// export interface WhereOptions<T> {
+//     equals: T;
+//     moreThan: T;
+//     moreThanE: T;
+//     lessThan: T;
+//     lessThanE: T;
+// }
 
 export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> extends Repository<T> {
     constructor(
@@ -36,14 +36,21 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
         return this.findOne({ where: { id } });
     }
 
-    async getByOptions(options: U, optionsJoin?: string[]): Promise<T[]> {
-        return !optionsJoin ?
-            this.find({ where: options }) :
-            this.find({ where: options, join: this.getJoinQuery(optionsJoin) });
+    async getByOptions(
+        options: U | U[],
+        optionsJoin?: string[],
+        findManyOptions?: FindManyOptions<T>
+    ): Promise<T[]> {
+        let findOptions = findManyOptions || {} as FindManyOptions<T>;
+        findOptions.where = options;
+        if (optionsJoin) {
+            findOptions.join = this.getJoinQuery(optionsJoin);
+        }
+        return this.find(findOptions);
     }
 
-    async getOneByOptions(options: U, optionsJoin?: string[]): Promise<T> {
-        return !optionsJoin ?
+    async getOneByOptions(options: U | U[], optionsJoin?: string[]): Promise<T> {
+        return !optionsJoin || !optionsJoin.length ?
             this.findOne({ where: options }) :
             this.findOne({ where: options, join: this.getJoinQuery(optionsJoin) });
     }
@@ -58,18 +65,18 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
         return opts;
     }
 
-    getDeepQuery(options: DeepQueryOptions<T>) {
-        const queryBuilder = this.createQueryBuilder('alias');
-        if (options.firstWhere) {
-            queryBuilder.where("");
-        }
-    }
+    // getDeepQuery(options: DeepQueryOptions<T>) {
+    //     const queryBuilder = this.createQueryBuilder('alias');
+    //     if (options.firstWhere) {
+    //         queryBuilder.where("");
+    //     }
+    // }
 
-    getOptionsWhere(options: DeepQueryOptions<T>) {
-        Object.keys(options).map(key => {
-            if (key == 'andWhere') {
+    // getOptionsWhere(options: DeepQueryOptions<T>) {
+    //     Object.keys(options).map(key => {
+    //         if (key == 'andWhere') {
 
-            }
-        })
-    }
+    //         }
+    //     })
+    // }
 }

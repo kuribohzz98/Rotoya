@@ -22,3 +22,13 @@ export interface TypePositionMapDistanceAndSport {
     distance: number;
     sport: string;
 }
+
+export interface TypeQuerySportCenterTimeSlotBlank {
+    longitude: number; // kinh do
+    latitude: number; //vi do
+    distance: number;
+    sportId: number;
+    time: number;
+    limit?: number;
+    page?: number;
+}

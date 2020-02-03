@@ -6,8 +6,7 @@ import {
     PrimaryGeneratedColumn,
     Column,
     OneToOne,
-    JoinColumn,
-    PrimaryColumn
+    JoinColumn
 } from "typeorm";
 import { User } from "./User.entity";
 
@@ -16,7 +15,7 @@ export class UserInfo extends BaseEntity<UserInfoAttribute> implements UserInfoA
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         unique: true,

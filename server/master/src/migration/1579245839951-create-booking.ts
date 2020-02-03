@@ -28,12 +28,6 @@ export class createBooking1579245839951 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "sportCenterId",
-                    type: "int",
-                    width: 11,
-                    isNullable: false
-                },
-                {
                     name: "timeSlotId",
                     type: "int",
                     width: 11,
@@ -72,12 +66,6 @@ export class createBooking1579245839951 implements MigrationInterface {
                     name: 'sport_ground-booking',
                     columnNames: ['sportGroundId'],
                     referencedTableName: 'sport_ground',
-                    referencedColumnNames: ['id']
-                },
-                {
-                    name: 'sport_center-booking',
-                    columnNames: ['sportCenterId'],
-                    referencedTableName: 'sport_center',
                     referencedColumnNames: ['id']
                 },
                 {

@@ -8,8 +8,7 @@ import {
     Column,
     ManyToOne,
     ManyToMany,
-    OneToMany,
-    PrimaryColumn
+    OneToMany
 } from "typeorm";
 import { SportGroundEquipment } from './SportGroundEquipment.entity';
 
@@ -18,7 +17,7 @@ export class SportEquipment extends BaseEntity<SportEquipmentAttribute> implemen
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false

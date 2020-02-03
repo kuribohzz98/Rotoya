@@ -1,5 +1,6 @@
-export function getFullDate(inpDate: number | Date, type?: { YYYYMMDD?: boolean }): string {
+export function GetFullDate(inpDate: number | Date, type?: { YYYYMMDD?: boolean }): string {
     let date: Date;
+    if (!inpDate) return;
     if (typeof inpDate == 'number') {
         date = new Date(inpDate);
     } else {

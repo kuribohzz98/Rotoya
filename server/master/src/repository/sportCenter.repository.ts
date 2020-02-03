@@ -1,3 +1,5 @@
+import { OptionsFilterTimeSlotBlank } from './../interface/repository.interface';
+import { HAVERSINE } from './../constants/map.constants';
 import { Booking } from './../entity/Booking.entity';
 import { TypePointFourDirection } from '../interface/map.interface';
 import { SportCenter } from '../entity/SportCenter.entity';
@@ -13,10 +15,10 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
         r_find: number,
         lat: number,
         lng: number,
-        alias: any,
         dataFilter: TypePointFourDirection
     ) {
-        return this.createQueryBuilder(alias)
+        const sportCenter = this.models.sport_center;
+        return this.createQueryBuilder(sportCenter)
             .addSelect(`
                 (${R_earth} * acos (
                     cos ( radians(${lat}) )
@@ -25,13 +27,14 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
                     + sin( radians(${lat}) )
                     * sin( radians(latitude ) )
                 ))`
-                , `${alias}_distance`)
-            .where(`${alias}.latitude <= :pointN`, { pointN: dataFilter.pointNorth.latitude })
-            .andWhere(`${alias}.latitude >= :pointS`, { pointS: dataFilter.pointSouth.latitude })
-            .andWhere(`${alias}.longitude <= :pointE`, { pointE: dataFilter.pointEast.longitude })
-            .andWhere(`${alias}.longitude >= :pointW`, { pointW: dataFilter.pointWest.longitude })
-            .having(`${alias}_distance < ${r_find}`)
-            .orderBy(`${alias}_distance`)
+                , `${sportCenter}_distance`)
+            .leftJoinAndSelect(`${sportCenter}.sports`, "sport")
+            .where(`${sportCenter}.latitude <= :pointN`, { pointN: dataFilter.pointNorth.latitude })
+            .andWhere(`${sportCenter}.latitude >= :pointS`, { pointS: dataFilter.pointSouth.latitude })
+            .andWhere(`${sportCenter}.longitude <= :pointE`, { pointE: dataFilter.pointEast.longitude })
+            .andWhere(`${sportCenter}.longitude >= :pointW`, { pointW: dataFilter.pointWest.longitude })
+            .having(`${sportCenter}_distance < ${r_find}`)
+            .orderBy(`${sportCenter}_distance`)
             .getRawMany();
     }
 
@@ -40,11 +43,11 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
         r_find: number,
         lat: number,
         lng: number,
-        alias: any,
         sport: string,
         dataFilter: TypePointFourDirection
     ) {
-        return this.createQueryBuilder(alias)
+        const sportCenter = this.models.sport_center;
+        return this.createQueryBuilder(sportCenter)
             .addSelect(`
                 (${R_earth} * acos (
                     cos ( radians(${lat}) )
@@ -53,20 +56,16 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
                     + sin( radians(${lat}) )
                     * sin( radians(latitude ) )
                 ))`
-                , `${alias}_distance`)
-            .leftJoinAndSelect(`${alias}.sports`, "sport")
-            .where(`${alias}.latitude <= :pointN`, { pointN: dataFilter.pointNorth.latitude })
-            .andWhere(`${alias}.latitude >= :pointS`, { pointS: dataFilter.pointSouth.latitude })
-            .andWhere(`${alias}.longitude <= :pointE`, { pointE: dataFilter.pointEast.longitude })
-            .andWhere(`${alias}.longitude >= :pointW`, { pointW: dataFilter.pointWest.longitude })
+                , `${sportCenter}_distance`)
+            .leftJoinAndSelect(`${sportCenter}.sports`, "sport")
+            .where(`${sportCenter}.latitude <= :pointN`, { pointN: dataFilter.pointNorth.latitude })
+            .andWhere(`${sportCenter}.latitude >= :pointS`, { pointS: dataFilter.pointSouth.latitude })
+            .andWhere(`${sportCenter}.longitude <= :pointE`, { pointE: dataFilter.pointEast.longitude })
+            .andWhere(`${sportCenter}.longitude >= :pointW`, { pointW: dataFilter.pointWest.longitude })
             .andWhere(`sport.name = :sport`, { sport })
-            .having(`${alias}_distance < ${r_find}`)
-            .orderBy(`${alias}_distance`)
+            .having(`${sportCenter}_distance < ${r_find}`)
+            .orderBy(`${sportCenter}_distance`)
             .getRawMany();
-    }
-
-    async getSportCenter(whereOptions: SportCenterAttribute) {
-        return this.getOneByOptions(whereOptions);
     }
 
     async getSportCentersBySport(sport: string) {
@@ -76,12 +75,17 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
             .getMany();
     }
 
-    async getSportCenterBySlotTimeBlank(sportId: number, bookingDate: string, startTime: number, limit?: number, page?: number) {
+    async getSportCenterBySlotTimeBlank(
+        sportId: number,
+        bookingDate: string,
+        startTime: number,
+        optionFilter?: OptionsFilterTimeSlotBlank
+    ) {
         const sportCenter = this.models.sport_center;
         const sportGround = this.models.sport_ground;
         const sportGroundTimeSlot = this.models.sport_ground_time_slot;
         const booking = this.models.booking;
-        return this.createQueryBuilder(sportCenter)
+        const query = this.createQueryBuilder(sportCenter)
             .leftJoinAndSelect(sportGround, sportGround, `${sportGround}.sportCenterId = ${sportCenter}.id`)
             .leftJoinAndSelect(sportGroundTimeSlot, sportGroundTimeSlot, `${sportGroundTimeSlot}.sportGroundId = ${sportGround}.id`)
             .leftJoinAndSelect(qb => {
@@ -102,9 +106,28 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
                 return qb.where(`count < ${sportGround}.quantity`)
                     .orWhere(`count is null`)
             }))
-            .limit(limit || null)
-            .offset(page && limit ? (page - 1) * limit : null)
-            .getMany();
+            .limit(optionFilter.limit || null)
+            .offset(optionFilter.page && optionFilter.limit ? (optionFilter.page - 1) * optionFilter.limit : null)
+        
+        if (optionFilter.pointFourDirection) {
+            return  query.addSelect(`
+                (${HAVERSINE.R_Earth} * acos (
+                    cos ( radians(${optionFilter.lat}) )
+                    * cos( radians(latitude ) )
+                    * cos( radians(longitude ) - radians(${optionFilter.lon}) )
+                    + sin( radians(${optionFilter.lat}) )
+                    * sin( radians(latitude ) )
+                ))`
+                , `${sportCenter}_distance`)
+            .andWhere(`${sportCenter}.latitude <= :pointN`, { pointN: optionFilter.pointFourDirection.pointNorth.latitude })
+            .andWhere(`${sportCenter}.latitude >= :pointS`, { pointS: optionFilter.pointFourDirection.pointSouth.latitude })
+            .andWhere(`${sportCenter}.longitude <= :pointE`, { pointE: optionFilter.pointFourDirection.pointEast.longitude })
+            .andWhere(`${sportCenter}.longitude >= :pointW`, { pointW: optionFilter.pointFourDirection.pointWest.longitude })
+            .having(`${sportCenter}_distance < ${optionFilter.distance}`)
+            .orderBy(`${sportCenter}_distance`)
+            .getRawMany();
+        }
+        return query.getRawMany();
     }
 }
 

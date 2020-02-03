@@ -15,12 +15,14 @@ export class SportCenterDataFindByRadius {
         this.distance = data[`${alias}_distance`] || data.distance;
         this.timeOpen = data[`${alias}_timeOpen`] || data.timeOpen;
         this.timeClose = data[`${alias}_timeClose`] || data.timeClose;
+        this.avatar = data[`${alias}_avatar`] || data.avatar;
     }
     id?: number;
     name?: string;
     code?: string;
     country?: string;
     city?: string;
+    avatar?: string;
     district?: string;
     commune?: string;
     address?: string;

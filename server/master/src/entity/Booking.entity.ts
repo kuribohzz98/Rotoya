@@ -1,5 +1,4 @@
 import { SportGroundTimeSlot } from './SportGroundTimeSlot.entity';
-import { SportCenter } from './SportCenter.entity';
 import { User } from './User.entity';
 import { SportGround } from './SportGround.entity';
 import { BookingAttribute } from './../interface/attribute.interface';
@@ -10,7 +9,6 @@ import {
     Column,
     ManyToOne,
     JoinColumn,
-    PrimaryColumn,
     OneToOne
 } from "typeorm";
 import { Payment } from './Payment.entity';
@@ -20,28 +18,21 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
     userId?: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
     sportGroundId?: number;
 
-    @PrimaryColumn({
-        type: 'int',
-        width: 11,
-        nullable: false
-    })
-    sportCenterId?: number;
-
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false
@@ -52,7 +43,7 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
         type: 'date',
         nullable: true
     })
-    bookingDate?: Date;
+    bookingDate?: string;
 
     @Column({
         type: 'json',
@@ -87,13 +78,10 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
     @JoinColumn({ name: "sportGroundId" })
     sportGround: SportGround;
 
-    @ManyToOne(type => SportCenter, sportCenter => sportCenter.bookings)
-    @JoinColumn({ name: "sportCenterId" })
-    sportCenter: SportCenter;
-
     @OneToOne(type => Payment, payment => payment.booking)
     payment: Payment;
 
     @ManyToOne(type => SportGroundTimeSlot, sportGroundTimeSlot => sportGroundTimeSlot.bookings)
+    @JoinColumn({ name: "timeSlotId" })
     sportGroundTimeSlot: SportGroundTimeSlot;
 }

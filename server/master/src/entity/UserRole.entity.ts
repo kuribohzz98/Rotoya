@@ -6,8 +6,7 @@ import {
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
-    JoinColumn,
-    PrimaryColumn
+    JoinColumn
 } from "typeorm";
 import { User } from './User.entity';
 
@@ -16,14 +15,14 @@ export class UserRole extends BaseEntity<UserRoleAttribute> implements UserRoleA
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
     userId: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false

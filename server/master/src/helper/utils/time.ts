@@ -1,4 +1,4 @@
-export function convertTimeToFloat(inpDate: number | Date): Number {
+export function convertTimeToFloat(inpDate: number | Date): number {
     let date: Date;
     if (typeof inpDate == 'number') {
         date = new Date(inpDate);

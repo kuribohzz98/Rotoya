@@ -13,8 +13,7 @@ import {
     JoinColumn,
     ManyToMany,
     JoinTable,
-    OneToMany,
-    PrimaryColumn
+    OneToMany
 } from "typeorm";
 import { SportGroundEquipment } from './SportGroundEquipment.entity';
 import { Booking } from './Booking.entity';
@@ -24,14 +23,14 @@ export class SportGround extends BaseEntity<SportGroundAttribute> implements Spo
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
     sportCenterId?: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false

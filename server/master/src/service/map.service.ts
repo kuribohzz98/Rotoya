@@ -1,4 +1,3 @@
-import { AliasQuery } from './../constants/model.constants';
 import { TypePointFourDirection } from './../interface/map.interface';
 import { SportCenterDataFindByRadius } from '../dto/sportCenter.dto';
 import { HAVERSINE } from './../constants/map.constants';
@@ -12,12 +11,12 @@ export class MapService {
     ) { }
 
     async getSportCenterInRadius(lat: number, lng: number, distance: number, dataFilter: TypePointFourDirection) {
-        const data = await this.sportCenterRepository.getSportCenterInRadius(HAVERSINE.R_Earth, distance, lat, lng, AliasQuery, dataFilter);
-        return data.map(dataMap => new SportCenterDataFindByRadius(dataMap, AliasQuery));
+        const data = await this.sportCenterRepository.getSportCenterInRadius(HAVERSINE.R_Earth, distance, lat, lng, dataFilter);
+        return data.map(dataMap => new SportCenterDataFindByRadius(dataMap, this.sportCenterRepository.models.sport_center));
     }
 
     async getSportCenterInRadiusBySport(lat: number, lng: number, distance: number, sport: string, dataFilter: TypePointFourDirection) {
-        const data = await this.sportCenterRepository.getSportCenterInRadiusBySport(HAVERSINE.R_Earth, distance, lat, lng, AliasQuery, sport, dataFilter);
-        return data.map(dataMap => new SportCenterDataFindByRadius(dataMap, AliasQuery));
+        const data = await this.sportCenterRepository.getSportCenterInRadiusBySport(HAVERSINE.R_Earth, distance, lat, lng, sport, dataFilter);
+        return data.map(dataMap => new SportCenterDataFindByRadius(dataMap, this.sportCenterRepository.models.sport_center));
     }
 }

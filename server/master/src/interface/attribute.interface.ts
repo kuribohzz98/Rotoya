@@ -116,7 +116,6 @@ export interface SportCenterSportAttribute {
 export interface SportGroundTimeSlotAttribute {
     id?: number;
     sportGroundId?: number;
-    quantity?: number;
     startTime?: number;
     endTime?: number;
     createdAt?: Date;
@@ -127,8 +126,8 @@ export interface BookingAttribute {
     id?: number;
     userId?: number;
     sportGroundId?: number;
-    sportCenterId?: number;
     timeSlotId?: number;
+    bookingDate?: string;
     detail?: string;
     equipment?: string;
     createdAt?: Date;

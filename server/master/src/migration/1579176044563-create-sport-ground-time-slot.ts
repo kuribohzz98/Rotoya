@@ -22,13 +22,6 @@ export class createSportGroundTimeSlot1579176044563 implements MigrationInterfac
                     isNullable: false
                 },
                 {
-                    name: "quantity",
-                    type: "int",
-                    width: 4,
-                    isNullable: false,
-                    default: 1
-                },
-                {
                     name: "startTime",
                     type: "float",
                     precision: 4,

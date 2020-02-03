@@ -5,8 +5,7 @@ import {
     PrimaryGeneratedColumn,
     Column,
     OneToOne,
-    JoinColumn,
-    PrimaryColumn
+    JoinColumn
 } from "typeorm";
 import { User } from "./User.entity";
 
@@ -15,7 +14,7 @@ export class UserMeta extends BaseEntity<UserMetaAttribute> implements UserMetaA
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         unique: true,

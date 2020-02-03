@@ -24,7 +24,7 @@ export class createPayment1579246071444 implements MigrationInterface {
                 {
                     name: "amount",
                     type: "float",
-                    precision: 10,
+                    precision: 12,
                     scale: 2,
                     isNullable: false,
                     default: 0

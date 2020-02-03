@@ -7,7 +7,6 @@ import {
     Column,
     ManyToOne,
     JoinColumn,
-    PrimaryColumn,
     OneToMany
 } from "typeorm";
 import { Booking } from './Booking.entity';
@@ -17,19 +16,12 @@ export class SportGroundTimeSlot extends BaseEntity<SportGroundTimeSlotAttribute
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn({
-        type: 'int',
-        width: 11,
-        nullable: false
-    })
-    sportGroundId?: number;
-
     @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
-    quantity?: number;
+    sportGroundId?: number;
 
     @Column({
         type: 'float',

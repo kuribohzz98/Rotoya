@@ -5,7 +5,6 @@ import {
     PrimaryGeneratedColumn,
     Column,
     JoinColumn,
-    PrimaryColumn,
     OneToOne
 } from "typeorm";
 import { Booking } from './Booking.entity';
@@ -15,7 +14,7 @@ export class Payment extends BaseEntity<PaymentAttribute> implements PaymentAttr
     @PrimaryGeneratedColumn()
     id: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false
@@ -24,7 +23,7 @@ export class Payment extends BaseEntity<PaymentAttribute> implements PaymentAttr
 
     @Column({
         type: 'float',
-        precision: 10,
+        precision: 12,
         scale: 2,
         nullable: false,
         default: 0

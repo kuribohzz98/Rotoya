@@ -7,8 +7,7 @@ import {
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
-    JoinColumn,
-    PrimaryColumn
+    JoinColumn
 } from "typeorm";
 
 @Entity({ name: 'sport_ground_equipment' })
@@ -16,14 +15,14 @@ export class SportGroundEquipment extends BaseEntity<SportGroundEquipmentAttribu
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
     sportEquipmentId?: number;
 
-    @PrimaryColumn({
+    @Column({
         type: 'int',
         width: 11,
         nullable: false
