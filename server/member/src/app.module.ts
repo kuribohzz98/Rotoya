@@ -10,7 +10,7 @@ import { TestWorker } from './worker/TestWorker';
 @Module({
   imports: [
     ConfigModule,
-    DatabaseModule,
+    // DatabaseModule,
     MapModule
     // MongooseModule.forRootAsync('mongodb://0.0.0.0:27017/rotoya', {useNewUrlParser: true})
   ],
