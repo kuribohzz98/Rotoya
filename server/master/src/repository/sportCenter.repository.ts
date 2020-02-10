@@ -1,4 +1,5 @@
-import { OptionsFilterTimeSlotBlank } from './../interface/repository.interface';
+import { TypePositionMapAndDistance, TypePositionMapDistanceAndSport } from './../interface/map.interface';
+import { OptionsFilterTimeSlotBlank, OptionsPaging } from './../interface/repository.interface';
 import { HAVERSINE } from './../constants/map.constants';
 import { Booking } from './../entity/Booking.entity';
 import { TypePointFourDirection } from '../interface/map.interface';
@@ -12,19 +13,17 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
 
     async getSportCenterInRadius(
         R_earth: number,
-        r_find: number,
-        lat: number,
-        lng: number,
+        opts: TypePositionMapAndDistance,
         dataFilter: TypePointFourDirection
     ) {
         const sportCenter = this.models.sport_center;
         return this.createQueryBuilder(sportCenter)
             .addSelect(`
                 (${R_earth} * acos (
-                    cos ( radians(${lat}) )
+                    cos ( radians(${opts.latitude}) )
                     * cos( radians(latitude ) )
-                    * cos( radians(longitude ) - radians(${lng}) )
-                    + sin( radians(${lat}) )
+                    * cos( radians(longitude ) - radians(${opts.longitude}) )
+                    + sin( radians(${opts.latitude}) )
                     * sin( radians(latitude ) )
                 ))`
                 , `${sportCenter}_distance`)
@@ -33,27 +32,26 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
             .andWhere(`${sportCenter}.latitude >= :pointS`, { pointS: dataFilter.pointSouth.latitude })
             .andWhere(`${sportCenter}.longitude <= :pointE`, { pointE: dataFilter.pointEast.longitude })
             .andWhere(`${sportCenter}.longitude >= :pointW`, { pointW: dataFilter.pointWest.longitude })
-            .having(`${sportCenter}_distance < ${r_find}`)
+            .having(`${sportCenter}_distance < ${opts.distance}`)
             .orderBy(`${sportCenter}_distance`)
+            .limit(opts.limit || null)
+            .offset(opts.page && opts.limit ? (opts.page - 1) * opts.limit : null)
             .getRawMany();
     }
 
     async getSportCenterInRadiusBySport(
         R_earth: number,
-        r_find: number,
-        lat: number,
-        lng: number,
-        sport: string,
+        opts: TypePositionMapDistanceAndSport,
         dataFilter: TypePointFourDirection
     ) {
         const sportCenter = this.models.sport_center;
         return this.createQueryBuilder(sportCenter)
             .addSelect(`
                 (${R_earth} * acos (
-                    cos ( radians(${lat}) )
+                    cos ( radians(${opts.latitude}) )
                     * cos( radians(latitude ) )
-                    * cos( radians(longitude ) - radians(${lng}) )
-                    + sin( radians(${lat}) )
+                    * cos( radians(longitude ) - radians(${opts.longitude}) )
+                    + sin( radians(${opts.latitude}) )
                     * sin( radians(latitude ) )
                 ))`
                 , `${sportCenter}_distance`)
@@ -62,16 +60,20 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
             .andWhere(`${sportCenter}.latitude >= :pointS`, { pointS: dataFilter.pointSouth.latitude })
             .andWhere(`${sportCenter}.longitude <= :pointE`, { pointE: dataFilter.pointEast.longitude })
             .andWhere(`${sportCenter}.longitude >= :pointW`, { pointW: dataFilter.pointWest.longitude })
-            .andWhere(`sport.name = :sport`, { sport })
-            .having(`${sportCenter}_distance < ${r_find}`)
+            .andWhere(`sport.name = :sport`, { sport: opts.sport })
+            .having(`${sportCenter}_distance < ${opts.distance}`)
             .orderBy(`${sportCenter}_distance`)
+            .limit(opts.limit || null)
+            .offset(opts.page && opts.limit ? (opts.page - 1) * opts.limit : null)
             .getRawMany();
     }
 
-    async getSportCentersBySport(sport: string) {
+    async getSportCentersBySport(sport: string, opts?: OptionsPaging) {
         return this.createQueryBuilder('alias')
             .leftJoinAndSelect(`alias.sports`, 'sport')
             .where(`sport.name = :sport`, { sport })
+            .limit(opts.limit || null)
+            .offset(opts.page && opts.limit ? (opts.page - 1) * opts.limit : null)
             .getMany();
     }
 
@@ -128,6 +130,13 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
             .getRawMany();
         }
         return query.getRawMany();
+    }
+
+    async getSportCenters(opts?: OptionsPaging) {
+        return this.getByOptions({}, [], {
+            take: opts.limit || null,
+            skip: opts.limit && opts.page ? opts.limit * (opts.page - 1) : null
+        })
     }
 }
 

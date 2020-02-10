@@ -1,9 +1,10 @@
+import { OptionsPaging } from './repository.interface';
 export interface TypePositionMap {
     longitude: number; // kinh do
     latitude: number; //vi do
 }
 
-export interface TypePositionMapAndDistance {
+export interface TypePositionMapAndDistance extends OptionsPaging {
     longitude: number; // kinh do
     latitude: number; //vi do
     distance: number;
@@ -16,7 +17,7 @@ export interface TypePointFourDirection {
     pointWest: TypePositionMap;
 }
 
-export interface TypePositionMapDistanceAndSport {
+export interface TypePositionMapDistanceAndSport extends OptionsPaging {
     longitude: number; // kinh do
     latitude: number; //vi do
     distance: number;

@@ -1,8 +1,8 @@
 import { convertTimeToFloat } from '../helper/utils/time';
 import { SportCenter } from './../entity/SportCenter.entity';
-import { OptionsFilterTimeSlotBlank } from './../interface/repository.interface';
+import { OptionsFilterTimeSlotBlank, OptionsPaging } from './../interface/repository.interface';
 import { HAVERSINE } from './../constants/map.constants';
-import { TypePointFourDirection } from './../interface/map.interface';
+import { TypePointFourDirection, TypePositionMapDistanceAndSport, TypePositionMapAndDistance } from './../interface/map.interface';
 import { ConfigService } from './../config/config.service';
 import { SportDto } from './../dto/sport.dto';
 import { SportRepository } from './../repository/sport.repository';
@@ -40,13 +40,13 @@ export class SportService {
         return sports.map(sport => new SportDto(sport));
     }
 
-    async getAllSportCenter() {
-        const sportCenters = await this.sportCenterRepository.find();
+    async getAllSportCenter(opts?: OptionsPaging) {
+        const sportCenters = await this.sportCenterRepository.getSportCenters(opts);
         return sportCenters.map(sportCenter => this.switchSportCenterInfo(sportCenter));
     }
 
-    async getSportCenterBySport(sport: string) {
-        const sportCenters = await this.sportCenterRepository.getSportCentersBySport(sport);
+    async getSportCenterBySport(sport: string, opts?: OptionsPaging) {
+        const sportCenters = await this.sportCenterRepository.getSportCentersBySport(sport, opts);
         return sportCenters.map(sportCenter => this.switchSportCenterInfo(sportCenter));
     }
 
@@ -57,13 +57,13 @@ export class SportService {
         return sportCenters.map(sportCenter => this.switchSportCenterInfo(sportCenter, this.sportCenterRepository.models.sport_center));
     }
 
-    async getSportCenterInRadius(lat: number, lng: number, distance: number, dataFilter: TypePointFourDirection) {
-        const sportCenters = await this.sportCenterRepository.getSportCenterInRadius(HAVERSINE.R_Earth, distance, lat, lng, dataFilter);
+    async getSportCenterInRadius(options: TypePositionMapAndDistance, dataFilter: TypePointFourDirection) {
+        const sportCenters = await this.sportCenterRepository.getSportCenterInRadius(HAVERSINE.R_Earth, options, dataFilter);
         return sportCenters.map(sportCenter => this.switchSportCenterInfo(sportCenter, this.sportCenterRepository.models.sport_center));
     }
 
-    async getSportCenterInRadiusBySport(lat: number, lng: number, distance: number, sport: string, dataFilter: TypePointFourDirection) {
-        const sportCenters = await this.sportCenterRepository.getSportCenterInRadiusBySport(HAVERSINE.R_Earth, distance, lat, lng, sport, dataFilter);
+    async getSportCenterInRadiusBySport(options: TypePositionMapDistanceAndSport, dataFilter: TypePointFourDirection) {
+        const sportCenters = await this.sportCenterRepository.getSportCenterInRadiusBySport(HAVERSINE.R_Earth, options, dataFilter);
         return sportCenters.map(sportCenter => this.switchSportCenterInfo(sportCenter, this.sportCenterRepository.models.sport_center));
     }
 } 

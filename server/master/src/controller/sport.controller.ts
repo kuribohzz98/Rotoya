@@ -7,6 +7,8 @@ import {
 import { SportService } from './../service/sport.service';
 import { Controller, Get, Query, Response } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
+import { OptionsPaging } from 'src/interface/repository.interface';
+import { take } from 'rxjs/operators';
 
 @ApiTags('sport')
 @Controller('sport')
@@ -22,16 +24,23 @@ export class SportController {
     return sports;
   }
 
-  @Get('getSportCenter')
-  async getSportCenter() {
-    const sportCenters = await this.sportService.getAllSportCenter();
+  @Get('getSportCenters')
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'page', required: false })
+  async getSportCenter(@Query() query: OptionsPaging) {
+    const sportCenters = await this.sportService.getAllSportCenter(query);
     return sportCenters;
   }
 
-  @Get('getSportCenterSport')
+  @Get('getSportCentersSport')
   @ApiQuery({ name: 'sport' })
-  async getSportCentreBySport(@Query() query: { sport: string }) {
-    const sportCenters = await this.sportService.getSportCenterBySport(query.sport);
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'page', required: false })
+  async getSportCentreBySport(@Query() query: { sport: string, limit?: number, page?: number }) {
+    const sportCenters = await this.sportService.getSportCenterBySport(
+      query.sport,
+      { limit: query.limit, page: query.page }
+    );
     return sportCenters;
   }
 
@@ -41,40 +50,35 @@ export class SportController {
   //   return queryTest;
   // }
 
-  @Get('getSportCenterByGeolocation')
+  @Get('getSportCentersByGeolocation')
   @ApiQuery({ name: 'longitude' })
   @ApiQuery({ name: 'latitude' })
   @ApiQuery({ name: 'distance' })
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'page', required: false })
   async getSportCenterByGeolocation(@Query() query: TypePositionMapAndDistance, @Response() res) {
-    const sub = this.rpcService.getLimitPoints(query).subscribe(async data => {
-      const result = await this.sportService.getSportCenterInRadius(
-        query.latitude,
-        query.longitude,
-        query.distance,
-        data
-      );
-      res.json(result);
-      sub.unsubscribe();
-    })
+    this.rpcService.getLimitPoints(query)
+      .pipe(take(1))
+      .subscribe(async data => {
+        const result = await this.sportService.getSportCenterInRadius(query, data);
+        res.json(result);
+      })
   }
 
-  @Get('getSportCenterByGeolocationAndSport')
+  @Get('getSportCentersByGeolocationAndSport')
   @ApiQuery({ name: 'longitude' })
   @ApiQuery({ name: 'latitude' })
   @ApiQuery({ name: 'distance' })
   @ApiQuery({ name: 'sport' })
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'page', required: false })
   async getSportCenterByGeolocationAndSport(@Query() query: TypePositionMapDistanceAndSport, @Response() res) {
-    const sub = this.rpcService.getLimitPoints(query).subscribe(async data => {
-      const result = await this.sportService.getSportCenterInRadiusBySport(
-        query.latitude,
-        query.longitude,
-        query.distance,
-        query.sport,
-        data
-      );
-      res.json(result);
-      sub.unsubscribe();
-    })
+    this.rpcService.getLimitPoints(query)
+      .pipe(take(1))
+      .subscribe(async data => {
+        const result = await this.sportService.getSportCenterInRadiusBySport(query, data);
+        res.json(result);
+      })
   }
 
   @Get('getSportCenterByGeolocationAndSport/timeSlotBlank')
@@ -82,25 +86,26 @@ export class SportController {
   @ApiQuery({ name: 'latitude' })
   @ApiQuery({ name: 'distance' })
   @ApiQuery({ name: 'sportId' })
-  @ApiQuery({ name: 'time' , description: new Date().getTime().toString()})
+  @ApiQuery({ name: 'time', description: new Date().getTime().toString() })
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'page', required: false })
   async getSportCentreByGeolocationAndSport(@Query() query: TypeQuerySportCenterTimeSlotBlank, @Response() res) {
-    const sub = this.rpcService.getLimitPoints(query).subscribe(async data => {
-      const sportCenters = await this.sportService.getSportCenterBySlotTimeBlank(
-        query.sportId,
-        +query.time,
-        {
-          lat: query.latitude,
-          lon: query.longitude,
-          distance: query.distance,
-          limit: query.limit,
-          page: query.page,
-          pointFourDirection: data
-        }
-      );
-      res.json(sportCenters);
-      sub.unsubscribe();
-    })
+    this.rpcService.getLimitPoints(query)
+      .pipe(take(1))
+      .subscribe(async data => {
+        const sportCenters = await this.sportService.getSportCenterBySlotTimeBlank(
+          query.sportId,
+          +query.time,
+          {
+            lat: query.latitude,
+            lon: query.longitude,
+            distance: query.distance,
+            limit: query.limit,
+            page: query.page,
+            pointFourDirection: data
+          }
+        );
+        res.json(sportCenters);
+      })
   }
 }
