@@ -1,12 +1,11 @@
 import * as fs from 'fs';
-import * as uuidv4 from 'uuid/v4';
 import * as QRCode from 'qrcode/lib';
 
-export function saveImageBase64(dir: string, dataImage: string) {
+export function saveImageBase64(dir: string, fileName: string, dataImage: string) {
     try {
         let base64Data = dataImage.replace(/^data:image\/png;base64,/, "");
-        const fileName = uuidv4() + '.png';
-        fs.writeFileSync(dir + fileName, base64Data, 'base64');
+        const name = fileName + '.png';
+        fs.writeFileSync(dir + name, base64Data, 'base64');
         return fileName;
     } catch (e) {
         throw new Error(`saveImage error: ${e}`);
@@ -19,12 +18,13 @@ export function createQrCode(data, callback: (err: any, data: string) => any) {
 
 export async function createQrCodeAndSave(
     dir: string,
+    fileName: string,
     data
 ): Promise<{ dataBase64: string, fileName: string }> {
     return new Promise((resolve, reject) => {
         createQrCode(data, (err, dataBase64) => {
-            const fileName = saveImageBase64(dir, dataBase64);
-            resolve({ dataBase64, fileName });
+            const name = saveImageBase64(dir, fileName, dataBase64);
+            resolve({ dataBase64, fileName: name });
         })
     })
 }

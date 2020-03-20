@@ -4,8 +4,8 @@ export interface OptionsFilterTimeSlotBlank {
     pointFourDirection?: TypePointFourDirection,
     limit?: number,
     page?: number,
-    lat?: number,
-    lon?: number,
+    latitude?: number,
+    longitude?: number,
     distance?: number,
     timeStart?: Date
 }

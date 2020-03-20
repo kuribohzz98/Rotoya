@@ -40,6 +40,14 @@ export class SportGroundTimeSlot extends BaseEntity<SportGroundTimeSlotAttribute
     endTime?: number;
 
     @Column({
+        type: 'int',
+        width: 11,
+        nullable: false,
+        default: 200000
+    })
+    price?: number;
+
+    @Column({
         type: 'datetime',
         nullable: false,
         default: () => 'CURRENT_TIMESTAMP'

@@ -16,7 +16,6 @@ import {
     OneToMany
 } from "typeorm";
 import { SportGroundEquipment } from './SportGroundEquipment.entity';
-import { Booking } from './Booking.entity';
 
 @Entity({ name: 'sport_ground' })
 export class SportGround extends BaseEntity<SportGroundAttribute> implements SportGroundAttribute {
@@ -127,6 +126,4 @@ export class SportGround extends BaseEntity<SportGroundAttribute> implements Spo
     @OneToMany(type => SportGroundTimeSlot, sportGroundTimeSlot => sportGroundTimeSlot.sportGround)
     sportGroundTimeSlots: SportGroundTimeSlot[];
 
-    @OneToMany(type => Booking, booking => booking.sportGround)
-    bookings: Booking[];
 }

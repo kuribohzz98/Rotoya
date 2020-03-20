@@ -16,7 +16,13 @@ export class createPayment1579246071444 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "bookingId",
+                    name: "userId",
+                    type: "int",
+                    width: 11,
+                    isNullable: false
+                },
+                {
+                    name: "sportCenterId",
                     type: "int",
                     width: 11,
                     isNullable: false
@@ -37,7 +43,13 @@ export class createPayment1579246071444 implements MigrationInterface {
                     default: "'VND'"
                 },
                 {
-                    name: "qrCode",
+                    name: "orderId",
+                    type: "varchar",
+                    length: '255',
+                    isNullable: true
+                },
+                {
+                    name: "transactionId",
                     type: "varchar",
                     length: '255',
                     isNullable: true
@@ -57,9 +69,15 @@ export class createPayment1579246071444 implements MigrationInterface {
             ],
             foreignKeys: [
                 {
-                    name: 'booking-payment',
-                    columnNames: ['bookingId'],
-                    referencedTableName: 'booking',
+                    name: 'user-payment',
+                    columnNames: ['userId'],
+                    referencedTableName: 'user',
+                    referencedColumnNames: ['id']
+                },
+                {
+                    name: 'sportCenter-payment',
+                    columnNames: ['sportCenterId'],
+                    referencedTableName: 'sportCenter',
                     referencedColumnNames: ['id']
                 }
             ]

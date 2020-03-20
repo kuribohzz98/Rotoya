@@ -27,9 +27,9 @@ export class AuthService {
       }
       const payload = { username: user.username, sub: user.id };
       const userProfile = new UserProfileDto(user);
-      if (userProfile.userMeta.avatar) {
-        userProfile.userMeta.avatar = readFileImg(this.configService.get('path_file_upload') + userProfile.userMeta.avatar);
-      }
+      // if (userProfile.userMeta.avatar) {
+      //   userProfile.userMeta.avatar = readFileImg(this.configService.get('path_file_upload') + userProfile.userMeta.avatar);
+      // }
       return {
         access_token: this.jwtService.sign(payload),
         user: userProfile

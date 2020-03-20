@@ -118,15 +118,15 @@ export interface SportGroundTimeSlotAttribute {
     sportGroundId?: number;
     startTime?: number;
     endTime?: number;
+    price?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
 
 export interface BookingAttribute {
     id?: number;
-    userId?: number;
-    sportGroundId?: number;
     timeSlotId?: number;
+    paymentId?: number;
     bookingDate?: string;
     detail?: string;
     equipment?: string;
@@ -136,10 +136,12 @@ export interface BookingAttribute {
 
 export interface PaymentAttribute {
     id?: number;
-    bookingId?: number;
+    userId?: number;
+    sportCenterId?: number;
     amount?: number;
     currency?: string;
-    qrCode?: string;
+    orderId?: string;
+    transactionId?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }

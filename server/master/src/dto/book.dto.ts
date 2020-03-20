@@ -1,19 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BookSportGround } from '../interface/booking.interface';
+import { BookSportGround, BookData } from '../interface/booking.interface';
 
-export class BookSportGroundBody implements BookSportGround {
-    @ApiProperty({default: 1})
-    userId: number;
-
-    @ApiProperty()
-    sportGroundId: number;
-
+class BookDataDto implements BookData {
     @ApiProperty()
     timeSlotId: number;
 
     @ApiProperty({default: new Date().getTime()})
     bookingDate: number;
 
-    @ApiProperty({required: false})
-    equipment?: Object;
+    @ApiProperty()
+    price: number;
+
+    @ApiProperty()
+    equipments?: any[];
+}
+
+export class BookSportGroundBody implements BookSportGround {
+
+    @ApiProperty()
+    userId: number;
+
+    @ApiProperty()
+    sportCenterId: number;
+
+    @ApiProperty()
+    bookDatas: BookDataDto[];
+
 }

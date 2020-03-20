@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { QueueModule } from './queue/queue.module';
 import { ConfigService } from './config/config.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,7 +14,7 @@ import Modules from './module';
     ...Modules,
     ConfigModule,
     AuthModule,
-    
+    QueueModule
   ],
   controllers: [AppController],
   providers: [

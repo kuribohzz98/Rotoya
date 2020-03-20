@@ -1,3 +1,4 @@
+import { SportHanderService } from './../service/sportHander.service';
 import { SportRepository } from './../repository/sport.repository';
 import { SportController } from '../controller/sport.controller';
 import { SportService } from '../service/sport.service';
@@ -14,7 +15,7 @@ import { Module } from '@nestjs/common';
             SportRepository
         ])
     ],
-    providers: [SportService],
+    providers: [SportService, SportHanderService],
     controllers: [SportController],
     exports: [SportService]
 })

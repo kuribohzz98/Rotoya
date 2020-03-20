@@ -1,21 +1,19 @@
-import { RpcService } from './../service/rpc.service';
+import { SportHanderService } from './../service/sportHander.service';
 import {
-  TypePositionMapAndDistance,
-  TypePositionMapDistanceAndSport,
-  TypeQuerySportCenterTimeSlotBlank
-} from './../interface/map.interface';
+  TypeQueryGetSportCenters
+} from './../interface/sport.interface';
 import { SportService } from './../service/sport.service';
-import { Controller, Get, Query, Response } from '@nestjs/common';
+import { Controller, Get, Query, Param } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
-import { OptionsPaging } from 'src/interface/repository.interface';
-import { take } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
+import { Observable, of, from } from 'rxjs';
 
 @ApiTags('sport')
 @Controller('sport')
 export class SportController {
   constructor(
     private readonly sportService: SportService,
-    private readonly rpcService: RpcService
+    private readonly sportHanderService: SportHanderService
   ) { }
 
   @Get('getAllSport')
@@ -24,88 +22,40 @@ export class SportController {
     return sports;
   }
 
-  @Get('getSportCenters')
-  @ApiQuery({ name: 'limit', required: false })
-  @ApiQuery({ name: 'page', required: false })
-  async getSportCenter(@Query() query: OptionsPaging) {
-    const sportCenters = await this.sportService.getAllSportCenter(query);
-    return sportCenters;
+  @Get('sportCenter/:id')
+  @ApiQuery({ name: 'time', description: new Date().getTime().toString(), required: false })
+  async getSportCenter(@Param('id') id: number, @Query() query: { time: number }) {
+    const result = await this.sportService.getSportCenter({ id, time: +query.time });
+    return result;
   }
 
-  @Get('getSportCentersSport')
-  @ApiQuery({ name: 'sport' })
+  @ApiQuery({ name: 'longitude', description: '105.781477', required: false })
+  @ApiQuery({ name: 'latitude', description: '21.037671', required: false })
+  @ApiQuery({ name: 'distance', required: false })
+  @ApiQuery({ name: 'sportId', required: false })
+  @ApiQuery({ name: 'sport', required: false })
+  @ApiQuery({ name: 'time', description: new Date().getTime().toString(), required: false })
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'page', required: false })
-  async getSportCentreBySport(@Query() query: { sport: string, limit?: number, page?: number }) {
-    const sportCenters = await this.sportService.getSportCenterBySport(
-      query.sport,
-      { limit: query.limit, page: query.page }
-    );
-    return sportCenters;
-  }
-
-  // @Get('test')
-  // async getTest() {
-  //   const queryTest = await this.sportService.getSportCenterBySlotTimeBlank();
-  //   return queryTest;
-  // }
-
-  @Get('getSportCentersByGeolocation')
-  @ApiQuery({ name: 'longitude' })
-  @ApiQuery({ name: 'latitude' })
-  @ApiQuery({ name: 'distance' })
-  @ApiQuery({ name: 'limit', required: false })
-  @ApiQuery({ name: 'page', required: false })
-  async getSportCenterByGeolocation(@Query() query: TypePositionMapAndDistance, @Response() res) {
-    this.rpcService.getLimitPoints(query)
-      .pipe(take(1))
-      .subscribe(async data => {
-        const result = await this.sportService.getSportCenterInRadius(query, data);
-        res.json(result);
-      })
-  }
-
-  @Get('getSportCentersByGeolocationAndSport')
-  @ApiQuery({ name: 'longitude' })
-  @ApiQuery({ name: 'latitude' })
-  @ApiQuery({ name: 'distance' })
-  @ApiQuery({ name: 'sport' })
-  @ApiQuery({ name: 'limit', required: false })
-  @ApiQuery({ name: 'page', required: false })
-  async getSportCenterByGeolocationAndSport(@Query() query: TypePositionMapDistanceAndSport, @Response() res) {
-    this.rpcService.getLimitPoints(query)
-      .pipe(take(1))
-      .subscribe(async data => {
-        const result = await this.sportService.getSportCenterInRadiusBySport(query, data);
-        res.json(result);
-      })
-  }
-
-  @Get('getSportCenterByGeolocationAndSport/timeSlotBlank')
-  @ApiQuery({ name: 'longitude' })
-  @ApiQuery({ name: 'latitude' })
-  @ApiQuery({ name: 'distance' })
-  @ApiQuery({ name: 'sportId' })
-  @ApiQuery({ name: 'time', description: new Date().getTime().toString() })
-  @ApiQuery({ name: 'limit', required: false })
-  @ApiQuery({ name: 'page', required: false })
-  async getSportCentreByGeolocationAndSport(@Query() query: TypeQuerySportCenterTimeSlotBlank, @Response() res) {
-    this.rpcService.getLimitPoints(query)
-      .pipe(take(1))
-      .subscribe(async data => {
-        const sportCenters = await this.sportService.getSportCenterBySlotTimeBlank(
-          query.sportId,
-          +query.time,
-          {
-            lat: query.latitude,
-            lon: query.longitude,
-            distance: query.distance,
-            limit: query.limit,
-            page: query.page,
-            pointFourDirection: data
+  @ApiQuery({ name: 'isTimeSlotBlank', type: 'boolean', required: false })
+  @ApiQuery({ name: 'isByLocation', type: 'boolean', required: false })
+  @Get('sportCenters')
+  getSportCenters$(@Query() query: TypeQueryGetSportCenters) {
+    console.log(query);
+    return of(query)
+      .pipe(
+        mergeMap(query => {
+          if (query.isTimeSlotBlank + '' === 'true') {
+            return this.sportHanderService.getSportCenterTimeBlank$(query);
+          } else {
+            if (query.isByLocation + '' === 'true') {
+              return this.sportHanderService.getSportCenterByGeoLocation$(query);
+            }
           }
-        );
-        res.json(sportCenters);
-      })
+          // if (!query.isByLocation && !query.isTimeSlotBlank) {
+          return from(this.sportService.getSportCenters(query))
+          // }
+        })
+      )
   }
 }

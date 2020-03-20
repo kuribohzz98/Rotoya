@@ -1,3 +1,4 @@
+import { ImageModule } from './image.module';
 import { BookingModule } from './booking.module';
 import { MapModule } from './map.module';
 import { PaymentModule } from './payment.module';
@@ -11,7 +12,8 @@ const Modules = [
     RpcModule,
     PaymentModule,
     MapModule,
-    BookingModule
+    BookingModule,
+    ImageModule
 ]
 
 export default Modules;

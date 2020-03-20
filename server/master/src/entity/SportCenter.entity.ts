@@ -1,3 +1,4 @@
+import { Payment } from './Payment.entity';
 import { SportEquipment } from './SportEquipment.entity';
 import { SportGround } from './SportGround.entity';
 import { User } from './User.entity';
@@ -152,4 +153,7 @@ export class SportCenter extends BaseEntity<SportCenterAttribute> implements Spo
 
     @OneToMany(type => SportCenterSport, sportCenterSport => sportCenterSport.sportCenter)
     sportCenterSports: SportCenterSport[];
+
+    @OneToMany(type => Payment, payment => payment.sportCenter)
+    payments: Payment[];
 }

@@ -1,11 +1,14 @@
+import { SportCenter } from './SportCenter.entity';
+import { User } from './User.entity';
 import { PaymentAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from '../base/BaseEntity';
 import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    JoinColumn,
-    OneToOne
+    OneToMany,
+    ManyToOne,
+    JoinColumn
 } from "typeorm";
 import { Booking } from './Booking.entity';
 
@@ -19,7 +22,14 @@ export class Payment extends BaseEntity<PaymentAttribute> implements PaymentAttr
         width: 11,
         nullable: false
     })
-    bookingId?: number;
+    userId?: number;
+
+    @Column({
+        type: 'int',
+        width: 11,
+        nullable: false
+    })
+    sportCenterId?: number;
 
     @Column({
         type: 'float',
@@ -43,7 +53,14 @@ export class Payment extends BaseEntity<PaymentAttribute> implements PaymentAttr
         length: '255',
         nullable: true
     })
-    qrCode?: string;
+    orderId?: string;
+
+    @Column({
+        type: 'varchar',
+        length: '255',
+        nullable: true
+    })
+    transactionId?: string;
 
     @Column({
         type: 'datetime',
@@ -58,7 +75,14 @@ export class Payment extends BaseEntity<PaymentAttribute> implements PaymentAttr
     })
     updatedAt: Date;
 
-    @OneToOne(type => Booking, booking => booking.payment)
-    @JoinColumn({ name: "bookingId" })
-    booking: Booking;
+    @OneToMany(type => Booking, booking => booking.payment)
+    bookings: Booking[];
+
+    @ManyToOne(type => User, user => user.payments)
+    @JoinColumn({name: 'userId'})
+    user: User;
+
+    @ManyToOne(type => SportCenter, sportCenter => sportCenter.payments)
+    @JoinColumn({name: 'sportCenterId'})
+    sportCenter: SportCenter;
 }

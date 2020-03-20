@@ -16,22 +16,16 @@ export class createBooking1579245839951 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "userId",
-                    type: "int",
-                    width: 11,
-                    isNullable: false
-                },
-                {
-                    name: "sportGroundId",
-                    type: "int",
-                    width: 11,
-                    isNullable: false
-                },
-                {
                     name: "timeSlotId",
                     type: "int",
                     width: 11,
                     isNullable: false
+                },
+                {
+                    name: "paymentId",
+                    type: "int",
+                    width: 11,
+                    isNullable: true
                 },
                 {
                     name: "bookingDate",
@@ -63,21 +57,15 @@ export class createBooking1579245839951 implements MigrationInterface {
             ],
             foreignKeys: [
                 {
-                    name: 'sport_ground-booking',
-                    columnNames: ['sportGroundId'],
-                    referencedTableName: 'sport_ground',
-                    referencedColumnNames: ['id']
-                },
-                {
-                    name: 'user-booking',
-                    columnNames: ['userId'],
-                    referencedTableName: 'user',
-                    referencedColumnNames: ['id']
-                },
-                {
                     name: 'sport_ground_time_slot-booking',
                     columnNames: ['timeSlotId'],
                     referencedTableName: 'sport_ground_time_slot',
+                    referencedColumnNames: ['id']
+                },
+                {
+                    name: 'booking-payment',
+                    columnNames: ['paymentId'],
+                    referencedTableName: 'payment',
                     referencedColumnNames: ['id']
                 }
             ]

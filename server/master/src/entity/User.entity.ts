@@ -1,3 +1,4 @@
+import { Payment } from './Payment.entity';
 import { SportCenter } from './SportCenter.entity';
 import { BaseEntity } from './../base/BaseEntity';
 import { UserAttribute } from '../interface/attribute.interface';
@@ -104,6 +105,6 @@ export class User extends BaseEntity<UserAttribute> implements UserAttribute {
     @OneToMany(type => SportCenter, sportCenter => sportCenter.user)
     sportCenters: SportCenter[];
 
-    @OneToMany(type => Booking, booking => booking.user)
-    bookings: Booking[];
+    @OneToMany(type => Payment, payment => payment.user)
+    payments: Payment[];
 }

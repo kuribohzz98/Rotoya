@@ -20,7 +20,7 @@ export class BookingRepository extends BaseRepository<Booking, BookingAttribute>
         userId: number,
         options?: OptionsPaging
     ): Promise<Booking[]> {
-        return this.getByOptions({ userId }, ['payment'], {
+        return this.getByOptions({ }, ['payment'], {
             order: {
                 createdAt: 'DESC'
             },

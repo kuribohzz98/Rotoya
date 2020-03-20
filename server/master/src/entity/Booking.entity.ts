@@ -1,6 +1,4 @@
 import { SportGroundTimeSlot } from './SportGroundTimeSlot.entity';
-import { User } from './User.entity';
-import { SportGround } from './SportGround.entity';
 import { BookingAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from '../base/BaseEntity';
 import {
@@ -23,21 +21,14 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
         width: 11,
         nullable: false
     })
-    userId?: number;
-
-    @Column({
-        type: 'int',
-        width: 11,
-        nullable: false
-    })
-    sportGroundId?: number;
-
-    @Column({
-        type: 'int',
-        width: 11,
-        nullable: false
-    })
     timeSlotId?: number;
+
+    @Column({
+        type: 'int',
+        width: 11,
+        nullable: true
+    })
+    paymentId?: number;
 
     @Column({
         type: 'date',
@@ -70,15 +61,8 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
     })
     updatedAt: Date;
 
-    @ManyToOne(type => User, user => user.bookings)
-    @JoinColumn({ name: "userId" })
-    user: User;
-
-    @ManyToOne(type => SportGround, sportGround => sportGround.bookings)
-    @JoinColumn({ name: "sportGroundId" })
-    sportGround: SportGround;
-
-    @OneToOne(type => Payment, payment => payment.booking)
+    @ManyToOne(type => Payment, payment => payment.bookings)
+    @JoinColumn({name: "paymentId"})
     payment: Payment;
 
     @ManyToOne(type => SportGroundTimeSlot, sportGroundTimeSlot => sportGroundTimeSlot.bookings)

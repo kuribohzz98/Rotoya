@@ -1,6 +1,3 @@
-import { TypePointFourDirection } from './../interface/map.interface';
-import { SportCenterDataFindByRadius } from '../dto/sportCenter.dto';
-import { HAVERSINE } from './../constants/map.constants';
 import { SportCenterRepository } from '../repository/sportCenter.repository';
 import { Injectable } from "@nestjs/common";
 

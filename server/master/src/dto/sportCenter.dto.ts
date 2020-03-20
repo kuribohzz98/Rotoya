@@ -1,3 +1,4 @@
+import { SportDto } from './sport.dto';
 import { DtoMapper, MapFrom } from './../base/BaseDtoMapper';
 
 export class SportCenterDataFindByRadius {
@@ -31,6 +32,56 @@ export class SportCenterDataFindByRadius {
     latitude?: number;
     longitude?: number;
     distance?: number;
+}
+
+class Booked {
+    date: string;
+    amount: number;
+}
+
+class SportGroundTimeSlot extends DtoMapper {
+    @MapFrom()
+    id?: number;
+
+    @MapFrom()
+    startTime?: number;
+
+    @MapFrom()
+    endTime?: number;
+
+    @MapFrom()
+    price?: number;
+
+    bookeds?: Booked[] = [];
+}
+
+class SportGround extends DtoMapper {
+    @MapFrom()
+    id?: number;
+
+    @MapFrom()
+    sportId?: number;
+
+    @MapFrom()
+    name?: number;
+
+    @MapFrom()
+    code?: string;
+
+    @MapFrom()
+    type?: string;
+
+    @MapFrom()
+    avatar?: string;
+
+    @MapFrom()
+    quantity?: number;
+
+    @MapFrom()
+    description?: string;
+
+    @MapFrom('sportGroundTimeSlots', SportGroundTimeSlot, true)
+    sportGroundTimeSlots?: SportGroundTimeSlot[];
 }
 
 export class SportCenterInfoDto extends DtoMapper {
@@ -75,4 +126,10 @@ export class SportCenterInfoDto extends DtoMapper {
 
     @MapFrom()
     longitude?: number;
+
+    @MapFrom('sportGrounds', SportGround, true)
+    sportGrounds?: SportGround[];
+
+    @MapFrom('sports', SportDto, true)
+    sports: SportDto[];
 }

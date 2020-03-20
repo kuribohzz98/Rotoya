@@ -5,5 +5,10 @@ import { EntityRepository } from "typeorm";
 
 @EntityRepository(Payment)
 export class PaymentRepository extends BaseRepository<Payment, PaymentAttribute>  {
-    
+    async getPaymentByOrderId(orderId: string) {
+        return this.findOne({
+            where: { orderId },
+            relations: ['bookings']
+        })
+    }
 }
