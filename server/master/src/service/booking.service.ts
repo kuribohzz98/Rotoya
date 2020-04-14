@@ -1,3 +1,7 @@
+import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
+import { Subject } from 'rxjs';
+import * as uuid from 'uuid/v4';
+import { filter, take } from 'rxjs/operators';
 import { TimeSlotRepository } from './../repository/timeslot.repository';
 import { BookQueueService } from './../queue/booking/bookQueue.service';
 import { OptionsPaging } from './../interface/repository.interface';
@@ -5,16 +9,12 @@ import { ConfigService } from './../config/config.service';
 import { BookingAttribute, PaymentAttribute } from './../interface/attribute.interface';
 import { BookSportGround, OutputCheckTimeSlot, SubjectError, BookSubject } from './../interface/booking.interface';
 import { BookingRepository } from './../repository/booking.repository';
-import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
 import { GetFullDate } from '../helper/utils/date';
 import { PaymentService } from './payment.service';
-import { Subject } from 'rxjs';
-import * as uuid from 'uuid/v4';
-import { filter, take } from 'rxjs/operators';
-import { StatusCheckTimeSlot } from '../constants/book.constants';
+import { StatusCheckTimeSlot, TimeOutBook } from '../constants/book.constants';
 
 @Injectable()
-export class BookingService {
+export class BookingService{
     public bookSubject$: Subject<BookSubject>;
     public errorSubject$: Subject<SubjectError>;
     private logger = new Logger('BookingService');
@@ -51,11 +51,20 @@ export class BookingService {
             take(1)
         ).subscribe(data => {
             this.logger.log(data, 'BookingService: bookSubject');
-            if (!data.error) return result$.next({ id: uuidv4, message: 'complete', data: data.data });
+            if (!data.error) {
+                this.addTimeOutBook(data.data.orderId);
+                return result$.next({ id: uuidv4, message: 'complete', data: data.data });
+            }
             if (data.error && !data.error.id) return result$.next({ id: uuidv4, error: 'There was an error' });
             return result$.next({ id: uuidv4, error: data.error.timeSlotId });
         });
         return result$.pipe(filter(data => data && data.id == uuidv4), take(1));
+    }
+
+    addTimeOutBook(orderId: string) {
+        const callback = () => this.paymentService.rollBackBooking(orderId);
+        const timeout = setTimeout(callback, TimeOutBook);
+        this.paymentService.schedule.addTimeout(orderId, timeout);
     }
 
     async checkTimeSlot(id: number, bookDate: string) {
@@ -76,11 +85,10 @@ export class BookingService {
 
     async bookInsert(book: BookSportGround) {
         const paymentAttribute = {} as PaymentAttribute;
-        const orderId = uuid();
         paymentAttribute.userId = book.userId;
         paymentAttribute.sportCenterId = book.sportCenterId;
         paymentAttribute.amount = book.bookDatas.reduce((preValue, bookData) => preValue + +bookData.price, 0);
-        paymentAttribute.orderId = orderId;
+        paymentAttribute.orderId = uuid();
         const insertPayment = await this.paymentService.insertPayment(paymentAttribute);
         const bookAttrs = book.bookDatas.map(bookData => {
             const bookAttribute = {} as BookingAttribute;

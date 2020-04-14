@@ -42,10 +42,8 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
         findManyOptions?: FindManyOptions<T>
     ): Promise<T[]> {
         let findOptions = findManyOptions || {} as FindManyOptions<T>;
-        findOptions.where = options;
-        if (optionsJoin) {
-            findOptions.join = this.getJoinQuery(optionsJoin);
-        }
+        if (options) findOptions.where = options;
+        if (optionsJoin) findOptions.join = this.getJoinQuery(optionsJoin);
         return this.find(findOptions);
     }
 
@@ -63,6 +61,17 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
             opts.leftJoinAndSelect[opt] = `${opts.alias}.${opt}`
         })
         return opts;
+    }
+
+    filterOptionsPaging(opts: any) {
+        if (!opts) return null;
+        const filterPaging = (key, value) => {
+            if (key == 'page' || key == 'limit') return undefined;
+            return value;
+        }
+        const options = JSON.parse(JSON.stringify(opts, filterPaging));
+        if (!Object.keys(options).length) return null;
+        return options;
     }
 
     // getDeepQuery(options: DeepQueryOptions<T>) {

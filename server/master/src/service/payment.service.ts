@@ -1,51 +1,85 @@
+import { Injectable, HttpService, Logger, OnModuleInit } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { ModuleRef } from '@nestjs/core';
 import { BookingRepository } from './../repository/booking.repository';
-import { RequestMomoAtm, ResponseSideMomoAfterFirstRequest, NotifyUrlBodySideMomo, NotifyUrlSideServer } from './../interface/payment.interface';
-import { Injectable, HttpService } from '@nestjs/common';
-import { RequestPaymentMomoAtm } from './../dto/payment.dto';
+import {
+    RequestMomoATM,
+    ResponseSideMomoAfterFirstRequestATM,
+    ResponseSideMomoAfterFirstRequestAIO,
+    NotifyUrlBodySideMomo,
+    NotifyUrlSideServer,
+    RequestMomoAIO,
+    OptionsQueryPayment
+} from './../interface/payment.interface';
+import { RequestPaymentMomoATM, RequestPaymentMomoAIO } from './../dto/payment.dto';
 import { ConfigService } from './../config/config.service';
 import { PaymentAttribute } from './../interface/attribute.interface';
 import { PaymentRepository } from './../repository/payment.repository';
+import { createQrCodeAndSave } from '../helper/tools/file';
 import * as uuid from 'uuid/v4';
-import * as PaymentUtils from 'src/helper/utils/payment';
-import { createQrCodeAndSave } from 'src/helper/tools/file';
+import * as PaymentUtils from '../helper/utils/payment'; 
+
 
 @Injectable()
-export class PaymentService {
+export class PaymentService implements OnModuleInit {
+    private logger = new Logger("PaymentService", true);
+    public schedule: SchedulerRegistry;
+
     constructor(
         public readonly paymentRepository: PaymentRepository,
         public readonly bookingRepository: BookingRepository,
         private readonly httpService: HttpService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly moduleRef: ModuleRef
     ) { }
 
-    async insertPayment(paymentAttribute: PaymentAttribute) {
-        return this.paymentRepository.insert(paymentAttribute);
+    async onModuleInit() {
+        this.schedule = await this.moduleRef.create(SchedulerRegistry);
     }
 
-    async requestPaymentMomoAtm(requestData: RequestPaymentMomoAtm): Promise<ResponseSideMomoAfterFirstRequest> {
-        var body = new RequestMomoAtm();
+    async requestPaymentMomo(
+        body: RequestMomoATM | RequestMomoAIO,
+        requestData: RequestPaymentMomoATM | RequestPaymentMomoAIO
+    ): Promise<ResponseSideMomoAfterFirstRequestATM | ResponseSideMomoAfterFirstRequestAIO> {
         const notifyUrlPath = '/api/rotoya/payment/momo/notifyUrl';
-        if (!PaymentUtils.checkBankCode(requestData.bankCode)) return;
         body.partnerCode = this.configService.get('MOMO_PARTNER_CODE');
         body.accessKey = this.configService.get('MOMO_ACCESS_KEY');
-        body.requestId = requestData.orderId;
-        body.bankCode = requestData.bankCode;
+        body.orderId = uuid();
+        if (body instanceof RequestMomoATM) body.bankCode = (requestData as RequestPaymentMomoATM).bankCode;
         body.amount = requestData.amount + "";
-        body.orderId = body.requestId;
-        body.orderInfo = "zz";
-        body.extraData = "email=kuribohzz98@gmail.com"
+        body.requestId = requestData.orderId;
+        body.orderInfo = "kuribboh";
+        body.extraData = "email=huhu@gmail.com";
         body.returnUrl = requestData.returnUrl;
         body.notifyUrl = this.configService.get('PUBLIC_HOST')
             ? this.configService.get('PUBLIC_HOST') + notifyUrlPath
             : this.configService.get('PUBLIC_HOSTNAME') + ':' + this.configService.get('PORT_LISTEN') + notifyUrlPath;
 
-        body.signature = PaymentUtils.getSignature(body, this.configService.get('MOMO_SECRET_KEY'));
+        body.signature = PaymentUtils.getSignature(
+            body,
+            this.configService.get('MOMO_SECRET_KEY'),
+            body instanceof RequestMomoAIO ? ['requestType'] : null
+        );
+
+        console.log(body);
+
         const res = await this.httpService
             .post(this.configService.get('MOMO_API_HOSTNAME') + '/gw_payment/transactionProcessor', body)
             .toPromise();
-        console.log(res);
-        if (res.status != 200) return;
-        return res.data as ResponseSideMomoAfterFirstRequest;
+        console.log(res.data);
+        if (res.status >= 400) return;
+        return res.data;
+    }
+
+    async requestPaymentMomoATM(requestData: RequestPaymentMomoATM): Promise<ResponseSideMomoAfterFirstRequestATM> {
+        var body = new RequestMomoATM();
+        if (!PaymentUtils.checkBankCode(requestData.bankCode)) return;
+        return this.requestPaymentMomo(body, requestData);
+    }
+
+    async requestPaymentMomoAIO(requestData: RequestPaymentMomoAIO): Promise<ResponseSideMomoAfterFirstRequestAIO> {
+        var body = new RequestMomoAIO();
+        return this.requestPaymentMomo(body, requestData) as Promise<ResponseSideMomoAfterFirstRequestAIO>;
     }
 
     async responseNotifyUrlMomo(requestData: NotifyUrlBodySideMomo): Promise<NotifyUrlSideServer> {
@@ -60,23 +94,42 @@ export class PaymentService {
         body.extraData = requestData.extraData;
         body.signature = PaymentUtils.getSignature(body, this.configService.get('MOMO_SECRET_KEY'));
 
-        if (+requestData.errorCode) {
-            await this.rollBackBooking(requestData.orderId);
-        } else {
-            await this.acceptBooking(requestData.orderId, requestData.transId);
+        try {
+            if (+requestData.errorCode) {
+                await this.rollBackBooking(requestData.requestId);
+            } else {
+                await this.acceptBooking(requestData.requestId, requestData.transId);
+            }
+        } catch (e) {
+            this.logger.error(e);
         }
+
         return body;
     }
 
     async rollBackBooking(orderId: string) {
-        const payment = await this.getPaymentByOrderId(orderId);
+        const payment = await this.getPayment({ orderId }, ['bookings']);
+        try {
+            this.schedule.deleteTimeout(orderId);
+        } catch (e) {
+            this.logger.error(e);
+        }
         if (!payment) throw new Error(`payment with orderId = ${orderId} not found`);
+        if (payment.transactionId) {
+            this.logger.error(`Can't rollback because transactionId available with paymentId = ${payment.id}`);
+            return;
+        };
         await this.bookingRepository.remove(payment.bookings);
         await this.paymentRepository.remove(payment);
     }
 
     async acceptBooking(orderId: string, transactionId: string) {
-        const payment = await this.getPaymentByOrderId(orderId);
+        try {
+            this.schedule.deleteTimeout(orderId);
+        } catch (e) {
+            this.logger.error(e);
+        }
+        const payment = await this.getPayment({ orderId });
         if (!payment) {
             throw new Error(`payment with orderId = ${orderId} not found`);
         }
@@ -86,9 +139,20 @@ export class PaymentService {
         await this.paymentRepository.update({ id: payment.id }, { transactionId });
     }
 
-    async getPaymentByOrderId(orderId: string) {
-        return this.paymentRepository.getPaymentByOrderId(orderId);
+    async insertPayment(paymentAttribute: PaymentAttribute) {
+        return this.paymentRepository.insert(paymentAttribute);
     }
 
+    async getPayment(paymentAttr: PaymentAttribute, joins?: string[]) {
+        return this.paymentRepository.getOneByOptions(paymentAttr, joins);
+    }
+    
+    async getPaymentInfo(paymentAttr: PaymentAttribute) {
+        return this.paymentRepository.getPaymentInfo(paymentAttr.orderId);
+    }
+
+    async getPayments(opts?: OptionsQueryPayment) {
+        return this.paymentRepository.getPayments(opts);
+    }
 
 }

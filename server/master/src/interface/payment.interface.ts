@@ -1,3 +1,4 @@
+import { OptionsPaging } from './repository.interface';
 import { RequestType } from './../constants/payment.constants';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -21,10 +22,7 @@ class BaseBodySideMomo extends BaseBodyMomo {
     localMessage: string;
 }
 
-export class RequestMomoAtm extends BaseBodyMomo {
-    @ApiProperty()
-    bankCode: string;
-
+class BaseRequestMomo extends BaseBodyMomo {
     @ApiProperty()
     amount: string;
 
@@ -40,19 +38,49 @@ export class RequestMomoAtm extends BaseBodyMomo {
     @ApiProperty()
     notifyUrl: string;
 
-    @ApiProperty({enum: RequestType, default: RequestType.MomoATM})
-    requestType: RequestType = RequestType.MomoATM;
+    @ApiProperty()
+    requestType: string;
 
     @ApiProperty()
     extraData: string = "";
 }
 
-export class ResponseSideMomoAfterFirstRequest extends BaseBodySideMomo {
+export class RequestMomoATM extends BaseRequestMomo {
+    @ApiProperty()
+    bankCode: string;
+
+    @ApiProperty({enum: RequestType, default: RequestType.MomoATM})
+    requestType: RequestType = RequestType.MomoATM;
+}
+
+export class RequestMomoAIO extends BaseRequestMomo {
+    @ApiProperty({enum: RequestType, default: RequestType.MomoAIO})
+    requestType: RequestType = RequestType.MomoAIO;
+}
+
+export class ResponseSideMomoAfterFirstRequestATM extends BaseBodySideMomo {
     @ApiProperty({enum: RequestType, default: RequestType.MomoATM})
     requestType: RequestType = RequestType.MomoATM;
 
     @ApiProperty()
     payUrl: string;
+}
+
+export class ResponseSideMomoAfterFirstRequestAIO extends BaseBodySideMomo {
+    @ApiProperty({enum: RequestType, default: RequestType.MomoAIO})
+    requestType: RequestType = RequestType.MomoAIO;
+
+    @ApiProperty()
+    payUrl: string;
+
+    @ApiProperty()
+    qrCodeUrl: string;
+
+    @ApiProperty()
+    deeplink: string;
+
+    @ApiProperty()
+    deeplinkWebInApp: string;
 }
 
 export class NotifyUrlBodySideMomo extends BaseBodySideMomo {
@@ -81,4 +109,21 @@ export class NotifyUrlSideServer extends BaseBodyMomo {
 
     @ApiProperty()
     extraData: string;
+}
+
+export class OptionsQueryPayment implements OptionsPaging {
+    @ApiProperty({required: false})
+    limit?: number;
+
+    @ApiProperty({required: false})
+    page?: number;
+
+    @ApiProperty({required: false})
+    userId?: number;
+
+    @ApiProperty({required: false})
+    sportCenterId?: number;
+
+    @ApiProperty({required: false})
+    orderId?: number;
 }

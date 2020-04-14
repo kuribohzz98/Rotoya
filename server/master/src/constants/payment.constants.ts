@@ -17,7 +17,8 @@ export enum Signature {
 }
 
 export enum RequestType {
-    MomoATM = 'payWithMoMoATM'
+    MomoATM = 'payWithMoMoATM',
+    MomoAIO = 'captureMoMoWallet'
 }
 
 export enum BankCode {

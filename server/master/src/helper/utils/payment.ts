@@ -11,9 +11,10 @@ function getSignatureEncode(data: string, secretKey: string) {
     return signature;
 }
 
-export function getSignature(data: ObjectLiteral, secretKey: string): string {
+export function getSignature(data: ObjectLiteral, secretKey: string, skip?: string[]): string {
     const dataTemp = Object.keys(data)
         .sort((a, b) => Signature[a] - Signature[b])
+        .filter(key => !skip || !skip.length || !skip.includes(key))
         .map(key => `${key}=${data[key]}`);
     return getSignatureEncode(dataTemp.join('&'), secretKey);
 }
