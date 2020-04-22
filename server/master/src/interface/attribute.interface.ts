@@ -1,3 +1,4 @@
+import { OptionsPaging } from './repository.interface';
 import { EUserStatus } from '../entity/db.type';
 
 export interface UserAttribute {
@@ -145,3 +146,9 @@ export interface PaymentAttribute {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export interface ITypeSportGroundTimeSlot extends SportGroundTimeSlotAttribute, OptionsPaging { }
+
+export interface ITypeSport extends OptionsPaging, SportAttribute { }
+
+export interface ITypeSportGround extends OptionsPaging, SportGroundAttribute { }

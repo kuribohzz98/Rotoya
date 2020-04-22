@@ -1,19 +1,19 @@
-import { ITypeSport } from './../../interface/sport.interface';
 import { ApiProperty } from '@nestjs/swagger';
+import { ITypeSport } from './../../interface/attribute.interface';
 
 export class SportType implements ITypeSport{
-    @ApiProperty()
+    @ApiProperty({required: false})
     id: number;
 
-    @ApiProperty()
+    @ApiProperty({required: false})
     name: string;
 
-    @ApiProperty()
+    @ApiProperty({required: false})
     code: string;
 
-    @ApiProperty()
+    @ApiProperty({required: false})
     page?: number;
 
-    @ApiProperty()
+    @ApiProperty({required: false})
     limit?: number;
 }

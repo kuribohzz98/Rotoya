@@ -16,9 +16,3 @@ export interface TypeQueryGetSportCenter {
     startDate?: string;
     endDate?: string;
 }
-
-export interface ITypeSport extends OptionsPaging {
-    id: number;
-    name: string;
-    code: string;
-}

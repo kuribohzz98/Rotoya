@@ -1,3 +1,5 @@
+import { SportGroundModule } from './sport-ground.module';
+import { SportGroundTimeSlotModule } from './sport-ground-time-slot.module';
 import { SportCenterModule } from './sport-center.module';
 import { ImageModule } from './image.module';
 import { BookingModule } from './booking.module';
@@ -15,7 +17,9 @@ const Modules = [
     MapModule,
     BookingModule,
     ImageModule,
-    SportCenterModule
+    SportCenterModule,
+    SportGroundModule,
+    SportGroundTimeSlotModule
 ];
 
 export default Modules;
