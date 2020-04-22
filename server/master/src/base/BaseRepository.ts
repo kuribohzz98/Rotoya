@@ -1,21 +1,7 @@
-import { ModelConstants, AliasQuery } from './../constants/model.constants';
+import { Repository, ObjectLiteral, Connection, JoinOptions, FindManyOptions } from "typeorm";
 import { BaseEntity } from './BaseEntity';
-import { Repository, ObjectLiteral, Connection, Brackets, JoinOptions, FindManyOptions } from "typeorm";
-
-// export interface DeepQueryOptions<T> {
-//     firstWhere?: boolean;
-//     andWhere?: DeepQueryOptions<T>;
-//     orWhere?: DeepQueryOptions<T>;
-//     whereAttribute?: WhereOptions<T>;
-// }
-
-// export interface WhereOptions<T> {
-//     equals: T;
-//     moreThan: T;
-//     moreThanE: T;
-//     lessThan: T;
-//     lessThanE: T;
-// }
+import { OptionsPaging } from './../interface/repository.interface';
+import { ModelConstants, AliasQuery } from './../constants/model.constants';
 
 export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> extends Repository<T> {
     constructor(
@@ -30,10 +16,6 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
 
     get models() {
         return ModelConstants;
-    }
-
-    async getById(id: number): Promise<T> {
-        return this.findOne({ where: { id } });
     }
 
     async getByOptions(
@@ -74,18 +56,20 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
         return options;
     }
 
-    // getDeepQuery(options: DeepQueryOptions<T>) {
-    //     const queryBuilder = this.createQueryBuilder('alias');
-    //     if (options.firstWhere) {
-    //         queryBuilder.where("");
-    //     }
-    // }
+    getPageOpts(opts: OptionsPaging) {
+        if (!opts || !opts.limit || !opts.page) return {};
+        const take = opts.limit;
+        const skip = (opts.page - 1) * opts.limit;
+        return { take, skip };
+    }
 
-    // getOptionsWhere(options: DeepQueryOptions<T>) {
-    //     Object.keys(options).map(key => {
-    //         if (key == 'andWhere') {
+    async get(opts?: U, page?: OptionsPaging): Promise<T[]> {
+        const pageOpts = this.getPageOpts(page);
+        return this.getByOptions(opts, null, pageOpts);
+    }
 
-    //         }
-    //     })
-    // }
+    async getById(id: number): Promise<T> {
+        return this.findOne({ where: { id } });
+    }
+
 }

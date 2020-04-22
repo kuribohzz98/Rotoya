@@ -1,5 +1,5 @@
 import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import * as uuid from 'uuid/v4';
 import { filter, take } from 'rxjs/operators';
 import { TimeSlotRepository } from './../repository/timeslot.repository';
@@ -12,6 +12,7 @@ import { BookingRepository } from './../repository/booking.repository';
 import { GetFullDate } from '../helper/utils/date';
 import { PaymentService } from './payment.service';
 import { StatusCheckTimeSlot, TimeOutBook } from '../constants/book.constants';
+import { Booking } from './../entity/Booking.entity';
 
 @Injectable()
 export class BookingService{
@@ -31,7 +32,7 @@ export class BookingService{
         this.errorSubject$ = new Subject<SubjectError>();
     }
 
-    bookSportGround$(book: BookSportGround) {
+    bookSportGround$(book: BookSportGround): Observable<any> {
         const uuidv4 = uuid();
         if (!book.userId || !book.bookDatas || !book.bookDatas.length) return;
         const result$ = new Subject<any>();
@@ -61,13 +62,13 @@ export class BookingService{
         return result$.pipe(filter(data => data && data.id == uuidv4), take(1));
     }
 
-    addTimeOutBook(orderId: string) {
+    addTimeOutBook(orderId: string): void {
         const callback = () => this.paymentService.rollBackBooking(orderId);
         const timeout = setTimeout(callback, TimeOutBook);
         this.paymentService.schedule.addTimeout(orderId, timeout);
     }
 
-    async checkTimeSlot(id: number, bookDate: string) {
+    async checkTimeSlot(id: number, bookDate: string): Promise<OutputCheckTimeSlot> {
         const result = {} as OutputCheckTimeSlot;
         result.id = +id;
         result.bookDate = bookDate;
@@ -83,7 +84,7 @@ export class BookingService{
         return result;
     }
 
-    async bookInsert(book: BookSportGround) {
+    async bookInsert(book: BookSportGround): Promise<PaymentAttribute> {
         const paymentAttribute = {} as PaymentAttribute;
         paymentAttribute.userId = book.userId;
         paymentAttribute.sportCenterId = book.sportCenterId;
@@ -102,7 +103,7 @@ export class BookingService{
         return paymentAttribute;
     }
 
-    async getBookingByUser(userId: number, options?: OptionsPaging) {
+    async getBookingByUser(userId: number, options?: OptionsPaging): Promise<Booking[]> {
         return this.bookingRepository.getBookingByUserHasPaging(userId, options);
     }
 

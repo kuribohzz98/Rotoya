@@ -108,19 +108,22 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
         return query.getRawMany();
     }
 
-    async getSportCenters(query: TypeQueryGetSportCenters = {}) {
+    async getSportCenters(query: TypeQueryGetSportCenters = {} as TypeQueryGetSportCenters) {
         const sportCenter = this.models.sport_center;
         const sport = this.models.sport;
         const queryBuilder = this.createQueryBuilder(sportCenter);
         if (query.sportId || query.sport) {
             queryBuilder.leftJoinAndSelect(`${sportCenter}.sports`, sport);
             queryBuilder.where(`${sport}.${query.sportId ? 'id' : 'name'} = :sport`, { sport: query.sportId || query.sport });
+            query.userId && queryBuilder.andWhere(`${sportCenter}.userId = :userId`, { userId: +query.userId });
+        } else {
+            query.userId && queryBuilder.where(`${sportCenter}.userId = :userId`, { userId: +query.userId });
         }
         if (query.limit) {
             queryBuilder.limit(query.limit);
             if (query.page) queryBuilder.offset((query.page - 1) * query.limit);
         }
-        return queryBuilder.getMany()
+        return queryBuilder.getMany();
     }
 
     async getSportCenter(opts: TypeQueryGetSportCenter) {
@@ -129,11 +132,14 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
         const sportGround = this.models.sport_ground;
         const sportGroundTimeSlot = this.models.sport_ground_time_slot;
         const booking = this.models.booking;
-        return this.createQueryBuilder(sportCenter)
+        const qb = this.createQueryBuilder(sportCenter)
             .leftJoinAndMapMany(`${sportCenter}.sportGrounds`, sportGround, sportGround, `${sportCenter}.id = ${sportGround}.sportCenterId`)
             .leftJoinAndMapMany(`${sportGround}.sportGroundTimeSlots`, sportGroundTimeSlot, sportGroundTimeSlot, `${sportGround}.id = ${sportGroundTimeSlot}.sportGroundId`)
             .leftJoinAndSelect(`${sportCenter}.sports`, sport)
-            .leftJoinAndMapMany(`${sportGroundTimeSlot}.bookings`, qb => {
+            .where(`${sportCenter}.id = :id`, { id: +opts.id });
+
+        if (opts.startDate && opts.endDate) {
+            qb.leftJoinAndMapMany(`${sportGroundTimeSlot}.bookings`, qb => {
                 return qb
                     .addSelect('COUNT(*)', 'count')
                     .addSelect(`${booking}.id`)
@@ -144,8 +150,8 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
                     .groupBy(`${booking}_timeSlotId`)
                     .addGroupBy(`${booking}_bookingDate`)
             }, booking, `${booking}_timeSlotId = ${sportGroundTimeSlot}.id`)
-            .where(`${sportCenter}.id = :id`, { id: +opts.id })
-            .getRawAndEntities();
+        }
+        return qb.getRawAndEntities();
     }
 }
 

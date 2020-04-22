@@ -1,3 +1,4 @@
+import { SportCenterModule } from './sport-center.module';
 import { ImageModule } from './image.module';
 import { BookingModule } from './booking.module';
 import { MapModule } from './map.module';
@@ -13,7 +14,8 @@ const Modules = [
     PaymentModule,
     MapModule,
     BookingModule,
-    ImageModule
-]
+    ImageModule,
+    SportCenterModule
+];
 
 export default Modules;

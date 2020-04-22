@@ -1,6 +1,7 @@
+import { Injectable } from '@nestjs/common';
+import { User } from './../entity/User.entity';
 import { UserAttribute } from './../interface/attribute.interface';
 import { UserRepository } from './../repository/user.repository';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -8,11 +9,11 @@ export class UserService {
         public readonly userRepository: UserRepository
     ) { }
 
-    async getUserByName(username: any) {
+    async getUserByName(username: any): Promise<User> {
         return this.userRepository.getOneByOptions({ username });
     }
 
-    async getInfoUser(userAttribute: UserAttribute) {
+    async getInfoUser(userAttribute: UserAttribute): Promise<User> {
         return this.userRepository.getInfoUser(userAttribute);
     }
 }

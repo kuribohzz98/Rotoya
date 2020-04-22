@@ -1,3 +1,4 @@
+import { OptionsPaging } from './repository.interface';
 import { TypePositionMapAndDistance } from './map.interface';
 
 export interface TypeQueryGetSportCenters extends TypePositionMapAndDistance {
@@ -6,6 +7,7 @@ export interface TypeQueryGetSportCenters extends TypePositionMapAndDistance {
     time?: number;
     isTimeSlotBlank?: boolean;
     isByLocation?: boolean;
+    userId?: number;
 }
 
 export interface TypeQueryGetSportCenter {
@@ -13,4 +15,10 @@ export interface TypeQueryGetSportCenter {
     time?: number;
     startDate?: string;
     endDate?: string;
+}
+
+export interface ITypeSport extends OptionsPaging {
+    id: number;
+    name: string;
+    code: string;
 }
