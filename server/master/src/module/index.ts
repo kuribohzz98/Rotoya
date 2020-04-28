@@ -1,3 +1,4 @@
+import { RequestCoOperateModule } from './request-co-operate.module';
 import { SportGroundModule } from './sport-ground.module';
 import { SportGroundTimeSlotModule } from './sport-ground-time-slot.module';
 import { SportCenterModule } from './sport-center.module';
@@ -19,7 +20,8 @@ const Modules = [
     ImageModule,
     SportCenterModule,
     SportGroundModule,
-    SportGroundTimeSlotModule
+    SportGroundTimeSlotModule,
+    RequestCoOperateModule
 ];
 
 export default Modules;

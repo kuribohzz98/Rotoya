@@ -16,7 +16,6 @@ import { EUserStatus } from "./db.type";
 import { UserInfo } from "./UserInfo.entity";
 import { Role } from "./Role.entity";
 import { UserMeta } from './UserMeta.entity';
-import { Booking } from './Booking.entity';
 
 @Entity({ name: 'user' })
 export class User extends BaseEntity<UserAttribute> implements UserAttribute {
@@ -66,6 +65,12 @@ export class User extends BaseEntity<UserAttribute> implements UserAttribute {
         nullable: true
     })
     iterations: number;
+
+    @Column({
+        type: 'boolean',
+        nullable: true
+    })
+    isNew: boolean;
 
     @Column({
         type: 'datetime',

@@ -1,5 +1,5 @@
 import { OptionsPaging } from './repository.interface';
-import { EUserStatus } from '../entity/db.type';
+import { EUserStatus, ECoOperateStatus } from '../entity/db.type';
 
 export interface UserAttribute {
     id?: number;
@@ -9,6 +9,7 @@ export interface UserAttribute {
     status?: EUserStatus;
     salt?: string;
     iterations?: number;
+    isNew?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -147,8 +148,26 @@ export interface PaymentAttribute {
     updatedAt?: Date;
 }
 
+export interface RequestCoOperateAttribute {
+    id?: number;
+    status?: ECoOperateStatus;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    email?: string;
+    city?: string;
+    district?: string;
+    commune?: string;
+    address?: string;
+    note?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
 export interface ITypeSportGroundTimeSlot extends SportGroundTimeSlotAttribute, OptionsPaging { }
 
 export interface ITypeSport extends OptionsPaging, SportAttribute { }
 
 export interface ITypeSportGround extends OptionsPaging, SportGroundAttribute { }
+
+export interface ITypeRequestCoOperate extends OptionsPaging, RequestCoOperateAttribute { }

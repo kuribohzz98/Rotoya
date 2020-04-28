@@ -1,9 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class createTableUser1575451934332 implements MigrationInterface {
+export class createRequestCoOperate1587666473013 implements MigrationInterface {
+
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
-            name: "user",
+            name: "request_co_operate",
             columns: [
                 {
                     name: "id",
@@ -15,46 +16,63 @@ export class createTableUser1575451934332 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "username",
-                    type: "varchar",
-                    length: "45",
-                    isUnique: true,
-                    isNullable: false
-                },
-                {
-                    name: "password",
-                    type: "varchar",
-                    length: "255",
-                    isNullable: false
-                },
-                {
-                    name: "type",
-                    type: "varchar",
-                    length: "45",
-                    isNullable: true
-                },
-                {
                     name: "status",
                     type: "enum",
-                    enum: ["ACTIVE", "DEACTIVE"],
-                    isNullable: true,
-                    default: "'ACTIVE'"
+                    enum: ["REJECTED", "APPROVED", "WAITTING"],
+                    isNullable: false,
+                    default: "'WAITTING'"
                 },
                 {
-                    name: "salt",
+                    name: "firstName",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: false
+                },
+                {
+                    name: "lastName",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: false
+                },
+                {
+                    name: "city",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: false
+                },
+                {
+                    name: "district",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: false
+                },
+                {
+                    name: "commune",
+                    type: "varchar",
+                    length: "45",
+                    isNullable: false
+                },
+                {
+                    name: "address",
                     type: "varchar",
                     length: "255",
                     isNullable: true
                 },
                 {
-                    name: "iterations",
-                    type: "int",
-                    width: 11,
-                    isNullable: true
+                    name: "email",
+                    type: "varchar",
+                    length: "255",
+                    isNullable: false
                 },
                 {
-                    name: "isNew",
-                    type: "boolean",
+                    name: "phone",
+                    type: "varchar",
+                    length: "15",
+                    isNullable: false
+                },
+                {
+                    name: "note",
+                    type: "varchar",
                     isNullable: true
                 },
                 {
@@ -70,11 +88,11 @@ export class createTableUser1575451934332 implements MigrationInterface {
                     default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
                 }
             ]
-        }), true);
+        }), true)
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropTable("user", true, true);
+        await queryRunner.dropTable('request_co_operate', true, true);
     }
 
 }

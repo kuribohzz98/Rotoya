@@ -8,7 +8,7 @@ const options = new DocumentBuilder()
     .addTag('Rotoya')
     .build();
 
-export function initSwagger(app: INestApplication) {
+export function initSwagger(app: INestApplication, path?: string) {
     const document = SwaggerModule.createDocument(app, options);
-    SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup(path || 'api', app, document);
 }

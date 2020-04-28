@@ -1,9 +1,9 @@
 import { BaseController } from './../base/BaseController';
-import { Controller, Get, Query, Param, Put } from '@nestjs/common';
+import { Controller, Get, Query, Param, Put, Post, Body } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { of, from, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { TypeGetSportCenters } from './type/sport-center.type';
+import { TypeGetSportCenters, TypePostSportCenter } from './type/sport-center.type';
 import { SportHanderService } from './../service/sportHander.service';
 import { SportCenterService } from './../service/sport-center.service';
 import { SportCenterInfoDto, SportCenterDataFindByRadius } from './../dto/sportCenter.dto';
@@ -45,6 +45,17 @@ export class SportCenterController {
                     return from(this.sportCenterService.getSportCenters(query))
                 })
             )
+    }
+
+    @Post()
+    async post(@Body() body: TypePostSportCenter) {
+        const result = await this.sportCenterService.post(body);
+        if (!result) return {
+            message: 'faild'
+        }
+        return {
+            message: 'success'
+        }
     }
 
 }

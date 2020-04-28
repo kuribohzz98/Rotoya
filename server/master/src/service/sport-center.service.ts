@@ -7,6 +7,8 @@ import { SportCenterDataFindByRadius, SportCenterInfoDto } from './../dto/sportC
 import { SportCenter } from './../entity/SportCenter.entity';
 import { GetFullDate } from '../helper/utils/date';
 import { convertTimeToFloat } from '../helper/utils/time';
+import { cloneFilterObject } from '../helper/utils/common';
+import { TypePostSportCenter } from './../controller/type/sport-center.type';
 
 @Injectable()
 export class SportCenterService {
@@ -74,5 +76,23 @@ export class SportCenterService {
     ): Promise<(SportCenterDataFindByRadius | SportCenterInfoDto)[]> {
         const sportCenters = await this.sportCenterRepository.getSportCenterByGeolocation(query, dataFilter);
         return sportCenters.map(sportCenter => this.switchSportCenterInfo(sportCenter, this.sportCenterRepository.models.sport_center));
+    }
+
+    async post(body: TypePostSportCenter) {
+        const entity = cloneFilterObject(body, ['sports']) as SportCenter;
+        entity.country = 'Việt Nam';
+        try {
+            const sportCenter = await this.sportCenterRepository.save<SportCenter>(entity);
+            await Promise.all(
+                body.sports.map(sport => {
+                    return this.sportCenterRepository.getRepository('sport_sportcenter')
+                        .save({ sportCenterId: sportCenter.id, sportId: +sport });
+                })
+            )
+        } catch(e) {
+            console.log(e);
+            return false;
+        }
+        return true;
     }
 }

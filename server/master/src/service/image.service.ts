@@ -8,17 +8,6 @@ export class ImageService {
         private readonly configService: ConfigService
     ) {}
 
-    async getImageUpload(path: string): Promise<string> {
-        return Promise.resolve(readFileImg(this.configService.get('path_file_upload') + path));
-    }
-
-    getImageSportCenter(path: string) {
-        return {
-            path,
-            image: readFileImg(this.configService.get('path_file_upload') + path)
-        }
-    }
-
     getImage(path: string) {
         return this.configService.get('path_file_upload') + path;
     }

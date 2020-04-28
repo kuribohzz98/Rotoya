@@ -36,4 +36,13 @@ export class AuthController {
         }
         return user;
     }
+
+    @Post('change-password')
+    async changePassword(@Body() userLogin: UserLoginDto) {
+        const user = await this.authService.changePassword(userLogin);
+        if (!user) {
+            return { message: 'faild' };
+        }
+        return { message: 'success' };
+    }
 }

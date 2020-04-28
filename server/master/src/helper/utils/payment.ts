@@ -1,7 +1,7 @@
-import { Signature, BankCode } from './../../constants/payment.constants';
 import { ObjectLiteral } from 'typeorm';
 import * as crypto from 'crypto';
 import { Logger } from '@nestjs/common';
+import { Signature, BankCode } from './../../constants/payment.constants';
 
 function getSignatureEncode(data: string, secretKey: string) {
     const logger = new Logger('helper:utils:payments.ts');

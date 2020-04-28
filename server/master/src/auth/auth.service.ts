@@ -1,18 +1,23 @@
-import { ConfigService } from './../config/config.service';
-import { UserLoginDto, UserProfileDto } from './../dto/user.dto';
-import { EUserStatus } from './../entity/db.type';
-import { UserAttribute } from './../interface/attribute.interface';
-import { UserService } from './../service/user.service';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
-import { readFileImg } from '../helper/tools/file';
+import { UserLoginDto, UserProfileDto, UserCreateDto } from './../dto/user.dto';
+import { EUserStatus } from './../entity/db.type';
+import { UserAttribute } from './../interface/attribute.interface';
+import { UserService } from './../service/user.service';
+import { User } from './../entity/User.entity';
+
+type PasswordData = {
+  salt: string,
+  password: string,
+  iterations: number
+}
+
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userService: UserService,
-    private readonly configService: ConfigService
+    private readonly userService: UserService
   ) { }
 
   async login(userLogin: UserLoginDto) {
@@ -27,9 +32,6 @@ export class AuthService {
       }
       const payload = { username: user.username, sub: user.id };
       const userProfile = new UserProfileDto(user);
-      // if (userProfile.userMeta.avatar) {
-      //   userProfile.userMeta.avatar = readFileImg(this.configService.get('path_file_upload') + userProfile.userMeta.avatar);
-      // }
       return {
         access_token: this.jwtService.sign(payload),
         user: userProfile
@@ -40,7 +42,7 @@ export class AuthService {
     }
   }
 
-  async signUp(userCreate: UserAttribute) {
+  async signUp(userCreate: UserCreateDto): Promise<UserAttribute & User> {
     const userInvaild = await this.userService.getUserByName(userCreate.username);
     if (userInvaild) {
       return;
@@ -52,26 +54,40 @@ export class AuthService {
     user.salt = hashPassword.salt;
     user.iterations = hashPassword.iterations;
     user.type = '1';
+    user.isNew = true;
     user.status = EUserStatus.ACTIVE;
-    return this.userService.userRepository.save(user);
+    const userEntity = await this.userService.userRepository.save(user);
+    if (userCreate.userInfo) {
+      await this.userService.createUserInfo(userCreate.userInfo, userEntity);
+    }
+    if (userCreate.roles && userCreate.roles.length) {
+      await this.userService.createUserRole(userCreate.roles, userEntity);
+    }
+    return userEntity;
   }
 
-  private hashPassword(password: any) {
+  async changePassword(data: UserLoginDto): Promise<boolean> {
+    const hashPassword = this.hashPassword(data.password);
+    try {
+      await this.userService.update({ username: data.username }, { ...hashPassword, isNew: null });
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  private hashPassword(password: any): PasswordData {
     var salt = crypto.randomBytes(128).toString('base64');
     var iterations = this.randomIterations();
     var hash = this.hashString(password, salt, iterations);
-    return {
-      salt: salt,
-      password: hash,
-      iterations: iterations
-    };
+    return { salt, password: hash, iterations };
   }
 
   private isPasswordCorrect(savedHash: string, password: any, salt: any, iterations: number): boolean {
     return savedHash == this.hashString(password, salt, iterations);
   }
 
-  private hashString(password: any, salt: any, iterations: number) {
+  private hashString(password: any, salt: any, iterations: number): string {
     return crypto.pbkdf2Sync(password, salt, iterations, 64, 'sha512').toString('hex');
   }
 

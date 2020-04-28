@@ -5,10 +5,8 @@ import { SportGroundType } from './type/sport-ground.type';
 import { SportGround } from './../entity/SportGround.entity';
 import { SportGroundRepository } from './../repository/sport-ground.repository';
 import { SportGroundService } from './../service/sport-ground.service';
-import { SportType } from './type/sport.type';
 import { SportGroundAttribute } from './../interface/attribute.interface';
 import { BaseController } from './../base/BaseController';
-import { SportService } from './../service/sport.service';
 
 @ApiTags('Sport Ground')
 @Controller('sport-ground')
