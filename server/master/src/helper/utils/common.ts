@@ -48,3 +48,7 @@ export function RandomPassword(): string {
     }
     return retVal;
 }
+
+export function isObject(val) {
+    return val != null && typeof val === 'object' && Array.isArray(val) === false;
+}

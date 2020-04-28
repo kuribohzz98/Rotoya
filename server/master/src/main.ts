@@ -20,6 +20,7 @@ async function bootstrap() {
       max: 100, // limit each IP to 100 requests per windowMs
     }),
   );
+  app.useGlobalPipes(app.get(Providers.GlobalPipe));
   initSwagger(app, app.get(Providers.PathSwagger));
   const port = app.get(Providers.Port);
   await app.listen(port);

@@ -1,6 +1,7 @@
 import { Provider } from "@nestjs/common";
 import { ConfigService } from './config.service';
 import { Providers } from './../constants/provider.constants';
+import { GlobalTransfromPipe } from './../pipe/global-transform.pipe';
 
 export const ProvidersConfig: Provider<any>[] = [
     {
@@ -23,5 +24,9 @@ export const ProvidersConfig: Provider<any>[] = [
             return configService.get('PATH_SWAGGER');
         },
         inject: [ConfigService]
-    }
+    },
+    {
+        provide: Providers.GlobalPipe,
+        useClass: GlobalTransfromPipe
+      },
 ]

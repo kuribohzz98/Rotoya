@@ -5,5 +5,6 @@ export enum ProviderRepository {
 export enum Providers {
     Port = 'Port',
     GlobalPrefix = 'GlobalPrefix',
-    PathSwagger = 'PathSwagger'
+    PathSwagger = 'PathSwagger',
+    GlobalPipe = 'GlobalPipe'
 }

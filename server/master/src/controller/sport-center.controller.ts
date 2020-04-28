@@ -37,10 +37,10 @@ export class SportCenterController {
         return of(query)
             .pipe(
                 mergeMap(query => {
-                    if (query.isTimeSlotBlank + '' === 'true') {
+                    if (query.isTimeSlotBlank) {
                         return this.sportHanderService.getSportCenterTimeBlank$(query);
                     } else {
-                        if (query.isByLocation + '' === 'true') return this.sportHanderService.getSportCenterByGeoLocation$(query);
+                        if (query.isByLocation) return this.sportHanderService.getSportCenterByGeoLocation$(query);
                     }
                     return from(this.sportCenterService.getSportCenters(query))
                 })
