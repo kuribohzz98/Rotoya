@@ -31,7 +31,8 @@ export abstract class BaseController<
 
     protected async createBase(body: Q): Promise<{ message: string }> {
         try {
-            await this.localService.create(body);
+            const dataCreate = cloneFilterObject(body, ['id']);
+            await this.localService.create(dataCreate);
         } catch (e) {
             console.log(e);
             return { message: 'faild' };
