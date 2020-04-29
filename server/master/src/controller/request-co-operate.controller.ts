@@ -1,17 +1,13 @@
 import { Controller, Get, Query, Param, Post, Body, Put, Delete } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { TypeRequestCoOperate } from './type/request-co-operate.type';
-import { RequestCoOperateRepository } from './../repository/request-co-operate.repository';
 import { RequestCoOperateService } from './../service/request-co-oprerate.service';
-import { RequestCoOperateAttribute } from './../interface/attribute.interface';
 import { BaseController } from './../base/BaseController';
-import { RequestCoOperate } from 'src/entity/RequestCoOperate.entity';
 
 @ApiTags('Request Co-operate')
 @Controller('request-co-operate')
 export class RequestCoOperateController extends
-    BaseController<RequestCoOperateService, RequestCoOperateRepository, RequestCoOperate,
-    RequestCoOperateAttribute, TypeRequestCoOperate> {
+    BaseController<RequestCoOperateService, TypeRequestCoOperate> {
     constructor(
         private readonly requestCoOperateService: RequestCoOperateService
     ) {

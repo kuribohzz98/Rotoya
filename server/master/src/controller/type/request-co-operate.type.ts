@@ -1,8 +1,9 @@
-import { ECoOperateStatus } from './../../entity/db.type';
-import { ITypeRequestCoOperate } from './../../interface/attribute.interface';
 import { ApiProperty } from '@nestjs/swagger';
+import { BaseTypeGet } from './base.type';
+import { ECoOperateStatus } from './../../entity/db.type';
+import { RequestCoOperateAttribute } from './../../interface/attribute.interface';
 
-export class TypeRequestCoOperate implements ITypeRequestCoOperate {
+export class TypeRequestCoOperate extends BaseTypeGet implements RequestCoOperateAttribute {
     @ApiProperty({ required: false })
     id: number;
 
@@ -35,10 +36,4 @@ export class TypeRequestCoOperate implements ITypeRequestCoOperate {
     
     @ApiProperty({ required: false })
     note: string;
-
-    @ApiProperty({required: false})
-    page: number;
-
-    @ApiProperty({required: false})
-    limit: number;
 }

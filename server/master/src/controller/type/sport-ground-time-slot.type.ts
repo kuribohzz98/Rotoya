@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ITypeSportGroundTimeSlot } from './../../interface/attribute.interface';
+import { SportGroundTimeSlotAttribute } from './../../interface/attribute.interface';
+import { BaseTypeGet } from './base.type';
 
-export class TypeSportGroundTimeSlot implements ITypeSportGroundTimeSlot {
+export class TypeSportGroundTimeSlot extends BaseTypeGet implements SportGroundTimeSlotAttribute {
     @ApiProperty({required: false})
     id: number;
 
@@ -16,10 +17,4 @@ export class TypeSportGroundTimeSlot implements ITypeSportGroundTimeSlot {
 
     @ApiProperty({required: false})
     price: number;
-
-    @ApiProperty({required: false})
-    page: number;
-
-    @ApiProperty({required: false})
-    limit: number;
 }

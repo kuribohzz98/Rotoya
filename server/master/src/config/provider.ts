@@ -28,5 +28,5 @@ export const ProvidersConfig: Provider<any>[] = [
     {
         provide: Providers.GlobalPipe,
         useClass: GlobalTransfromPipe
-      },
+    }
 ]

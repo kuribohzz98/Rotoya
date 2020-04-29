@@ -163,11 +163,3 @@ export interface RequestCoOperateAttribute {
     createdAt?: Date;
     updatedAt?: Date;
 }
-
-export interface ITypeSportGroundTimeSlot extends SportGroundTimeSlotAttribute, OptionsPaging { }
-
-export interface ITypeSport extends OptionsPaging, SportAttribute { }
-
-export interface ITypeSportGround extends OptionsPaging, SportGroundAttribute { }
-
-export interface ITypeRequestCoOperate extends OptionsPaging, RequestCoOperateAttribute { }

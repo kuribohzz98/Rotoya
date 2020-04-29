@@ -3,16 +3,12 @@ import { ApiTags } from '@nestjs/swagger';
 import { BaseController } from './../base/BaseController';
 import { SportGroundTimeSlotDto } from './../dto/sport-ground-time-slot.dto';
 import { TypeSportGroundTimeSlot } from './type/sport-ground-time-slot.type';
-import { SportGroundTimeSlotAttribute } from './../interface/attribute.interface';
-import { SportGroundTimeSlot } from './../entity/SportGroundTimeSlot.entity';
-import { TimeSlotRepository } from './../repository/timeslot.repository';
 import { SportGroundTimeSlotService } from './../service/sport-gound-time-slot.service';
 
 @ApiTags('Sport ground time slot')
 @Controller('sport-ground-time-slot')
 export class SportGroundTimeSlotController extends
-    BaseController<SportGroundTimeSlotService, TimeSlotRepository, SportGroundTimeSlot,
-    SportGroundTimeSlotAttribute, TypeSportGroundTimeSlot, SportGroundTimeSlotDto>{
+    BaseController<SportGroundTimeSlotService, TypeSportGroundTimeSlot, SportGroundTimeSlotDto>{
 
     constructor(
         private readonly timeSlotService: SportGroundTimeSlotService

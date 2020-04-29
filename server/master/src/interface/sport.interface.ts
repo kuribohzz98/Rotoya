@@ -1,4 +1,3 @@
-import { OptionsPaging } from './repository.interface';
 import { TypePositionMapAndDistance } from './map.interface';
 
 export interface TypeQueryGetSportCenters extends TypePositionMapAndDistance {

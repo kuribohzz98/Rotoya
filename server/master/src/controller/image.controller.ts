@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
-import { ImageService } from './../service/image.service';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { ImageService } from './../service/image.service';
 
 @ApiTags('Image')
 @Controller('image')

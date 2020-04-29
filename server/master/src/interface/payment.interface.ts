@@ -1,3 +1,4 @@
+import { SortType } from './../constants/model.constants';
 import { OptionsPaging } from './repository.interface';
 import { RequestType } from './../constants/payment.constants';
 import { ApiProperty } from '@nestjs/swagger';
@@ -113,10 +114,19 @@ export class NotifyUrlSideServer extends BaseBodyMomo {
 
 export class OptionsQueryPayment implements OptionsPaging {
     @ApiProperty({required: false})
-    limit?: number;
+    limit: number;
 
     @ApiProperty({required: false})
-    page?: number;
+    page: number;
+
+    @ApiProperty({required: false})
+    sort: string;
+
+    @ApiProperty({required: false})
+    sortType: SortType;
+
+    @ApiProperty({required: false})
+    count: boolean;
 
     @ApiProperty({required: false})
     userId?: number;

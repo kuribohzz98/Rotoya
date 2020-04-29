@@ -16,3 +16,8 @@ export enum ModelConstants {
 }
 
 export const AliasQuery = 'alias';
+
+export enum SortType {
+    ASC = 'ASC',
+    DESC = 'DESC'
+}

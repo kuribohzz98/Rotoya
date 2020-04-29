@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ITypeSportGround } from './../../interface/attribute.interface';
+import { SportGroundAttribute } from './../../interface/attribute.interface';
+import { BaseTypeGet } from './base.type';
 
-export class SportGroundType implements ITypeSportGround{
+export class SportGroundType extends BaseTypeGet implements SportGroundAttribute{
     @ApiProperty({required: false})
     id: number;
     
@@ -28,10 +29,4 @@ export class SportGroundType implements ITypeSportGround{
     
     @ApiProperty({required: false})
     description: string;
-
-    @ApiProperty({required: false})
-    page?: number;
-
-    @ApiProperty({required: false})
-    limit?: number;
 }

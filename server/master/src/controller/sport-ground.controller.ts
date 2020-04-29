@@ -2,16 +2,12 @@ import { Controller, Get, Query, Param, Post, Body, Put, Delete } from '@nestjs/
 import { ApiTags } from '@nestjs/swagger';
 import { SportGroundDto } from './../dto/sport-ground.dto';
 import { SportGroundType } from './type/sport-ground.type';
-import { SportGround } from './../entity/SportGround.entity';
-import { SportGroundRepository } from './../repository/sport-ground.repository';
 import { SportGroundService } from './../service/sport-ground.service';
-import { SportGroundAttribute } from './../interface/attribute.interface';
 import { BaseController } from './../base/BaseController';
 
 @ApiTags('Sport Ground')
 @Controller('sport-ground')
-export class SportGroundController extends
-  BaseController<SportGroundService, SportGroundRepository, SportGround, SportGroundAttribute, SportGroundType, SportGroundDto> {
+export class SportGroundController extends BaseController<SportGroundService, SportGroundType, SportGroundDto> {
   constructor(
     private readonly sportService: SportGroundService
   ) {

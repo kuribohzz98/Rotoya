@@ -4,7 +4,6 @@ import * as uuid from 'uuid/v4';
 import { filter, take } from 'rxjs/operators';
 import { TimeSlotRepository } from './../repository/timeslot.repository';
 import { BookQueueService } from './../queue/booking/bookQueue.service';
-import { OptionsPaging } from './../interface/repository.interface';
 import { ConfigService } from './../config/config.service';
 import { BookingAttribute, PaymentAttribute } from './../interface/attribute.interface';
 import { BookSportGround, OutputCheckTimeSlot, SubjectError, BookSubject } from './../interface/booking.interface';
@@ -12,7 +11,6 @@ import { BookingRepository } from './../repository/booking.repository';
 import { GetFullDate } from '../helper/utils/date';
 import { PaymentService } from './payment.service';
 import { StatusCheckTimeSlot, TimeOutBook } from '../constants/book.constants';
-import { Booking } from './../entity/Booking.entity';
 
 @Injectable()
 export class BookingService{
@@ -102,9 +100,4 @@ export class BookingService{
         paymentAttribute.id = insertPayment.identifiers[0].id;
         return paymentAttribute;
     }
-
-    async getBookingByUser(userId: number, options?: OptionsPaging): Promise<Booking[]> {
-        return this.bookingRepository.getBookingByUserHasPaging(userId, options);
-    }
-
 }

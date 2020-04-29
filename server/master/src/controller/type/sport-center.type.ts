@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TypeQueryGetSportCenters } from './../../interface/sport.interface';
 import { SportCenterAttribute } from './../../interface/attribute.interface';
+import { BaseTypeGet } from './base.type';
 
-export class TypeGetSportCenters implements TypeQueryGetSportCenters {
+export class TypeGetSportCenters extends BaseTypeGet implements SportCenterAttribute {
     @ApiProperty({ required: false })
-    userId?: number;
+    userId: number;
 
     @ApiProperty({ description: '105.781477', required: false })
     longitude: number;
@@ -16,25 +16,19 @@ export class TypeGetSportCenters implements TypeQueryGetSportCenters {
     distance: number;
 
     @ApiProperty({ required: false })
-    sportId?: number;
+    sportId: number;
 
     @ApiProperty({ required: false })
-    sport?: string;
+    sport: string;
 
     @ApiProperty({ description: new Date().getTime().toString(), required: false })
-    time?: number;
-    
-    @ApiProperty({ required: false })
-    limit?: number;
+    time: number;
 
     @ApiProperty({ required: false })
-    page?: number;
+    isTimeSlotBlank: boolean;
 
     @ApiProperty({ required: false })
-    isTimeSlotBlank?: boolean;
-
-    @ApiProperty({ required: false })
-    isByLocation?: boolean;
+    isByLocation: boolean;
 
 }
 

@@ -9,6 +9,15 @@ export function cloneFilterObject(obj: ObjectLiteral, keys?: string[]): any {
     return JSON.parse(JSON.stringify(obj, filterPaging));
 }
 
+export function cloneGetObject(obj: ObjectLiteral, keys?: string[]): any {
+    if (!obj) return null;
+    const filterPaging = keys ? (key, value) => {
+        if (keys.includes(key)) return value;
+        return undefined;
+    } : null;
+    return JSON.parse(JSON.stringify(obj, filterPaging));
+}
+
 export function RandomPassword(): string {
     let length = 10,
         charset = 'abcdefghijklmnopqrstuvwxyz',

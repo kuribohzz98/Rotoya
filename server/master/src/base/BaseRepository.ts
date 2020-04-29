@@ -1,7 +1,7 @@
 import { Repository, ObjectLiteral, Connection, JoinOptions, FindManyOptions } from "typeorm";
 import { BaseEntity } from './BaseEntity';
 import { OptionsPaging } from './../interface/repository.interface';
-import { ModelConstants, AliasQuery } from './../constants/model.constants';
+import { ModelConstants, AliasQuery, SortType } from './../constants/model.constants';
 
 export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> extends Repository<T> {
     constructor(
@@ -21,12 +21,13 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
     async getByOptions(
         options: U | U[],
         optionsJoin?: string[],
-        findManyOptions?: FindManyOptions<T>
-    ): Promise<T[]> {
+        findManyOptions?: FindManyOptions<T>,
+        count?: boolean
+    ): Promise<T[] | [T[], number]> {
         let findOptions = findManyOptions || {} as FindManyOptions<T>;
         if (options) findOptions.where = options;
         if (optionsJoin) findOptions.join = this.getJoinQuery(optionsJoin);
-        return this.find(findOptions);
+        return count ? this.findAndCount(findOptions) : this.find(findOptions);
     }
 
     async getOneByOptions(options: U | U[], optionsJoin?: string[]): Promise<T> {
@@ -57,19 +58,25 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
     }
 
     getPageOpts(opts: OptionsPaging) {
-        if (!opts || !opts.limit || !opts.page) return {};
-        const take = opts.limit;
-        const skip = (opts.page - 1) * opts.limit;
-        return { take, skip };
+        const result = {} as any;
+        if (opts.sort) {
+            result.sort = {
+                [opts.sort]: opts.sortType ? opts.sortType : SortType.ASC
+            }
+        }
+        if (!opts || !opts.limit || !opts.page) return result;
+        result.take = opts.limit;
+        result.skip = (opts.page - 1) * opts.limit;
+        return result;
     }
 
-    async get(opts?: U, page?: OptionsPaging): Promise<T[]> {
+    async get(opts?: U, page?: OptionsPaging, relations?: string[]): Promise<T[] | [T[], number]> {
         const pageOpts = this.getPageOpts(page);
-        return this.getByOptions(opts, null, pageOpts);
+        return this.getByOptions(opts, relations, pageOpts, page.count);
     }
 
-    async getById(id: number): Promise<T> {
-        return this.findOne({ where: { id } });
+    async getById(id: number, relations?: string[]): Promise<T> {
+        return this.findOne({ where: { id }, relations });
     }
 
 }
