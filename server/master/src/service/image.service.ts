@@ -1,6 +1,5 @@
-import { ConfigService } from './../config/config.service';
 import { Injectable } from '@nestjs/common';
-import { readFileImg } from '../helper/tools/file';
+import { ConfigService } from './../config/config.service';
 
 @Injectable()
 export class ImageService {
