@@ -88,6 +88,13 @@ export interface SportGroundAttribute {
     updatedAt?: Date;
 }
 
+export interface SportGroundImageAttribute {
+    id?: number;
+    sportGroundId?: number;
+    image?: string;
+    createdAt?: Date;
+}
+
 export interface SportEquipmentAttribute {
     id?: number;
     sportId?: number;

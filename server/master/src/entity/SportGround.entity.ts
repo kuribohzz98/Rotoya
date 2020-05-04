@@ -1,3 +1,4 @@
+import { SportGroundImage } from './SportGroundImage.entity';
 import { SportGroundTimeSlot } from './SportGroundTimeSlot.entity';
 import { SportEquipment } from './SportEquipment.entity';
 import { SportCenter } from './SportCenter.entity';
@@ -126,4 +127,6 @@ export class SportGround extends BaseEntity<SportGroundAttribute> implements Spo
     @OneToMany(type => SportGroundTimeSlot, sportGroundTimeSlot => sportGroundTimeSlot.sportGround)
     sportGroundTimeSlots: SportGroundTimeSlot[];
 
+    @OneToMany(type => SportGroundImage, sportGroundImage => sportGroundImage.sportGround)
+    sportGroundImages: SportGroundImage[];
 }
