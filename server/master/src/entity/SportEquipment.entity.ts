@@ -1,5 +1,5 @@
+import { Sport } from './Sport.entity';
 import { SportGround } from './SportGround.entity';
-import { SportCenter } from './SportCenter.entity';
 import { SportEquipmentAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from './../base/BaseEntity';
 import {
@@ -15,28 +15,28 @@ import { SportGroundEquipment } from './SportGroundEquipment.entity';
 @Entity({ name: 'sport_equipment' })
 export class SportEquipment extends BaseEntity<SportEquipmentAttribute> implements SportEquipmentAttribute {
     @PrimaryGeneratedColumn()
-    id?: number;
+    id: number;
 
     @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
-    sportCenterId?: number;
+    sportId: number;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: true
     })
-    name?: string;
+    name: string;
 
     @Column({
         type: 'varchar',
         length: '255',
         nullable: true
     })
-    description?: string;
+    description: string;
 
     @Column({
         type: 'datetime',
@@ -50,8 +50,8 @@ export class SportEquipment extends BaseEntity<SportEquipmentAttribute> implemen
     })
     updatedAt: Date;
 
-    @ManyToOne(type => SportCenter, sportCenter => sportCenter.sportEquipments)
-    sportCenter: SportCenter;
+    @ManyToOne(type => Sport, sport => sport.sportEquipments)
+    sport: Sport;
 
     @ManyToMany(type => SportGround, sportGround => sportGround.sportEquipments)
     sportGrounds: SportGround[];

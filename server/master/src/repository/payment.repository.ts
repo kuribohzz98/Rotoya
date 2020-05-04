@@ -37,4 +37,18 @@ export class PaymentRepository extends BaseRepository<Payment, PaymentAttribute>
             .where(`${payment}.orderId = :orderId`, { orderId })
             .getOne();
     }
+
+    async getPaymentByTimeSlotId(timeSlotId: number, bookingDate: string) {
+        const payment = this.models.payment;
+        const booking = this.models.booking;
+        const user = this.models.user;
+        const userInfo = this.models.user_info;
+        return this.createQueryBuilder(payment)
+            .leftJoinAndMapMany(`${payment}.bookings`, booking, booking, `${booking}.paymentId = ${payment}.id`)
+            .leftJoinAndMapOne(`${payment}.user`, user, user, `${user}.id = ${payment}.userId`)
+            .leftJoinAndMapOne(`${user}.userInfo`, userInfo, userInfo, `${user}.id = ${userInfo}.userId`)
+            .where(`${booking}.timeSlotId = :timeSlotId`, { timeSlotId })
+            .andWhere(`${booking}.bookingDate LIKE :bookingDate`, { bookingDate: bookingDate + '%' })
+            .getMany();
+    }
 }

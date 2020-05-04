@@ -1,3 +1,5 @@
+import { SportGroundEquipment } from './SportGroundEquipment.entity';
+import { SportGroundEquipmentBooking } from './SportGroundEquipmentBooking.entity';
 import { SportGroundTimeSlot } from './SportGroundTimeSlot.entity';
 import { BookingAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from '../base/BaseEntity';
@@ -7,7 +9,10 @@ import {
     Column,
     ManyToOne,
     JoinColumn,
-    OneToOne
+    OneToOne,
+    OneToMany,
+    ManyToMany,
+    JoinTable
 } from "typeorm";
 import { Payment } from './Payment.entity';
 
@@ -21,32 +26,27 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
         width: 11,
         nullable: false
     })
-    timeSlotId?: number;
+    timeSlotId: number;
 
     @Column({
         type: 'int',
         width: 11,
         nullable: true
     })
-    paymentId?: number;
+    paymentId: number;
 
     @Column({
         type: 'date',
         nullable: true
     })
-    bookingDate?: string;
+    bookingDate: string;
 
     @Column({
-        type: 'json',
+        type: 'int',
+        width: 11,
         nullable: true
     })
-    detail?: string;
-
-    @Column({
-        type: 'json',
-        nullable: true
-    })
-    equipment?: string;
+    amount: number;
 
     @Column({
         type: 'datetime',
@@ -68,4 +68,17 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
     @ManyToOne(type => SportGroundTimeSlot, sportGroundTimeSlot => sportGroundTimeSlot.bookings)
     @JoinColumn({ name: "timeSlotId" })
     sportGroundTimeSlot: SportGroundTimeSlot;
+
+    @OneToMany(type => SportGroundEquipmentBooking, sportGroundEquipmentBooking => sportGroundEquipmentBooking.booking)
+    sportGroundEquipmentBookings: SportGroundEquipmentBooking[];
+
+    @ManyToMany(type => SportGroundEquipment, sportGroundEquipment => sportGroundEquipment.bookings)
+    @JoinTable({
+        name: "sport_ground_equipment_booking",
+        joinColumn: {
+            name: 'bookingId',
+            referencedColumnName: 'id'
+        }
+    })
+    sportGroundEquipments: SportGroundEquipment[];
 }

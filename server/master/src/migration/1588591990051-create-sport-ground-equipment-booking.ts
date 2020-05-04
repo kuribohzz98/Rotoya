@@ -1,9 +1,10 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class createTableSportGroundEquipment1576616087183 implements MigrationInterface {
+export class createSportGroundEquipmentBooking1588591990051 implements MigrationInterface {
+
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
-            name: "sport_ground_equipment",
+            name: "sport_ground_equipment_booking",
             columns: [
                 {
                     name: "id",
@@ -15,55 +16,47 @@ export class createTableSportGroundEquipment1576616087183 implements MigrationIn
                     isNullable: false
                 },
                 {
-                    name: "sportEquipmentId",
+                    name: "sportGroundEquipmentId",
                     type: "int",
                     width: 11,
                     isNullable: false
                 },
                 {
-                    name: "sportGroundId",
+                    name: "bookingId",
                     type: "int",
                     width: 11,
                     isNullable: false
-                },
-                {
-                    name: "quantity",
-                    type: "int",
-                    width: 4,
-                    isNullable: false,
-                    default: 0
                 },
                 {
                     name: "price",
                     type: "int",
                     width: 11,
-                    isNullable: false,
-                    default: 0
+                    isNullable: false
+                },
+                {
+                    name: "amount",
+                    type: "int",
+                    width: 11,
+                    isNullable: false
                 },
                 {
                     name: "createdAt",
                     type: "datetime",
                     isNullable: false,
                     default: "CURRENT_TIMESTAMP"
-                },
-                {
-                    name: "updatedAt",
-                    type: "datetime",
-                    isNullable: false,
-                    default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
                 }
             ],
             foreignKeys: [
                 {
-                    name: 'sport_equipment-sport_ground_equipment',
-                    columnNames: ['sportEquipmentId'],
-                    referencedTableName: 'sport_equipment',
+                    name: 'sport_ground_equipment_booking-sport_ground_equipment',
+                    columnNames: ['sportGroundEquipmentId'],
+                    referencedTableName: 'sport_ground_equipment',
                     referencedColumnNames: ['id']
                 },
                 {
-                    name: 'sport_ground-sport_ground_equipment',
-                    columnNames: ['sportGroundId'],
-                    referencedTableName: 'sport_ground',
+                    name: 'sport_ground_equipment_booking-booking',
+                    columnNames: ['bookingId'],
+                    referencedTableName: 'booking',
                     referencedColumnNames: ['id']
                 }
             ]
@@ -71,7 +64,6 @@ export class createTableSportGroundEquipment1576616087183 implements MigrationIn
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropTable('sport_ground_equipment');
     }
 
 }

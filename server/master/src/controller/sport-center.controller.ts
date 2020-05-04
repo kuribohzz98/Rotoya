@@ -58,4 +58,15 @@ export class SportCenterController {
         }
     }
 
+    @Put()
+    async update(@Body() body: TypePostSportCenter) {
+        const result = await this.sportCenterService.update(body);
+        if (!result) return {
+            message: 'faild'
+        }
+        return {
+            message: 'success'
+        }
+    }
+
 }

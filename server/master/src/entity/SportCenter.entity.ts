@@ -1,5 +1,4 @@
 import { Payment } from './Payment.entity';
-import { SportEquipment } from './SportEquipment.entity';
 import { SportGround } from './SportGround.entity';
 import { User } from './User.entity';
 import { SportCenterAttribute } from '../interface/attribute.interface';
@@ -20,70 +19,70 @@ import { SportCenterSport } from './SportCenterSport.entity';
 @Entity({ name: 'sport_center' })
 export class SportCenter extends BaseEntity<SportCenterAttribute> implements SportCenterAttribute {
     @PrimaryGeneratedColumn()
-    id?: number;
+    id: number;
 
     @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
-    userId?: number;
+    userId: number;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: false
     })
-    name?: string;
+    name: string;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: true
     })
-    code?: string;
+    code: string;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: false
     })
-    country?: string;
+    country: string;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: false
     })
-    city?: string;
+    city: string;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: false
     })
-    district?: string;
+    district: string;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: true
     })
-    commune?: string;
+    commune: string;
 
     @Column({
         type: 'varchar',
         length: '255',
         nullable: true
     })
-    address?: string;
+    address: string;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: true
     })
-    avatar?: string;
+    avatar: string;
 
     @Column({
         type: 'float',
@@ -91,7 +90,7 @@ export class SportCenter extends BaseEntity<SportCenterAttribute> implements Spo
         scale: 8,
         nullable: true
     })
-    latitude?: number;
+    latitude: number;
 
     @Column({
         type: 'float',
@@ -99,7 +98,7 @@ export class SportCenter extends BaseEntity<SportCenterAttribute> implements Spo
         scale: 8,
         nullable: true
     })
-    longitude?: number;
+    longitude: number;
 
     @Column({
         type: 'float',
@@ -108,7 +107,7 @@ export class SportCenter extends BaseEntity<SportCenterAttribute> implements Spo
         nullable: false,
         default: "'0.00'"
     })
-    timeOpen?: number;
+    timeOpen: number;
 
     @Column({
         type: 'float',
@@ -117,7 +116,7 @@ export class SportCenter extends BaseEntity<SportCenterAttribute> implements Spo
         nullable: false,
         default: "'0.00'"
     })
-    timeClose?: number;
+    timeClose: number;
 
     @Column({
         type: 'datetime',
@@ -137,9 +136,6 @@ export class SportCenter extends BaseEntity<SportCenterAttribute> implements Spo
 
     @OneToMany(type => SportGround, sportGround => sportGround.sportCenter)
     sportGrounds: SportGround[];
-
-    @OneToMany(type => SportEquipment, sportEquipment => sportEquipment.sportCenter)
-    sportEquipments: SportEquipment[];
 
     @ManyToMany(type => Sport, sport => sport.sportCenters)
     @JoinTable({

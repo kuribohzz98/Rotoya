@@ -9,4 +9,13 @@ export class UserRepository extends BaseRepository<User, UserAttribute>  {
         return this.getOneByOptions(whereOptions, ['userInfo', 'userMeta', 'roles']);
     }
 
+    getUserByEmail(email: string): Promise<User> {
+        const user = this.models.user;
+        const user_info = this.models.user_info;
+        return this.createQueryBuilder(user)
+            .leftJoinAndMapOne(`${user}.userInfo`, user_info, user_info, `${user}.id = ${user_info}.userId`)
+            .where(`${user_info}.email = :email`, { email })
+            .getOne();
+    }
+
 }

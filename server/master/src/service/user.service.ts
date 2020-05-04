@@ -7,13 +7,21 @@ import { UserRepository } from './../repository/user.repository';
 import { RoleRepository } from './../repository/role.repository';
 import { UserProfileDto } from './../dto/user.dto';
 import { RoleCode } from './../constants/auth.constants';
+import { OptionsPaging } from './../interface/repository.interface';
+import { BaseService } from '../base/BaseService';
 
 @Injectable()
-export class UserService {
+export class UserService extends BaseService<UserRepository, User, UserAttribute, UserProfileDto>{
     constructor(
         public readonly userRepository: UserRepository,
         private readonly roleRepository: RoleRepository
-    ) { }
+    ) {
+        super(userRepository)
+    }
+
+    mapEntityToDto(entity: User): UserProfileDto {
+        return new UserProfileDto(entity);
+    }
 
     async getUserByName(username: any): Promise<User> {
         return this.userRepository.getOneByOptions({ username });
@@ -23,7 +31,7 @@ export class UserService {
         return this.userRepository.getInfoUser(userAttribute);
     }
 
-    async getUserById(id: number): Promise<UserProfileDto> {
+    async getById(id: number): Promise<UserProfileDto> {
         const user = await this.userRepository.getInfoUser({ id });
         return new UserProfileDto(user);
     }
@@ -51,7 +59,19 @@ export class UserService {
         )
     }
 
-    async update(userAttr: UserAttribute, userUpdate: UserAttribute): Promise<UpdateResult> {
+    async updateByAttribute(userAttr: UserAttribute, userUpdate: UserAttribute): Promise<UpdateResult> {
         return this.userRepository.update(userAttr, userUpdate);
+    }
+
+    async get(
+        opts?: UserAttribute,
+        page?: OptionsPaging
+    ): Promise<UserProfileDto[] | [UserProfileDto[], number]> {
+        const data = await this.userRepository.get(opts, page, ['userInfo', 'userMeta', 'roles']);
+        return this.mapEntitiesToDtos(data, page.count);
+    }
+
+    async getUserByEmail(email: string): Promise<User> {
+        return await this.userRepository.getUserByEmail(email);
     }
 }

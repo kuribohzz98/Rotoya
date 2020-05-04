@@ -46,7 +46,7 @@ export class UserProfileDto extends DtoMapper {
     userMeta: UserMeta;
 
     @MapFrom('roles', role => {
-        return role.code;
+        if (role) return role.code;
     }, true)
     roles: string[];
 }

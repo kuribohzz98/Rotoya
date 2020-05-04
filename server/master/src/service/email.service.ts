@@ -39,7 +39,7 @@ export class EmailService {
             this.logger.log(e);
         }
         if (!sendmail) return;
-        return this.transporter.sendMail(this.getOptionsSendMail(listTo, subject, message));
+        return this.transporter.sendMail(sendmail);
     }
 
     getOptionsSendMail(listTo: string[], subject: string, message: string): any {

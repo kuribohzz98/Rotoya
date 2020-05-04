@@ -1,6 +1,7 @@
 import { Injectable, HttpService, Logger, OnModuleInit } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { ModuleRef } from '@nestjs/core';
+import * as uuid from 'uuid/v4';
 import { BookingRepository } from './../repository/booking.repository';
 import {
     RequestMomoATM,
@@ -11,13 +12,13 @@ import {
     RequestMomoAIO,
     OptionsQueryPayment
 } from './../interface/payment.interface';
-import { RequestPaymentMomoATM, RequestPaymentMomoAIO } from './../dto/payment.dto';
+import { RequestPaymentMomoATM, RequestPaymentMomoAIO, PaymentInfoDto } from './../dto/payment.dto';
 import { ConfigService } from './../config/config.service';
 import { PaymentAttribute } from './../interface/attribute.interface';
 import { PaymentRepository } from './../repository/payment.repository';
 import { createQrCodeAndSave } from '../helper/tools/file';
-import * as uuid from 'uuid/v4';
 import * as PaymentUtils from '../helper/utils/payment'; 
+import { GetFullDate } from '../helper/utils/date';
 
 
 @Injectable()
@@ -153,6 +154,12 @@ export class PaymentService implements OnModuleInit {
 
     async getPayments(opts?: OptionsQueryPayment) {
         return this.paymentRepository.getPayments(opts);
+    }
+
+    async getPaymentByTimeSlotId(timeSlotId: number, time?: number) {
+        const bookingDate = GetFullDate(time || new Date());
+        const payments = await this.paymentRepository.getPaymentByTimeSlotId(timeSlotId, bookingDate);
+        return payments.map(payment => new PaymentInfoDto(payment));
     }
 
 }

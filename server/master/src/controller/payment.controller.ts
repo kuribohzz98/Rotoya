@@ -47,21 +47,31 @@ export class PaymentController {
   }
 
   @Get('get-one')
-  @ApiQuery({name: 'id', type: 'number', required: false})
-  @ApiQuery({name: 'orderId', type: 'string', required: false})
-  @ApiQuery({name: 'transactionId', type: 'string', required: false})
+  @ApiQuery({ name: 'id', type: 'number', required: false })
+  @ApiQuery({ name: 'orderId', type: 'string', required: false })
+  @ApiQuery({ name: 'transactionId', type: 'string', required: false })
   getOne(@Query() query: PaymentAttribute) {
     return of(query)
-    .pipe(
-      mergeMap(query => from(this.paymentService.getPaymentInfo(query)))
-    )
+      .pipe(
+        mergeMap(query => from(this.paymentService.getPaymentInfo(query)))
+      )
   }
 
   @Get()
   getPayments(@Query() query: OptionsQueryPayment) {
     return of(query)
-    .pipe(
-      mergeMap(query => from(this.paymentService.getPayments(query)))
-    )
+      .pipe(
+        mergeMap(query => from(this.paymentService.getPayments(query)))
+      )
+  }
+
+  @Get('info')
+  @ApiQuery({ name: 'timeSlotId', type: 'number', required: true })
+  @ApiQuery({ name: 'time', type: 'number', required: false })
+  getPaymentInfo(@Query() query: { timeSlotId: number, time?: number }) {
+    return of(query)
+      .pipe(
+        mergeMap(query => from(this.paymentService.getPaymentByTimeSlotId(query.timeSlotId, +query.time)))
+      )
   }
 }

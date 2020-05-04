@@ -33,13 +33,9 @@ export class createBooking1579245839951 implements MigrationInterface {
                     isNullable: true
                 },
                 {
-                    name: "equipment",
-                    type: "json",
-                    isNullable: true
-                },
-                {
-                    name: "detail",
-                    type: "json",
+                    name: "amount",
+                    type: "int",
+                    width: 11,
                     isNullable: true
                 },
                 {

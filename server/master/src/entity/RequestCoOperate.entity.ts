@@ -6,7 +6,7 @@ import { ECoOperateStatus } from './db.type';
 @Entity({ name: 'request_co_operate' })
 export class RequestCoOperate extends BaseEntity<RequestCoOperateAttribute> implements RequestCoOperateAttribute {
     @PrimaryGeneratedColumn()
-    id?: number;
+    id: number;
 
     @Column({
         type: 'enum',
@@ -70,13 +70,13 @@ export class RequestCoOperate extends BaseEntity<RequestCoOperateAttribute> impl
         length: '255',
         nullable: true
     })
-    address?: string;
+    address: string;
 
     @Column({
         type: 'varchar',
         nullable: true
     })
-    note?: string;
+    note: string;
 
     @Column({
         type: 'datetime',

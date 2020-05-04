@@ -34,6 +34,9 @@ export class TypeGetSportCenters extends BaseTypeGet implements SportCenterAttri
 
 export class TypePostSportCenter implements SportCenterAttribute {
     @ApiProperty({ required: true })
+    id: number;
+
+    @ApiProperty({ required: true })
     name: string;
 
     @ApiProperty({ required: true })

@@ -20,49 +20,49 @@ import { SportGroundEquipment } from './SportGroundEquipment.entity';
 @Entity({ name: 'sport_ground' })
 export class SportGround extends BaseEntity<SportGroundAttribute> implements SportGroundAttribute {
     @PrimaryGeneratedColumn()
-    id?: number;
+    id: number;
 
     @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
-    sportCenterId?: number;
+    sportCenterId: number;
 
     @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
-    sportId?: number;
+    sportId: number;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: false
     })
-    name?: string;
+    name: string;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: true
     })
-    code?: string;
+    code: string;
 
     @Column({
         type: 'varchar',
         length: '45',
         nullable: true
     })
-    type?: string;
+    type: string;
 
     @Column({
         type: 'varchar',
         length: '255',
         nullable: true
     })
-    avatar?: string;
+    avatar: string;
 
     @Column({
         type: 'int',
@@ -70,7 +70,7 @@ export class SportGround extends BaseEntity<SportGroundAttribute> implements Spo
         nullable: false,
         default: 0
     })
-    quantity?: number;
+    quantity: number;
 
     @Column({
         type: 'int',
@@ -78,26 +78,26 @@ export class SportGround extends BaseEntity<SportGroundAttribute> implements Spo
         nullable: false,
         default: 0
     })
-    quantityInStock?: number;
+    quantityInStock: number;
 
     @Column({
         type: 'varchar',
         length: '255',
         nullable: true
     })
-    description?: string;
+    description: string;
 
     @Column({
         type: 'datetime',
         default: () => 'CURRENT_TIMESTAMP'
     })
-    createdAt?: Date;
+    createdAt: Date;
 
     @Column({
         type: 'datetime',
         default: () => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
     })
-    updatedAt?: Date;
+    updatedAt: Date;
 
     @OneToOne(type => Sport, sport => sport.sportGround)
     sport: Sport;

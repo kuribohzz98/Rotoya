@@ -1,4 +1,3 @@
-import { OptionsPaging } from './repository.interface';
 import { EUserStatus, ECoOperateStatus } from '../entity/db.type';
 
 export interface UserAttribute {
@@ -91,11 +90,19 @@ export interface SportGroundAttribute {
 
 export interface SportEquipmentAttribute {
     id?: number;
-    sportCenterId?: number;
+    sportId?: number;
     name?: string;
     description?: string;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+export interface SportGroundEquipmentBookingAttribute {
+    id?: number;
+    sportGroundEquipmentId?: number;
+    bookingId?: number;
+    price?: number;
+    amount?: number
 }
 
 export interface SportGroundEquipmentAttribute {
@@ -103,6 +110,7 @@ export interface SportGroundEquipmentAttribute {
     sportEquipmentId?: number;
     sportGroundId?: number;
     quantity?: number;
+    price?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -130,8 +138,7 @@ export interface BookingAttribute {
     timeSlotId?: number;
     paymentId?: number;
     bookingDate?: string;
-    detail?: string;
-    equipment?: string;
+    amount?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }

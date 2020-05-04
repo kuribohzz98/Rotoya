@@ -22,14 +22,14 @@ export class Payment extends BaseEntity<PaymentAttribute> implements PaymentAttr
         width: 11,
         nullable: false
     })
-    userId?: number;
+    userId: number;
 
     @Column({
         type: 'int',
         width: 11,
         nullable: false
     })
-    sportCenterId?: number;
+    sportCenterId: number;
 
     @Column({
         type: 'float',
@@ -38,7 +38,7 @@ export class Payment extends BaseEntity<PaymentAttribute> implements PaymentAttr
         nullable: false,
         default: 0
     })
-    amount?: number;
+    amount: number;
 
     @Column({
         type: 'varchar',
@@ -46,21 +46,21 @@ export class Payment extends BaseEntity<PaymentAttribute> implements PaymentAttr
         nullable: false,
         default: "'VND'"
     })
-    currency?: string;
+    currency: string;
 
     @Column({
         type: 'varchar',
         length: '255',
         nullable: true
     })
-    orderId?: string;
+    orderId: string;
 
     @Column({
         type: 'varchar',
         length: '255',
         nullable: true
     })
-    transactionId?: string;
+    transactionId: string;
 
     @Column({
         type: 'datetime',

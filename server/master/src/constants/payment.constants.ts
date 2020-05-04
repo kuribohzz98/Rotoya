@@ -49,5 +49,6 @@ export enum BankCode {
     BIDV = 'BIDV',
     SHB = 'SHB',
     SCB = 'SCB',
-    Techcom = 'TCB'
+    Techcom = 'TCB',
+    SML = 'SML'
 }

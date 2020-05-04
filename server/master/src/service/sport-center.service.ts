@@ -89,7 +89,18 @@ export class SportCenterService {
                         .save({ sportCenterId: sportCenter.id, sportId: +sport });
                 })
             )
-        } catch(e) {
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+        return true;
+    }
+
+    async update(body: TypePostSportCenter) {
+        const entity = cloneFilterObject(body, ['sports', 'id']) as SportCenter;
+        try {
+            await this.sportCenterRepository.update({id: +body.id}, entity);
+        } catch (e) {
             console.log(e);
             return false;
         }
