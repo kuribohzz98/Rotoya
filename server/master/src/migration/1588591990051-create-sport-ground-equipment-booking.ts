@@ -64,6 +64,7 @@ export class createSportGroundEquipmentBooking1588591990051 implements Migration
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropTable('sport_ground_equipment_booking', true, true);
     }
 
 }
