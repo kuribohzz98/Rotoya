@@ -1,6 +1,21 @@
+import { BookEquipmentData } from './../interface/booking.interface';
 import { DtoMapper, MapFrom } from './../base/BaseDtoMapper';
 import { ApiProperty } from '@nestjs/swagger';
 import { BookSportGround, BookData } from '../interface/booking.interface';
+
+class BookEquipment implements BookEquipmentData {
+    @ApiProperty()
+    id: number;
+
+    @ApiProperty()
+    amount: number;
+
+    @ApiProperty()
+    price: number;
+
+    @ApiProperty()
+    timeSlotId: number;
+}
 
 class BookDataDto implements BookData {
     @ApiProperty()
@@ -12,8 +27,6 @@ class BookDataDto implements BookData {
     @ApiProperty()
     price: number;
 
-    @ApiProperty()
-    equipments?: any[];
 }
 
 export class BookSportGroundBody implements BookSportGround {
@@ -27,6 +40,8 @@ export class BookSportGroundBody implements BookSportGround {
     @ApiProperty()
     bookDatas: BookDataDto[];
 
+    @ApiProperty({required: false})
+    equipments: BookEquipment[];
 }
 
 export class BookingDto extends DtoMapper {

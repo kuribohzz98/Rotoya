@@ -1,5 +1,5 @@
 import { Controller, Get, Query, Param, Post, Body, Put, Delete } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { SportGroundDto } from './../dto/sport-ground.dto';
 import { SportGroundType } from './type/sport-ground.type';
 import { SportGroundService } from './../service/sport-ground.service';
@@ -9,9 +9,9 @@ import { BaseController } from './../base/BaseController';
 @Controller('sport-ground')
 export class SportGroundController extends BaseController<SportGroundService, SportGroundType, SportGroundDto> {
   constructor(
-    private readonly sportService: SportGroundService
+    private readonly sportGroundService: SportGroundService
   ) {
-    super(sportService);
+    super(sportGroundService);
   }
 
   @Get()
@@ -42,5 +42,12 @@ export class SportGroundController extends BaseController<SportGroundService, Sp
   async delete(@Param('id') id: number) {
     const data = await this.deleteBase(id);
     return data;
+  }
+
+  @Get('info/:id')
+  @ApiQuery({ name: 'time', description: new Date().getTime().toString(), required: false })
+  async getInfo(@Param('id') id: number, @Query() query: { time: number }) {
+    const result = await this.sportGroundService.getSportGround({ id, time: +query.time });
+    return result;
   }
 }

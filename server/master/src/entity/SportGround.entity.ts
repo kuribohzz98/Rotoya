@@ -1,6 +1,5 @@
 import { SportGroundImage } from './SportGroundImage.entity';
 import { SportGroundTimeSlot } from './SportGroundTimeSlot.entity';
-import { SportEquipment } from './SportEquipment.entity';
 import { SportCenter } from './SportCenter.entity';
 import { Sport } from './Sport.entity';
 import { SportGroundAttribute } from './../interface/attribute.interface';
@@ -12,11 +11,8 @@ import {
     OneToOne,
     ManyToOne,
     JoinColumn,
-    ManyToMany,
-    JoinTable,
     OneToMany
 } from "typeorm";
-import { SportGroundEquipment } from './SportGroundEquipment.entity';
 
 @Entity({ name: 'sport_ground' })
 export class SportGround extends BaseEntity<SportGroundAttribute> implements SportGroundAttribute {
@@ -107,26 +103,9 @@ export class SportGround extends BaseEntity<SportGroundAttribute> implements Spo
     @JoinColumn({ name: 'sportCenterId' })
     sportCenter: SportCenter;
 
-    @ManyToMany(type => SportEquipment, sportEquipment => sportEquipment.sportGrounds)
-    @JoinTable({
-        name: "sport_ground_equipment",
-        joinColumn: {
-            name: "sportGroundId",
-            referencedColumnName: "id"
-        },
-        // inverseJoinColumn: {
-        //     name: "sportEquipment",
-        //     referencedColumnName: "id"
-        // }
-    })
-    sportEquipments: SportEquipment[];
-
-    @OneToMany(type => SportGroundEquipment, sportGroundEquipment => sportGroundEquipment.sportGround)
-    sportGroundEquipments: SportGroundEquipment[];
+    @OneToMany(type => SportGroundImage, sportGroundImage => sportGroundImage.sportGround)
+    sportGroundImages: SportGroundImage[];
 
     @OneToMany(type => SportGroundTimeSlot, sportGroundTimeSlot => sportGroundTimeSlot.sportGround)
     sportGroundTimeSlots: SportGroundTimeSlot[];
-
-    @OneToMany(type => SportGroundImage, sportGroundImage => sportGroundImage.sportGround)
-    sportGroundImages: SportGroundImage[];
 }

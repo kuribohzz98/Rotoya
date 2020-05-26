@@ -19,6 +19,8 @@ import { PaymentRepository } from './../repository/payment.repository';
 import { createQrCodeAndSave } from '../helper/tools/file';
 import * as PaymentUtils from '../helper/utils/payment'; 
 import { GetFullDate } from '../helper/utils/date';
+import { SportCenterEquipmentBooking } from '../entity/SportCenterEquipmentBooking.entity';
+import { Payment } from './../entity/Payment.entity';
 
 
 @Injectable()
@@ -109,7 +111,7 @@ export class PaymentService implements OnModuleInit {
     }
 
     async rollBackBooking(orderId: string) {
-        const payment = await this.getPayment({ orderId }, ['bookings']);
+        const payment = await this.getPaymentInfoByOrderId(orderId);
         try {
             this.schedule.deleteTimeout(orderId);
         } catch (e) {
@@ -120,6 +122,11 @@ export class PaymentService implements OnModuleInit {
             this.logger.error(`Can't rollback because transactionId available with paymentId = ${payment.id}`);
             return;
         };
+        await Promise.all(payment.bookings.map(booking => {
+            if (booking.sportCenterEquipmentBookings) {
+                return this.bookingRepository.getRepository<SportCenterEquipmentBooking>('sport_center_equipment_booking').remove(booking.sportCenterEquipmentBookings);
+            }
+        }))
         await this.bookingRepository.remove(payment.bookings);
         await this.paymentRepository.remove(payment);
     }
@@ -135,8 +142,8 @@ export class PaymentService implements OnModuleInit {
             throw new Error(`payment with orderId = ${orderId} not found`);
         }
         const qrcodeData = {} as any;
-        qrcodeData.paymentId = payment.id;
-        await createQrCodeAndSave(this.configService.get('path_qrcode'), orderId, JSON.stringify(qrcodeData));
+        qrcodeData.orderId = payment.orderId;
+        await createQrCodeAndSave(this.configService.get('path_file_upload'), orderId, JSON.stringify(qrcodeData));
         await this.paymentRepository.update({ id: payment.id }, { transactionId });
     }
 
@@ -148,12 +155,14 @@ export class PaymentService implements OnModuleInit {
         return this.paymentRepository.getOneByOptions(paymentAttr, joins);
     }
     
-    async getPaymentInfo(paymentAttr: PaymentAttribute) {
-        return this.paymentRepository.getPaymentInfo(paymentAttr.orderId);
+    async getPaymentInfoByOrderId(orderId: string) {
+        return this.paymentRepository.getPaymentInfo(orderId);
     }
 
     async getPayments(opts?: OptionsQueryPayment) {
-        return this.paymentRepository.getPayments(opts);
+        const payments = await this.paymentRepository.getPayments(opts);
+        if (payments.length == 2 && !isNaN(+payments[1])) return [(payments[0] as Payment[]).map(payment => new PaymentInfoDto(payment)), payments[1]];
+        return (payments as Payment[]).map(payment => new PaymentInfoDto(payment));
     }
 
     async getPaymentByTimeSlotId(timeSlotId: number, time?: number) {

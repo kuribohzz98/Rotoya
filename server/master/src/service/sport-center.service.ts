@@ -9,6 +9,7 @@ import { GetFullDate } from '../helper/utils/date';
 import { convertTimeToFloat } from '../helper/utils/time';
 import { cloneFilterObject } from '../helper/utils/common';
 import { TypePostSportCenter } from './../controller/type/sport-center.type';
+import { SportCenterSport } from '../entity/SportCenterSport.entity';
 
 @Injectable()
 export class SportCenterService {
@@ -40,9 +41,21 @@ export class SportCenterService {
                     .find(sgTimeSlot => sgTimeSlot.id == raw[`${this.sportCenterRepository.models.sport_ground_time_slot}_id`]);
                 if (timeSlot) {
                     if (raw[`count`]) {
-                        timeSlot.bookeds.push({
+                        const saved = timeSlot.bookeds.find(booked => new Date(booked.date).getTime() == new Date(raw[`${this.sportCenterRepository.models.booking}_bookingDate`]).getTime());
+                        !saved && timeSlot.bookeds.push({
                             date: raw[`${this.sportCenterRepository.models.booking}_bookingDate`],
                             amount: +raw[`count`]
+                        })
+                    }
+                    if (raw[`${this.sportCenterRepository.models.sport_center_equipment_booking}_id`]) {
+                        const sceBooking = this.sportCenterRepository.models.sport_center_equipment_booking;
+                        const saved = timeSlot.sportCenterEquipmentBookings.find(_ => _.id == raw[`${sceBooking}_id`]);
+                        !saved && timeSlot.sportCenterEquipmentBookings.push({
+                            id: raw[`${sceBooking}_id`],
+                            sportCenterEquipmentId: raw[`${sceBooking}_sportCenterEquipmentId`],
+                            bookingId: raw[`${sceBooking}_bookingId`],
+                            price: raw[`${sceBooking}_price`],
+                            amount: raw[`${sceBooking}_amount`]
                         })
                     }
                 }
@@ -85,7 +98,7 @@ export class SportCenterService {
             const sportCenter = await this.sportCenterRepository.save<SportCenter>(entity);
             await Promise.all(
                 body.sports.map(sport => {
-                    return this.sportCenterRepository.getRepository('sport_sportcenter')
+                    return this.sportCenterRepository.getRepository<SportCenterSport>('sport_sportcenter')
                         .save({ sportCenterId: sportCenter.id, sportId: +sport });
                 })
             )
@@ -105,5 +118,10 @@ export class SportCenterService {
             return false;
         }
         return true;
+    }
+
+    async getSportCentersFavorites(userId: number) {
+        const sportCenters = await this.sportCenterRepository.getSportCentersFavorites(userId);
+        return sportCenters.map(sportCenter => this.switchSportCenterInfo(sportCenter));
     }
 }

@@ -1,10 +1,10 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class createSportGroundEquipmentBooking1588591990051 implements MigrationInterface {
+export class createSportCenterEquipmentBooking1588591990051 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
-            name: "sport_ground_equipment_booking",
+            name: "sport_center_equipment_booking",
             columns: [
                 {
                     name: "id",
@@ -16,7 +16,7 @@ export class createSportGroundEquipmentBooking1588591990051 implements Migration
                     isNullable: false
                 },
                 {
-                    name: "sportGroundEquipmentId",
+                    name: "sportCenterEquipmentId",
                     type: "int",
                     width: 11,
                     isNullable: false
@@ -48,13 +48,13 @@ export class createSportGroundEquipmentBooking1588591990051 implements Migration
             ],
             foreignKeys: [
                 {
-                    name: 'sport_ground_equipment_booking-sport_ground_equipment',
-                    columnNames: ['sportGroundEquipmentId'],
-                    referencedTableName: 'sport_ground_equipment',
+                    name: 'sport_center_equipment_booking-sport_center_equipment',
+                    columnNames: ['sportCenterEquipmentId'],
+                    referencedTableName: 'sport_center_equipment',
                     referencedColumnNames: ['id']
                 },
                 {
-                    name: 'sport_ground_equipment_booking-booking',
+                    name: 'sport_center_equipment_booking-booking',
                     columnNames: ['bookingId'],
                     referencedTableName: 'booking',
                     referencedColumnNames: ['id']
@@ -64,7 +64,7 @@ export class createSportGroundEquipmentBooking1588591990051 implements Migration
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropTable('sport_ground_equipment_booking', true, true);
+        await queryRunner.dropTable('sport_center_equipment_booking', true, true);
     }
 
 }

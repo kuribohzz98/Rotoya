@@ -69,4 +69,10 @@ export class SportCenterController {
         }
     }
 
+    @Get('favorites/:userId')
+    async getSportCentersFavorites(@Param('userId') userId: number) {
+        const sportCenters = await this.sportCenterService.getSportCentersFavorites(+userId);
+        return sportCenters;
+    }
+
 }

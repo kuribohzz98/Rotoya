@@ -1,3 +1,6 @@
+import { SportCenterEquipment } from './SportCenterEquipment.entity';
+import { SportEquipment } from './SportEquipment.entity';
+import { SportCenterFavorite } from './SportCenterFavorite.entity';
 import { Payment } from './Payment.entity';
 import { SportGround } from './SportGround.entity';
 import { User } from './User.entity';
@@ -152,4 +155,24 @@ export class SportCenter extends BaseEntity<SportCenterAttribute> implements Spo
 
     @OneToMany(type => Payment, payment => payment.sportCenter)
     payments: Payment[];
+
+    @OneToMany(type => SportCenterFavorite, sportCenterFavorite => sportCenterFavorite.sportCenter)
+    sportCenterFavorites: SportCenterFavorite[];
+
+    @ManyToMany(type => SportEquipment, sportEquipment => sportEquipment.sportCenters)
+    @JoinTable({
+        name: "sport_center_equipment",
+        joinColumn: {
+            name: "sportCenterId",
+            referencedColumnName: "id"
+        },
+        // inverseJoinColumn: {
+        //     name: "sportEquipment",
+        //     referencedColumnName: "id"
+        // }
+    })
+    sportEquipments: SportEquipment[];
+
+    @OneToMany(type => SportCenterEquipment, sportCenterEquipment => sportCenterEquipment.sportCenter)
+    sportCenterEquipments: SportCenterEquipment[];
 }

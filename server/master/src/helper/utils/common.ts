@@ -22,7 +22,7 @@ export function RandomPassword(): string {
     let length = 10,
         charset = 'abcdefghijklmnopqrstuvwxyz',
         capitalize_letter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-        special_character = `!@#$%^&*()_-=+`,
+        special_character = `!@#$%^&*()_=+`,
         retVal = '';
     for (var i = 0, c = 0, cl = 0, sc = 0, num = 0; i < length; i++) {
         const random = Math.floor(Math.random() * 4);
@@ -58,6 +58,6 @@ export function RandomPassword(): string {
     return retVal;
 }
 
-export function isObject(val) {
+export function isObject(val): boolean {
     return val != null && typeof val === 'object' && Array.isArray(val) === false;
 }

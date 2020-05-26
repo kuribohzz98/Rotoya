@@ -1,3 +1,4 @@
+import { SportCenterFavorite } from './SportCenterFavorite.entity';
 import { Payment } from './Payment.entity';
 import { SportCenter } from './SportCenter.entity';
 import { BaseEntity } from './../base/BaseEntity';
@@ -112,4 +113,7 @@ export class User extends BaseEntity<UserAttribute> implements UserAttribute {
 
     @OneToMany(type => Payment, payment => payment.user)
     payments: Payment[];
+
+    @OneToMany(type => SportCenterFavorite, sportCenterFavorite => sportCenterFavorite.user)
+    sportCenterFavorites: SportCenterFavorite[];
 }

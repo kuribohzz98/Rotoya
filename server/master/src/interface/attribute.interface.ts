@@ -99,22 +99,23 @@ export interface SportEquipmentAttribute {
     id?: number;
     sportId?: number;
     name?: string;
+    image?: string;
     description?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
 
-export interface SportGroundEquipmentBookingAttribute {
+export interface SportCenterEquipmentBookingAttribute {
     id?: number;
-    sportGroundEquipmentId?: number;
+    sportCenterEquipmentId?: number;
     bookingId?: number;
     price?: number;
     amount?: number
 }
 
-export interface SportGroundEquipmentAttribute {
+export interface SportCenterEquipmentAttribute {
     id?: number;
-    sportEquipmentId?: number;
+    sportCenterId?: number;
     sportGroundId?: number;
     quantity?: number;
     price?: number;
@@ -176,4 +177,11 @@ export interface RequestCoOperateAttribute {
     note?: string;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+export interface SportCenterFavoriteAttribute {
+    id?: number;
+    sportCenterId?: number;
+    userId?: number;
+    createdAt?: Date;
 }

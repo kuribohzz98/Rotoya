@@ -10,9 +10,11 @@ export enum ModelConstants {
     sport_center = 'sport_center',
     sport_equipment = 'sport_equipment',
     sport_ground = 'sport_ground',
-    sport_ground_equipment = 'sport_ground_equipment',
+    sport_center_equipment = 'sport_center_equipment',
     sport_ground_time_slot = 'sport_ground_time_slot',
-    sport_sportcenter = 'sport_sportcenter'
+    sport_sportcenter = 'sport_sportcenter',
+    sport_center_equipment_booking = 'sport_center_equipment_booking',
+    sport_center_favorite = 'sport_center_favorite'
 }
 
 export const AliasQuery = 'alias';

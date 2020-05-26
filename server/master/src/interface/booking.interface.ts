@@ -7,12 +7,19 @@ export interface BookData {
     price: number;
 }
 
+export interface BookEquipmentData {
+    id: number;
+    amount: number;
+    price: number;
+    timeSlotId: number;
+}
+
 export interface BookSportGround {
     id?: string;
     userId: number;
     sportCenterId: number;
     bookDatas: BookData[];
-    equipments?: any[];
+    equipments?: BookEquipmentData[];
 }
 
 export interface OutputCheckTimeSlot {

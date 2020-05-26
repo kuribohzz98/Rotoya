@@ -16,7 +16,7 @@ export class SportGroundImage extends BaseEntity<SportGroundImageAttribute> impl
     sportGroundId: number;
 
     @Column({
-        type: 'image',
+        type: 'varchar',
         length: '255',
         nullable: false
     })

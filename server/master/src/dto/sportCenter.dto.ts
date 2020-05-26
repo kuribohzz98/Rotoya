@@ -1,3 +1,4 @@
+import { SportCenterEquipmentBookingAttribute } from './../interface/attribute.interface';
 import { SportDto } from './sport.dto';
 import { DtoMapper, MapFrom } from './../base/BaseDtoMapper';
 
@@ -39,7 +40,7 @@ class Booked {
     amount: number;
 }
 
-class SportGroundTimeSlot extends DtoMapper {
+export class SportGroundTimeSlot extends DtoMapper {
     @MapFrom()
     id?: number;
 
@@ -53,6 +54,44 @@ class SportGroundTimeSlot extends DtoMapper {
     price?: number;
 
     bookeds?: Booked[] = [];
+    sportCenterEquipmentBookings?: SportCenterEquipmentBookingAttribute[] = [];
+}
+
+class SportEquipment extends DtoMapper {
+    @MapFrom()
+    id: number;
+
+    @MapFrom()
+    sportId: number;
+
+    @MapFrom()
+    name: string;
+
+    @MapFrom()
+    image: string;
+
+    @MapFrom()
+    description: string;
+}
+
+class SportCenterEquipment extends DtoMapper {
+    @MapFrom()
+    id: number;
+
+    @MapFrom()
+    sportEquipmentId: number;
+
+    @MapFrom()
+    sportCenterId: number;
+
+    @MapFrom()
+    quantity: number;
+
+    @MapFrom()
+    price: number;
+
+    @MapFrom('sportEquipment', SportEquipment)
+    sportEquipment: SportEquipment;
 }
 
 class SportGround extends DtoMapper {
@@ -82,6 +121,17 @@ class SportGround extends DtoMapper {
 
     @MapFrom('sportGroundTimeSlots', SportGroundTimeSlot, true)
     sportGroundTimeSlots?: SportGroundTimeSlot[];
+}
+
+class SportCenterFavorite extends DtoMapper {
+    @MapFrom()
+    id: number;
+
+    @MapFrom()
+    sportCenterId: number;
+
+    @MapFrom()
+    userId: number;
 }
 
 export class SportCenterInfoDto extends DtoMapper {
@@ -132,4 +182,10 @@ export class SportCenterInfoDto extends DtoMapper {
 
     @MapFrom('sports', SportDto, true)
     sports: SportDto[];
+
+    @MapFrom('sportCenterFavorites', SportCenterFavorite, true)
+    sportCenterFavorites: SportCenterFavorite[];
+
+    @MapFrom('sportCenterEquipments', SportCenterEquipment, true)
+    sportCenterEquipments: SportCenterEquipment[];
 }

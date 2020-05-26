@@ -29,10 +29,20 @@ export abstract class BaseController<
         return data;
     }
 
-    protected async createBase(body: Q): Promise<{ message: string }> {
+    protected async createBase(body: Q): Promise<{ message: string, id?: number }> {
         try {
             const dataCreate = cloneFilterObject(body, ['id']);
-            await this.localService.create(dataCreate);
+            const created = await this.localService.create(dataCreate);
+            return { message: 'success', id: created.id};
+        } catch (e) {
+            console.log(e);
+            return { message: 'faild' };
+        }
+    }
+
+    protected async createManyBase(body: Q[]): Promise<{ message: string }> {
+        try {
+            await this.localService.createMany(body);
         } catch (e) {
             console.log(e);
             return { message: 'faild' };

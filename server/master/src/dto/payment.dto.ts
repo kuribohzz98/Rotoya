@@ -1,3 +1,4 @@
+import { SportCenterInfoDto } from './sportCenter.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import * as uuid from 'uuid/v4';
 import { UserProfileDto } from './user.dto';
@@ -75,10 +76,26 @@ export class PaymentInfoDto extends DtoMapper {
     @MapFrom()
     transactionId: string;
 
+    @MapFrom()
+    createdAt: Date;
+
     @MapFrom('bookings', BookingDto, true)
     bookings: BookingDto[];
 
     @MapFrom('user', UserProfileDto)
     user: UserProfileDto;
 
+    @MapFrom('sportCenter', SportCenterInfoDto)
+    sportCenter: SportCenterInfoDto;
+}
+
+export class PaymentBookDataDto extends DtoMapper {
+    @MapFrom()
+    id: number;
+
+    @MapFrom()
+    amount: number;
+
+    @MapFrom()
+    orderId: string;
 }

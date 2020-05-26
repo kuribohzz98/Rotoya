@@ -1,5 +1,5 @@
-import { SportGroundEquipment } from './SportGroundEquipment.entity';
-import { SportGroundEquipmentBooking } from './SportGroundEquipmentBooking.entity';
+import { SportCenterEquipment } from './SportCenterEquipment.entity';
+import { SportCenterEquipmentBooking } from './SportCenterEquipmentBooking.entity';
 import { SportGroundTimeSlot } from './SportGroundTimeSlot.entity';
 import { BookingAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from '../base/BaseEntity';
@@ -69,16 +69,16 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
     @JoinColumn({ name: "timeSlotId" })
     sportGroundTimeSlot: SportGroundTimeSlot;
 
-    @OneToMany(type => SportGroundEquipmentBooking, sportGroundEquipmentBooking => sportGroundEquipmentBooking.booking)
-    sportGroundEquipmentBookings: SportGroundEquipmentBooking[];
+    @OneToMany(type => SportCenterEquipmentBooking, sportCenterEquipmentBooking => sportCenterEquipmentBooking.booking)
+    sportCenterEquipmentBookings: SportCenterEquipmentBooking[];
 
-    @ManyToMany(type => SportGroundEquipment, sportGroundEquipment => sportGroundEquipment.bookings)
+    @ManyToMany(type => SportCenterEquipment, sportCenterEquipment => sportCenterEquipment.bookings)
     @JoinTable({
-        name: "sport_ground_equipment_booking",
+        name: "sport_center_equipment_booking",
         joinColumn: {
             name: 'bookingId',
             referencedColumnName: 'id'
         }
     })
-    sportGroundEquipments: SportGroundEquipment[];
+    sportCenterEquipments: SportCenterEquipment[];
 }

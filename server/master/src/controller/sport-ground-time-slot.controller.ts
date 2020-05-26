@@ -46,4 +46,11 @@ export class SportGroundTimeSlotController extends
         return data;
     }
 
+    @Post('multi')
+    async createMulti(@Body() body: any) {
+        const dataBody = Object.values(body).map(value => value) as TypeSportGroundTimeSlot[];
+        const data = await this.createManyBase(dataBody);
+        return data;
+    }
+
 }

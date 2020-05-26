@@ -49,4 +49,7 @@ export abstract class BaseService<
         return this.localRepository.delete(entity);
     }
 
+    async createMany(entites: A[]): Promise<E[]> {
+        return this.localRepository.save(entites);
+    }
 }

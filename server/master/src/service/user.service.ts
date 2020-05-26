@@ -1,3 +1,4 @@
+import { UserRole } from './../entity/UserRole.entity';
 import { Injectable } from '@nestjs/common';
 import { UpdateResult } from 'typeorm';
 import { UserInfo } from './../entity/UserInfo.entity';
@@ -54,7 +55,7 @@ export class UserService extends BaseService<UserRepository, User, UserAttribute
             roles.map(async role => {
                 const roleEntity = await this.roleRepository.findOne({ code: role });
                 if (!roleEntity) return;
-                return this.userRepository.getRepository('user_role').save({ userId: user.id, roleId: roleEntity.id });
+                return this.userRepository.getRepository<UserRole>('user_role').save({ userId: user.id, roleId: roleEntity.id });
             })
         )
     }

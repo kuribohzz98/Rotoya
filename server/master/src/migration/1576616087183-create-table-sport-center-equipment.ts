@@ -1,9 +1,9 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class createTableSportGroundEquipment1576616087183 implements MigrationInterface {
+export class createTableSportCenterEquipment1576616087183 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
-            name: "sport_ground_equipment",
+            name: "sport_center_equipment",
             columns: [
                 {
                     name: "id",
@@ -21,7 +21,7 @@ export class createTableSportGroundEquipment1576616087183 implements MigrationIn
                     isNullable: false
                 },
                 {
-                    name: "sportGroundId",
+                    name: "sportCenterId",
                     type: "int",
                     width: 11,
                     isNullable: false
@@ -55,15 +55,15 @@ export class createTableSportGroundEquipment1576616087183 implements MigrationIn
             ],
             foreignKeys: [
                 {
-                    name: 'sport_equipment-sport_ground_equipment',
-                    columnNames: ['sportEquipmentId'],
+                    name: 'sport_equipment-sport_center_equipment',
+                    columnNames: ['sportCenterId'],
                     referencedTableName: 'sport_equipment',
                     referencedColumnNames: ['id']
                 },
                 {
-                    name: 'sport_ground-sport_ground_equipment',
-                    columnNames: ['sportGroundId'],
-                    referencedTableName: 'sport_ground',
+                    name: 'sport_center_equipment-sport_center',
+                    columnNames: ['sportCenterId'],
+                    referencedTableName: 'sport_center',
                     referencedColumnNames: ['id']
                 }
             ]
@@ -71,7 +71,7 @@ export class createTableSportGroundEquipment1576616087183 implements MigrationIn
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropTable('sport_ground_equipment');
+        await queryRunner.dropTable('sport_center_equipment');
     }
 
 }

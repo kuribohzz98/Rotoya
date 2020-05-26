@@ -1,9 +1,9 @@
-import { SportGroundEquipmentBooking } from './SportGroundEquipmentBooking.entity';
+import { SportCenter } from './SportCenter.entity';
+import { SportCenterEquipmentBooking } from './SportCenterEquipmentBooking.entity';
 import { Booking } from './Booking.entity';
 import { SportEquipment } from './SportEquipment.entity';
-import { SportGround } from './SportGround.entity';
-import { SportGroundEquipmentAttribute } from './../interface/attribute.interface';
-import { BaseEntity } from './../base/BaseEntity';
+import { SportCenterEquipmentAttribute } from '../interface/attribute.interface';
+import { BaseEntity } from '../base/BaseEntity';
 import {
     Entity,
     PrimaryGeneratedColumn,
@@ -15,8 +15,8 @@ import {
     OneToMany
 } from "typeorm";
 
-@Entity({ name: 'sport_ground_equipment' })
-export class SportGroundEquipment extends BaseEntity<SportGroundEquipmentAttribute> implements SportGroundEquipmentAttribute {
+@Entity({ name: 'sport_center_equipment' })
+export class SportCenterEquipment extends BaseEntity<SportCenterEquipmentAttribute> implements SportCenterEquipmentAttribute {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -32,7 +32,7 @@ export class SportGroundEquipment extends BaseEntity<SportGroundEquipmentAttribu
         width: 11,
         nullable: false
     })
-    sportGroundId: number;
+    sportCenterId: number;
 
     @Column({
         type: 'int',
@@ -62,24 +62,24 @@ export class SportGroundEquipment extends BaseEntity<SportGroundEquipmentAttribu
     })
     updatedAt: Date;
 
-    @ManyToOne(type => SportGround, sportGround => sportGround.sportGroundEquipments)
-    @JoinColumn({ name: 'sportGroundId' })
-    sportGround: SportGround;
+    @ManyToOne(type => SportCenter, sportCenter => sportCenter.sportCenterEquipments)
+    @JoinColumn({ name: 'sportCenterId' })
+    sportCenter: SportCenter;
 
-    @ManyToOne(type => SportEquipment, sportEquipment => sportEquipment.sportGroundEquipments)
+    @ManyToOne(type => SportEquipment, sportEquipment => sportEquipment.sportCenterEquipments)
     @JoinColumn({ name: 'sportEquipmentId' })
     sportEquipment: SportEquipment;
 
-    @ManyToMany(type => Booking, booking => booking.sportGroundEquipments)
+    @ManyToMany(type => Booking, booking => booking.sportCenterEquipments)
     @JoinTable({
-        name: "sport_ground_equipment_booking",
+        name: "sport_center_equipment_booking",
         joinColumn: {
-            name: 'sportGroundEquipmentId',
+            name: 'sportCenterEquipmentId',
             referencedColumnName: 'id'
         }
     })
     bookings: Booking[];
 
-    @OneToMany(type => SportGroundEquipmentBooking, sportGroundEquipmentBooking => sportGroundEquipmentBooking.sportGroundEquipment)
-    sportGroundEquipmentBookings: SportGroundEquipmentBooking[];
+    @OneToMany(type => SportCenterEquipmentBooking, sportCenterEquipmentBooking => sportCenterEquipmentBooking.sportCenterEquipment)
+    sportCenterEquipmentBookings: SportCenterEquipmentBooking[];
 }

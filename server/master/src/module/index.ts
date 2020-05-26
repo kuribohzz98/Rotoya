@@ -1,3 +1,4 @@
+import { SportCenterFavoriteModule } from './sport-center-favorite.module';
 import { EmailModule } from './email.module';
 import { RequestCoOperateModule } from './request-co-operate.module';
 import { SportGroundModule } from './sport-ground.module';
@@ -23,7 +24,8 @@ const Modules = [
     SportGroundModule,
     SportGroundTimeSlotModule,
     RequestCoOperateModule,
-    EmailModule
+    EmailModule,
+    SportCenterFavoriteModule
 ];
 
 export default Modules;

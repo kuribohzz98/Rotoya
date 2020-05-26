@@ -52,20 +52,20 @@ export class UserProfileDto extends DtoMapper {
 }
 
 export class UserCreateDto {
-    @ApiProperty()
-    username?: string;
+    @ApiProperty({ required: false })
+    username: string;
 
-    @ApiProperty()
-    password?: string;
+    @ApiProperty({ required: false })
+    password: string;
 
-    @ApiProperty()
-    type?: string;
+    @ApiProperty({ required: false })
+    type: string;
 
-    @ApiProperty()
-    userInfo?: UserInfo;
+    @ApiProperty({ required: false })
+    userInfo: UserInfo;
 
-    @ApiProperty({ type: 'enum', enum: RoleCode })
-    roles?: RoleCode[];
+    @ApiProperty({ type: [String], enum: RoleCode, required: false })
+    roles: RoleCode[];
 }
 
 export class UserLoginDto {

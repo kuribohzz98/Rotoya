@@ -45,7 +45,7 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
         const sport = this.models.sport;
         if (query.sportId || query.sport) {
             queryBuilder.leftJoinAndSelect(`${sportCenter}.sports`, sport);
-            queryBuilder.andWhere(`${sport}.${query.sportId ? 'id' : 'name'} = :sport`, { sport: query.sportId || query.sport });
+            queryBuilder.andWhere(`${sport}.${query.sportId ? 'id' : 'code'} = :sport`, { sport: query.sportId || query.sport });
         }
         if (query.limit) {
             queryBuilder.limit(query.limit);
@@ -114,7 +114,7 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
         const queryBuilder = this.createQueryBuilder(sportCenter);
         if (query.sportId || query.sport) {
             queryBuilder.leftJoinAndSelect(`${sportCenter}.sports`, sport);
-            queryBuilder.where(`${sport}.${query.sportId ? 'id' : 'name'} = :sport`, { sport: query.sportId || query.sport });
+            queryBuilder.where(`${sport}.${query.sportId ? 'id' : 'code'} = :sport`, { sport: query.sportId || query.sport });
             query.userId && queryBuilder.andWhere(`${sportCenter}.userId = :userId`, { userId: +query.userId });
         } else {
             query.userId && queryBuilder.where(`${sportCenter}.userId = :userId`, { userId: +query.userId });
@@ -131,9 +131,16 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
         const sport = this.models.sport;
         const sportGround = this.models.sport_ground;
         const sportGroundTimeSlot = this.models.sport_ground_time_slot;
+        const sportEquipment = this.models.sport_equipment;
+        const scEquipment = this.models.sport_center_equipment;
         const booking = this.models.booking;
+        const sc_favorite = this.models.sport_center_favorite;
+        const sceBooking = this.models.sport_center_equipment_booking;
         const qb = this.createQueryBuilder(sportCenter)
             .leftJoinAndMapMany(`${sportCenter}.sportGrounds`, sportGround, sportGround, `${sportCenter}.id = ${sportGround}.sportCenterId`)
+            .leftJoinAndMapMany(`${sportCenter}.sportCenterFavorites`, sc_favorite, sc_favorite, `${sportCenter}.id = ${sc_favorite}.sportCenterId`)
+            .leftJoinAndMapMany(`${sportCenter}.sportCenterEquipments`, scEquipment, scEquipment, `${sportCenter}.id = ${scEquipment}.sportCenterId`)
+            .leftJoinAndMapOne(`${scEquipment}.sportEquipment`, sportEquipment, sportEquipment, `${scEquipment}.sportEquipmentId = ${sportEquipment}.id`)
             .leftJoinAndMapMany(`${sportGround}.sportGroundTimeSlots`, sportGroundTimeSlot, sportGroundTimeSlot, `${sportGround}.id = ${sportGroundTimeSlot}.sportGroundId`)
             .leftJoinAndSelect(`${sportCenter}.sports`, sport)
             .where(`${sportCenter}.id = :id`, { id: +opts.id });
@@ -150,8 +157,18 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
                     .groupBy(`${booking}_timeSlotId`)
                     .addGroupBy(`${booking}_bookingDate`)
             }, booking, `${booking}_timeSlotId = ${sportGroundTimeSlot}.id`)
+            .leftJoinAndMapMany(`${booking}.sportCenterEquipmentBookings`, sceBooking, sceBooking, `${sceBooking}.bookingId = ${booking}_id`)
         }
         return qb.getRawAndEntities();
+    }
+
+    async getSportCentersFavorites(userId: number): Promise<SportCenter[]> {
+        const sportCenter = this.models.sport_center;
+        const sc_favorite = this.models.sport_center_favorite;
+        return this.createQueryBuilder(sportCenter)
+            .leftJoinAndMapMany(`${sportCenter}.sportCenterFavorites`, sc_favorite, sc_favorite, `${sportCenter}.id = ${sc_favorite}.sportCenterId`)
+            .where(`${sc_favorite}.userId = :userId`, { userId })
+            .getMany();
     }
 }
 

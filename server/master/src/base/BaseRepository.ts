@@ -10,8 +10,8 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
         super();
     }
 
-    getRepository(entity: string) {
-        return this.connection.getRepository(entity);
+    getRepository<E = any>(entity: string) {
+        return this.connection.getRepository<E>(entity);
     }
 
     get models() {
@@ -26,14 +26,14 @@ export class BaseRepository<T extends BaseEntity<U>, U extends ObjectLiteral> ex
     ): Promise<T[] | [T[], number]> {
         let findOptions = findManyOptions || {} as FindManyOptions<T>;
         if (options) findOptions.where = options;
-        if (optionsJoin) findOptions.join = this.getJoinQuery(optionsJoin);
+        if (optionsJoin) findOptions.relations = optionsJoin;
         return count ? this.findAndCount(findOptions) : this.find(findOptions);
     }
 
     async getOneByOptions(options: U | U[], optionsJoin?: string[]): Promise<T> {
         return !optionsJoin || !optionsJoin.length ?
             this.findOne({ where: options }) :
-            this.findOne({ where: options, join: this.getJoinQuery(optionsJoin) });
+            this.findOne({ where: options, relations: optionsJoin });
     }
 
     getJoinQuery(optionsJoin: string[]) {
