@@ -1,11 +1,12 @@
+import { Module } from '@nestjs/common';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { EmailModule } from './../module/email.module';
 import { ConfigService } from './../config/config.service';
 import { UserModule } from './../module/user.module';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strargety';
-import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
       // signOptions: { expiresIn: '60s' },
     }),
-    UserModule
+    UserModule,
+    EmailModule
   ],
   providers: [
     AuthService,

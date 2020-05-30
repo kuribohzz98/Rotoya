@@ -1,6 +1,6 @@
+import { SportCenterEquipment } from './SportCenterEquipment.entity';
+import { SportCenterEquipmentBooking } from './SportCenterEquipmentBooking.entity';
 import { SportGroundTimeSlot } from './SportGroundTimeSlot.entity';
-import { User } from './User.entity';
-import { SportGround } from './SportGround.entity';
 import { BookingAttribute } from './../interface/attribute.interface';
 import { BaseEntity } from '../base/BaseEntity';
 import {
@@ -9,7 +9,10 @@ import {
     Column,
     ManyToOne,
     JoinColumn,
-    OneToOne
+    OneToOne,
+    OneToMany,
+    ManyToMany,
+    JoinTable
 } from "typeorm";
 import { Payment } from './Payment.entity';
 
@@ -23,39 +26,27 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
         width: 11,
         nullable: false
     })
-    userId?: number;
+    timeSlotId: number;
 
     @Column({
         type: 'int',
         width: 11,
-        nullable: false
+        nullable: true
     })
-    sportGroundId?: number;
-
-    @Column({
-        type: 'int',
-        width: 11,
-        nullable: false
-    })
-    timeSlotId?: number;
+    paymentId: number;
 
     @Column({
         type: 'date',
         nullable: true
     })
-    bookingDate?: string;
+    bookingDate: string;
 
     @Column({
-        type: 'json',
+        type: 'int',
+        width: 11,
         nullable: true
     })
-    detail?: string;
-
-    @Column({
-        type: 'json',
-        nullable: true
-    })
-    equipment?: string;
+    amount: number;
 
     @Column({
         type: 'datetime',
@@ -70,18 +61,24 @@ export class Booking extends BaseEntity<BookingAttribute> implements BookingAttr
     })
     updatedAt: Date;
 
-    @ManyToOne(type => User, user => user.bookings)
-    @JoinColumn({ name: "userId" })
-    user: User;
-
-    @ManyToOne(type => SportGround, sportGround => sportGround.bookings)
-    @JoinColumn({ name: "sportGroundId" })
-    sportGround: SportGround;
-
-    @OneToOne(type => Payment, payment => payment.booking)
+    @ManyToOne(type => Payment, payment => payment.bookings)
+    @JoinColumn({name: "paymentId"})
     payment: Payment;
 
     @ManyToOne(type => SportGroundTimeSlot, sportGroundTimeSlot => sportGroundTimeSlot.bookings)
     @JoinColumn({ name: "timeSlotId" })
     sportGroundTimeSlot: SportGroundTimeSlot;
+
+    @OneToMany(type => SportCenterEquipmentBooking, sportCenterEquipmentBooking => sportCenterEquipmentBooking.booking)
+    sportCenterEquipmentBookings: SportCenterEquipmentBooking[];
+
+    @ManyToMany(type => SportCenterEquipment, sportCenterEquipment => sportCenterEquipment.bookings)
+    @JoinTable({
+        name: "sport_center_equipment_booking",
+        joinColumn: {
+            name: 'bookingId',
+            referencedColumnName: 'id'
+        }
+    })
+    sportCenterEquipments: SportCenterEquipment[];
 }

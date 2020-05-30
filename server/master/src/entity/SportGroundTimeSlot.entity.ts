@@ -21,7 +21,7 @@ export class SportGroundTimeSlot extends BaseEntity<SportGroundTimeSlotAttribute
         width: 11,
         nullable: false
     })
-    sportGroundId?: number;
+    sportGroundId: number;
 
     @Column({
         type: 'float',
@@ -29,7 +29,7 @@ export class SportGroundTimeSlot extends BaseEntity<SportGroundTimeSlotAttribute
         scale: 2,
         nullable: true
     })
-    startTime?: number;
+    startTime: number;
 
     @Column({
         type: 'float',
@@ -37,7 +37,15 @@ export class SportGroundTimeSlot extends BaseEntity<SportGroundTimeSlotAttribute
         scale: 2,
         nullable: true
     })
-    endTime?: number;
+    endTime: number;
+
+    @Column({
+        type: 'int',
+        width: 11,
+        nullable: false,
+        default: 200000
+    })
+    price: number;
 
     @Column({
         type: 'datetime',

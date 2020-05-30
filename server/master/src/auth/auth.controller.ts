@@ -1,7 +1,7 @@
 import { UserCreateDto, UserLoginDto } from './../dto/user.dto';
 import { AuthService } from './auth.service';
 import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -32,8 +32,30 @@ export class AuthController {
             throw new HttpException({
                 status: HttpStatus.UNAUTHORIZED,
                 error: user
-            }, 401)
+            }, HttpStatus.UNAUTHORIZED)
         }
         return user;
+    }
+
+    @Post('change-password')
+    async changePassword(@Body() userLogin: UserLoginDto) {
+        const user = await this.authService.changePassword(userLogin);
+        if (!user) {
+            return { message: 'faild' };
+        }
+        return { message: 'success' };
+    }
+
+    @Post('forget-password')
+    async forgetPassword(@Body() body: { email: string }) {
+        try {
+            await this.authService.forgetPassword(body.email);
+        } catch (e) {
+            throw new HttpException({
+                status: HttpStatus.BAD_REQUEST,
+                error: e.message
+            }, HttpStatus.BAD_REQUEST)
+        }
+        return { message: 'success' };
     }
 }

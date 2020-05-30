@@ -1,4 +1,4 @@
-import { EUserStatus } from '../entity/db.type';
+import { EUserStatus, ECoOperateStatus } from '../entity/db.type';
 
 export interface UserAttribute {
     id?: number;
@@ -8,6 +8,7 @@ export interface UserAttribute {
     status?: EUserStatus;
     salt?: string;
     iterations?: number;
+    isNew?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -87,20 +88,37 @@ export interface SportGroundAttribute {
     updatedAt?: Date;
 }
 
+export interface SportGroundImageAttribute {
+    id?: number;
+    sportGroundId?: number;
+    image?: string;
+    createdAt?: Date;
+}
+
 export interface SportEquipmentAttribute {
     id?: number;
-    sportCenterId?: number;
+    sportId?: number;
     name?: string;
+    image?: string;
     description?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
 
-export interface SportGroundEquipmentAttribute {
+export interface SportCenterEquipmentBookingAttribute {
     id?: number;
-    sportEquipmentId?: number;
+    sportCenterEquipmentId?: number;
+    bookingId?: number;
+    price?: number;
+    amount?: number
+}
+
+export interface SportCenterEquipmentAttribute {
+    id?: number;
+    sportCenterId?: number;
     sportGroundId?: number;
     quantity?: number;
+    price?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -118,28 +136,52 @@ export interface SportGroundTimeSlotAttribute {
     sportGroundId?: number;
     startTime?: number;
     endTime?: number;
+    price?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
 
 export interface BookingAttribute {
     id?: number;
-    userId?: number;
-    sportGroundId?: number;
     timeSlotId?: number;
+    paymentId?: number;
     bookingDate?: string;
-    detail?: string;
-    equipment?: string;
+    amount?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
 
 export interface PaymentAttribute {
     id?: number;
-    bookingId?: number;
+    userId?: number;
+    sportCenterId?: number;
     amount?: number;
     currency?: string;
-    qrCode?: string;
+    orderId?: string;
+    transactionId?: string;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+export interface RequestCoOperateAttribute {
+    id?: number;
+    status?: ECoOperateStatus;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    email?: string;
+    city?: string;
+    district?: string;
+    commune?: string;
+    address?: string;
+    note?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface SportCenterFavoriteAttribute {
+    id?: number;
+    sportCenterId?: number;
+    userId?: number;
+    createdAt?: Date;
 }

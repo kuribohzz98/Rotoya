@@ -6,18 +6,16 @@ import { User } from "../entity/User.entity";
 @EntityRepository(User)
 export class UserRepository extends BaseRepository<User, UserAttribute>  {
     getInfoUser(whereOptions: UserAttribute): Promise<User> {
-        // return this.findOne({
-        //     where: whereOptions,
-        //     join: {
-        //         alias: this.models.user,
-        //         leftJoinAndSelect: {
-        //             userInfo: `${this.models.user}.userInfo`,
-        //             userMeta: `${this.models.user}.userMeta`,
-        //             roles: `${this.models.user}.roles`
-        //         },
-        //     }
-        // })
         return this.getOneByOptions(whereOptions, ['userInfo', 'userMeta', 'roles']);
+    }
+
+    getUserByEmail(email: string): Promise<User> {
+        const user = this.models.user;
+        const user_info = this.models.user_info;
+        return this.createQueryBuilder(user)
+            .leftJoinAndMapOne(`${user}.userInfo`, user_info, user_info, `${user}.id = ${user_info}.userId`)
+            .where(`${user_info}.email = :email`, { email })
+            .getOne();
     }
 
 }

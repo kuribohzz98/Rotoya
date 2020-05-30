@@ -53,6 +53,11 @@ export class createTableUser1575451934332 implements MigrationInterface {
                     isNullable: true
                 },
                 {
+                    name: "isNew",
+                    type: "boolean",
+                    isNullable: true
+                },
+                {
                     name: "createdAt",
                     type: "datetime",
                     isNullable: false,

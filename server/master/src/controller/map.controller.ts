@@ -1,9 +1,5 @@
 import { MapService } from './../service/map.service';
 import { RpcService } from './../service/rpc.service';
-import {
-  TypePositionMapAndDistance,
-  TypePositionMapDistanceAndSport
-} from './../interface/map.interface';
 import { Controller, Get, Query, Response } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
 

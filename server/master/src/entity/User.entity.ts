@@ -1,3 +1,5 @@
+import { SportCenterFavorite } from './SportCenterFavorite.entity';
+import { Payment } from './Payment.entity';
 import { SportCenter } from './SportCenter.entity';
 import { BaseEntity } from './../base/BaseEntity';
 import { UserAttribute } from '../interface/attribute.interface';
@@ -15,7 +17,6 @@ import { EUserStatus } from "./db.type";
 import { UserInfo } from "./UserInfo.entity";
 import { Role } from "./Role.entity";
 import { UserMeta } from './UserMeta.entity';
-import { Booking } from './Booking.entity';
 
 @Entity({ name: 'user' })
 export class User extends BaseEntity<UserAttribute> implements UserAttribute {
@@ -67,6 +68,12 @@ export class User extends BaseEntity<UserAttribute> implements UserAttribute {
     iterations: number;
 
     @Column({
+        type: 'boolean',
+        nullable: true
+    })
+    isNew: boolean;
+
+    @Column({
         type: 'datetime',
         default: () => 'CURRENT_TIMESTAMP'
     })
@@ -104,6 +111,9 @@ export class User extends BaseEntity<UserAttribute> implements UserAttribute {
     @OneToMany(type => SportCenter, sportCenter => sportCenter.user)
     sportCenters: SportCenter[];
 
-    @OneToMany(type => Booking, booking => booking.user)
-    bookings: Booking[];
+    @OneToMany(type => Payment, payment => payment.user)
+    payments: Payment[];
+
+    @OneToMany(type => SportCenterFavorite, sportCenterFavorite => sportCenterFavorite.user)
+    sportCenterFavorites: SportCenterFavorite[];
 }

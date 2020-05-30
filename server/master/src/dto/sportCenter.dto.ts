@@ -1,3 +1,5 @@
+import { SportCenterEquipmentBookingAttribute } from './../interface/attribute.interface';
+import { SportDto } from './sport.dto';
 import { DtoMapper, MapFrom } from './../base/BaseDtoMapper';
 
 export class SportCenterDataFindByRadius {
@@ -31,6 +33,105 @@ export class SportCenterDataFindByRadius {
     latitude?: number;
     longitude?: number;
     distance?: number;
+}
+
+class Booked {
+    date: string;
+    amount: number;
+}
+
+export class SportGroundTimeSlot extends DtoMapper {
+    @MapFrom()
+    id?: number;
+
+    @MapFrom()
+    startTime?: number;
+
+    @MapFrom()
+    endTime?: number;
+
+    @MapFrom()
+    price?: number;
+
+    bookeds?: Booked[] = [];
+    sportCenterEquipmentBookings?: SportCenterEquipmentBookingAttribute[] = [];
+}
+
+class SportEquipment extends DtoMapper {
+    @MapFrom()
+    id: number;
+
+    @MapFrom()
+    sportId: number;
+
+    @MapFrom()
+    name: string;
+
+    @MapFrom()
+    image: string;
+
+    @MapFrom()
+    description: string;
+}
+
+class SportCenterEquipment extends DtoMapper {
+    @MapFrom()
+    id: number;
+
+    @MapFrom()
+    sportEquipmentId: number;
+
+    @MapFrom()
+    sportCenterId: number;
+
+    @MapFrom()
+    quantity: number;
+
+    @MapFrom()
+    price: number;
+
+    @MapFrom('sportEquipment', SportEquipment)
+    sportEquipment: SportEquipment;
+}
+
+class SportGround extends DtoMapper {
+    @MapFrom()
+    id?: number;
+
+    @MapFrom()
+    sportId?: number;
+
+    @MapFrom()
+    name?: number;
+
+    @MapFrom()
+    code?: string;
+
+    @MapFrom()
+    type?: string;
+
+    @MapFrom()
+    avatar?: string;
+
+    @MapFrom()
+    quantity?: number;
+
+    @MapFrom()
+    description?: string;
+
+    @MapFrom('sportGroundTimeSlots', SportGroundTimeSlot, true)
+    sportGroundTimeSlots?: SportGroundTimeSlot[];
+}
+
+class SportCenterFavorite extends DtoMapper {
+    @MapFrom()
+    id: number;
+
+    @MapFrom()
+    sportCenterId: number;
+
+    @MapFrom()
+    userId: number;
 }
 
 export class SportCenterInfoDto extends DtoMapper {
@@ -75,4 +176,16 @@ export class SportCenterInfoDto extends DtoMapper {
 
     @MapFrom()
     longitude?: number;
+
+    @MapFrom('sportGrounds', SportGround, true)
+    sportGrounds?: SportGround[];
+
+    @MapFrom('sports', SportDto, true)
+    sports: SportDto[];
+
+    @MapFrom('sportCenterFavorites', SportCenterFavorite, true)
+    sportCenterFavorites: SportCenterFavorite[];
+
+    @MapFrom('sportCenterEquipments', SportCenterEquipment, true)
+    sportCenterEquipments: SportCenterEquipment[];
 }

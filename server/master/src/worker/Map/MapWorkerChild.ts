@@ -1,4 +1,4 @@
-import { TypePositionMapAndDistance, TypePointFourDirection } from '../../interface/map.interface';
+import { TypePositionMapAndDistance, TypePointFourDirection } from './../../interface/map.interface';
 import { BaseWorkerChild } from './../../base/BaseWorkerChild';
 import {
     destinationPointGivenDistanceAndBearingFromStartPoint,

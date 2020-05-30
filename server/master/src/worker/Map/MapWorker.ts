@@ -1,4 +1,4 @@
-import { TypePositionMapAndDistance } from '../../interface/map.interface';
+import { TypePositionMapAndDistance } from './../../interface/map.interface';
 import { BaseWorker } from './../../base/BaseWorker';
 import { TypeFilePathChild } from './../../base/BaseWorker';
 

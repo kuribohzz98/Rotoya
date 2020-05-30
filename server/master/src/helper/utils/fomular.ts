@@ -1,5 +1,5 @@
-import { HAVERSINE } from '../../constants/map.constants';
-import { TypePositionMap, TypePositionMapAndDistance } from '../../interface/map.interface';
+import { HAVERSINE } from './../../constants/map.constants';
+import { TypePositionMap, TypePositionMapAndDistance } from './../../interface/map.interface';
 
 // fomular converted to address https://www.movable-type.co.uk/scripts/latlong.html
 
