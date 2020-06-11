@@ -51,6 +51,12 @@ export class SportCenterEquipment extends BaseEntity<SportCenterEquipmentAttribu
     price: number;
 
     @Column({
+        type: 'boolean',
+        nullable: true
+    })
+    isDelete: boolean;
+
+    @Column({
         type: 'datetime',
         default: () => 'CURRENT_TIMESTAMP'
     })

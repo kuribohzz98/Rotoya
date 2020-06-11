@@ -6,6 +6,9 @@ export class TypeGetSportCenters extends BaseTypeGet implements SportCenterAttri
     @ApiProperty({ required: false })
     userId: number;
 
+    @ApiProperty({ required: false})
+    name: string;
+
     @ApiProperty({ description: '105.781477', required: false })
     longitude: number;
 

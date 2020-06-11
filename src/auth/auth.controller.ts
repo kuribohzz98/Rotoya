@@ -20,7 +20,7 @@ export class AuthController {
             }, 401)
         }
         return {
-            "message": "success"
+            message: "success"
         }
     }
 

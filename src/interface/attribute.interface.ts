@@ -119,6 +119,7 @@ export interface SportCenterEquipmentAttribute {
     sportEquipmentId?: number;
     quantity?: number;
     price?: number;
+    isDelete?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }

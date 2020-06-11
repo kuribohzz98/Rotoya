@@ -10,6 +10,9 @@ export class SportCenterEquipmentDto extends DtoMapper {
     @MapFrom()
     sportCenterId?: number;
 
+    @MapFrom()
+    sportEquipmentId?: number;
+
     @MapFrom('sportEquipment.name')
     name?: number;
 

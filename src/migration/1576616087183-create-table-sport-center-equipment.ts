@@ -41,6 +41,11 @@ export class createTableSportCenterEquipment1576616087183 implements MigrationIn
                     default: 0
                 },
                 {
+                    name: "isDelete",
+                    type: "boolean",
+                    isNullable: true
+                },
+                {
                     name: "createdAt",
                     type: "datetime",
                     isNullable: false,

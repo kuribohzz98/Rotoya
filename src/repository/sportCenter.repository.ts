@@ -32,7 +32,7 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
             .andWhere(`${sportCenter}.latitude >= :pointS`, { pointS: dataFilter.pointSouth.latitude })
             .andWhere(`${sportCenter}.longitude <= :pointE`, { pointE: dataFilter.pointEast.longitude })
             .andWhere(`${sportCenter}.longitude >= :pointW`, { pointW: dataFilter.pointWest.longitude })
-            .having(`${sportCenter}_distance < ${opts.distance}`)
+            .having(`${sportCenter}_distance ${opts.distance ? '<' + opts.distance : '> 0'}`)
             .orderBy(`${sportCenter}_distance`)
     }
 
@@ -47,6 +47,7 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
             queryBuilder.leftJoinAndSelect(`${sportCenter}.sports`, sport);
             queryBuilder.andWhere(`${sport}.${query.sportId ? 'id' : 'code'} = :sport`, { sport: query.sportId || query.sport });
         }
+        if (query.name) queryBuilder.andWhere(`${sportCenter}.name LIKE :name`, { name: '%' + query.name + '%' });
         if (query.limit) {
             queryBuilder.limit(query.limit);
             if (query.page) queryBuilder.offset((query.page - 1) * query.limit);
@@ -171,52 +172,3 @@ export class SportCenterRepository extends BaseRepository<SportCenter, SportCent
             .getMany();
     }
 }
-
-// SELECT 
-//     `alias`.`id` AS `alias_id`,
-//     `alias`.`userId` AS `alias_userId`,
-//     `alias`.`name` AS `alias_name`,
-//     `alias`.`code` AS `alias_code`,
-//     `alias`.`country` AS `alias_country`,
-//     `alias`.`city` AS `alias_city`,
-//     `alias`.`district` AS `alias_district`,
-//     `alias`.`commune` AS `alias_commune`,
-//     `alias`.`address` AS `alias_address`,
-//     `alias`.`avatar` AS `alias_avatar`,
-//     `alias`.`latitude` AS `alias_latitude`,
-//     `alias`.`longitude` AS `alias_longitude`,
-//     `alias`.`createdAt` AS `alias_createdAt`,
-//     `alias`.`updatedAt` AS `alias_updatedAt`,
-//     `sport_ground`.`id` AS `sport_ground_id`,
-//     `sport_ground`.`sportCenterId` AS `sport_ground_sportCenterId`,
-//     `sport_ground`.`sportId` AS `sport_ground_sportId`,
-//     `sport_ground`.`name` AS `sport_ground_name`,
-//     `sport_ground`.`code` AS `sport_ground_code`,
-//     `sport_ground`.`type` AS `sport_ground_type`,
-//     `sport_ground`.`avatar` AS `sport_ground_avatar`,
-//     `sport_ground`.`quantity` AS `sport_ground_quantity`,
-//     `sport_ground`.`quantityInStock` AS `sport_ground_quantityInStock`,
-//     `sport_ground`.`description` AS `sport_ground_description`,
-//     `sport_ground`.`createdAt` AS `sport_ground_createdAt`,
-//     `sport_ground`.`updatedAt` AS `sport_ground_updatedAt`,
-//     `sport_ground_time_slot`.*,
-//     `booking`.*
-// FROM
-//     `sport_center` `alias`
-//         inner JOIN
-//     `sport_ground` `sport_ground` ON `sport_ground`.`sportCenterId` = `alias`.`id`
-// 		inner JOIN
-//     `sport_ground_time_slot` `sport_ground_time_slot` ON `sport_ground`.`id` = `sport_ground_time_slot`.`sportGroundId`
-//         inner JOIN
-//     (SELECT 
-//         `booking`.`id` AS `booking_id`,
-//             `booking`.`sportGroundId` AS `booking_sportGroundId`,
-//             `booking`.`timeSlotId` AS `booking_timeSlotId`,
-//             `booking`.`bookingDate` AS `booking_bookingDate`,
-//             COUNT(*) AS `count`
-//     FROM
-//         `booking` `booking`
-// 	where `booking`.`bookingDate` LIKE "2020-01-19%"
-//     GROUP BY `booking_timeSlotId`, `booking_bookingDate`
-//     ) `booking` ON `booking_timeSlotId` = `sport_ground_time_slot`.`id`
-//     where `sport_ground`.`sportId` = 1 and (`count` < `sport_ground`.`quantity` or `count` is null);

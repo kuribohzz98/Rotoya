@@ -41,7 +41,7 @@ export abstract class BaseService<
 
     async update(id: number, opts: A): Promise<UpdateResult> {
         const entity = { id: +id } as any;
-        return this.localRepository.update(opts, entity);
+        return this.localRepository.update(entity, opts);
     }
 
     async delete(id: number): Promise<DeleteResult> {

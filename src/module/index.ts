@@ -1,3 +1,4 @@
+import { SportEquipmentModule } from './sport-equipment.module';
 import { SportCenterEquipmentModule } from './sport-center-equipment.module';
 import { SportCenterFavoriteModule } from './sport-center-favorite.module';
 import { EmailModule } from './email.module';
@@ -27,7 +28,8 @@ const Modules = [
     RequestCoOperateModule,
     EmailModule,
     SportCenterFavoriteModule,
-    SportCenterEquipmentModule
+    SportCenterEquipmentModule,
+    SportEquipmentModule
 ];
 
 export default Modules;

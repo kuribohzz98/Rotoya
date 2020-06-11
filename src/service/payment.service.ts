@@ -17,10 +17,11 @@ import { ConfigService } from './../config/config.service';
 import { PaymentAttribute } from './../interface/attribute.interface';
 import { PaymentRepository } from './../repository/payment.repository';
 import { createQrCodeAndSave } from '../helper/tools/file';
-import * as PaymentUtils from '../helper/utils/payment'; 
+import * as PaymentUtils from '../helper/utils/payment';
 import { GetFullDate } from '../helper/utils/date';
 import { SportCenterEquipmentBooking } from '../entity/SportCenterEquipmentBooking.entity';
 import { Payment } from './../entity/Payment.entity';
+import * as querystring from 'qs';
 
 
 @Injectable()
@@ -154,7 +155,7 @@ export class PaymentService implements OnModuleInit {
     async getPayment(paymentAttr: PaymentAttribute, joins?: string[]) {
         return this.paymentRepository.getOneByOptions(paymentAttr, joins);
     }
-    
+
     async getPaymentInfoByOrderId(orderId: string) {
         return this.paymentRepository.getPaymentInfo(orderId);
     }
@@ -169,6 +170,72 @@ export class PaymentService implements OnModuleInit {
         const bookingDate = GetFullDate(time || new Date());
         const payments = await this.paymentRepository.getPaymentByTimeSlotId(timeSlotId, bookingDate);
         return payments.map(payment => new PaymentInfoDto(payment));
+    }
+
+    async getPaymentBySportCenterId(sportCenterId: number, startDate: number, endDate: number) {
+        const startDate_temp = GetFullDate(startDate);
+        const endDate_temp = GetFullDate(endDate);
+        return this.paymentRepository.getPaymentBySportCenterId(sportCenterId, startDate_temp, endDate_temp);
+    }
+
+    async requestPaymentVnpayATM(requestData: RequestPaymentMomoATM, headers: any) {
+        var ipAddr = headers['x-forwarded-for'] || '172.16.68.68';
+        var tmnCode = 'B9SUBZUX';
+        var secretKey = 'PHGRRLVSAKJSEFVUYYANCZOIOYUGJTYH';
+        var vnpUrl = 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
+        var returnUrl = requestData.returnUrl; //|| this.configService.get('PUBLIC_HOST') + '/atm-inland-vnpay';
+        var date = new Date();
+        var orderId = requestData.orderId;
+        var amount = requestData.amount;
+        var bankCode = requestData.bankCode;
+        var orderInfo = 'Rotoya đặt lịch';
+        var orderType = 'topup';
+        var locale = 'vn';
+        var currCode = 'VND';
+        var vnp_Params = {};
+
+        vnp_Params['vnp_Version'] = '2';
+        vnp_Params['vnp_Command'] = 'pay';
+        vnp_Params['vnp_TmnCode'] = tmnCode;
+        vnp_Params['vnp_Locale'] = locale;
+        vnp_Params['vnp_CurrCode'] = currCode;
+        vnp_Params['vnp_TxnRef'] = orderId;
+        vnp_Params['vnp_OrderInfo'] = orderInfo;
+        vnp_Params['vnp_OrderType'] = orderType;
+        vnp_Params['vnp_Amount'] = amount * 100;
+        vnp_Params['vnp_ReturnUrl'] = returnUrl;
+        vnp_Params['vnp_IpAddr'] = ipAddr;
+        vnp_Params['vnp_CreateDate'] = 20190829103111 || date.getTime();
+        vnp_Params['vnp_BankCode'] = bankCode;
+
+        vnp_Params = this.sortObject(vnp_Params);
+
+        var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
+
+        var secureHash = PaymentUtils.hashSHA256(signData);
+
+        vnp_Params['vnp_SecureHashType'] = 'SHA256';
+        vnp_Params['vnp_SecureHash'] = secureHash;
+        vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: true });
+        return vnpUrl;
+    }
+
+    sortObject(o) {
+        var sorted = {},
+            key, a = [];
+
+        for (key in o) {
+            if (o.hasOwnProperty(key)) {
+                a.push(key);
+            }
+        }
+
+        a.sort();
+
+        for (key = 0; key < a.length; key++) {
+            sorted[a[key]] = o[a[key]];
+        }
+        return sorted;
     }
 
 }

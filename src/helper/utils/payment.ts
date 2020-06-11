@@ -30,3 +30,8 @@ export function checkBankCode(bankCode: string) {
     if (code) return true;
     return false;
 }
+
+export function hashSHA256(data) {
+    const hash = crypto.createHash('sha256').update(data).digest('hex');
+    return hash;
+}

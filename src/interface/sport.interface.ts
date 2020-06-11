@@ -7,6 +7,7 @@ export interface TypeQueryGetSportCenters extends TypePositionMapAndDistance {
     isTimeSlotBlank?: boolean;
     isByLocation?: boolean;
     userId?: number;
+    name?: string;
 }
 
 export interface TypeQueryGetSportCenter {

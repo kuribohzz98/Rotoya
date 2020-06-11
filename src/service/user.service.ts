@@ -38,7 +38,7 @@ export class UserService extends BaseService<UserRepository, User, UserAttribute
     }
 
     async createUserInfo(userInfoAttribute: UserInfoAttribute, user: User): Promise<UserInfo> {
-        if (!user) throw new Error('user is undefine');
+        if (!user) throw new Error('user is undefined');
         const userInfo = new UserInfo();
         userInfo.firstName = userInfoAttribute.firstName;
         userInfo.lastName = userInfoAttribute.lastName;

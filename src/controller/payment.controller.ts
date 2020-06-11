@@ -1,5 +1,5 @@
 import { PaymentAttribute } from './../interface/attribute.interface';
-import { Controller, Get, Post, Body, Logger, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Logger, Query, Request } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { mergeMap } from 'rxjs/operators';
 import { of, Observable, from } from 'rxjs';
@@ -74,4 +74,29 @@ export class PaymentController {
         mergeMap(query => from(this.paymentService.getPaymentByTimeSlotId(query.timeSlotId, +query.time)))
       )
   }
+
+  @Get('by-sport-center-id')
+  @ApiQuery({ name: 'sportCenterId', type: 'number', required: true })
+  @ApiQuery({ name: 'startDate', type: 'number', required: true, description: new Date().getTime().toString() })
+  @ApiQuery({ name: 'endDate', type: 'number', required: true })
+  getPaymentBySportCenterId(@Query() query: { sportCenterId: number, startDate: number, endDate: number }) {
+    return of(query)
+      .pipe(
+        mergeMap(query => from(this.paymentService.getPaymentBySportCenterId(+query.sportCenterId, +query.startDate, +query.endDate)))
+      )
+  }
+
+  @Post('atm-inland-vnpay')
+  atmInlandVnpay$(@Body() body: RequestPaymentMomoATM, @Request() req: Request) {
+    return of(body)
+      .pipe(
+        mergeMap(body => from(this.paymentService.requestPaymentVnpayATM(body, req.headers)))
+      )
+  }
+
+  @Get('atm-inland-vnpay')
+  atmInlandVnpayNotify$(@Query() query: any) {
+    return ""
+  }
+
 }

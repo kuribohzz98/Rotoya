@@ -13,6 +13,7 @@ export class SportCenterEquipmentRepository extends BaseRepository<SportCenterEq
             .leftJoinAndSelect(`${sce}.sportEquipment`, se)
             .where(`${sce}.sportCenterId = :sportCenterId`, { sportCenterId })
             .andWhere(`${se}.sportId = :sportId`, { sportId })
+            .andWhere(`${sce}.isDelete IS NULL`)
             .getMany()
     }
 }

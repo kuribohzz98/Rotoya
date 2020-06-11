@@ -20,7 +20,7 @@ export class PaymentRepository extends BaseRepository<Payment, PaymentAttribute>
             const skip = opts.limit * (opts.page - 1);
             return this.getByOptions(options, ['sportCenter', 'user', 'user.userInfo'], { take, skip, order: { createdAt: 'DESC' } }, opts.count);
         }
-        return this.getByOptions(options, ['sportCenter', 'user', 'user.userInfo'], {order: { createdAt: 'DESC' }}, opts.count);
+        return this.getByOptions(options, ['sportCenter', 'user', 'user.userInfo'], { order: { createdAt: 'DESC' } }, opts.count);
     }
 
     async getPaymentInfo(orderId: string) {
@@ -47,6 +47,20 @@ export class PaymentRepository extends BaseRepository<Payment, PaymentAttribute>
             .leftJoinAndMapOne(`${timeSlot}.sportGround`, sportGround, sportGround, `${sportGround}.id = ${timeSlot}.sportGroundId`)
             .where(`${payment}.orderId = :orderId`, { orderId })
             .getOne();
+    }
+
+    async getPaymentBySportCenterId(sportCenterId: number, startDate: string, endDate: string) {
+        const payment = this.models.payment;
+        const booking = this.models.booking;
+        const timeSlot = this.models.sport_ground_time_slot;
+        const sportGround = this.models.sport_ground;
+        return this.createQueryBuilder(payment)
+            .leftJoinAndMapMany(`${payment}.bookings`, booking, booking, `${booking}.paymentId = ${payment}.id`)
+            .leftJoinAndMapOne(`${booking}.sportGroundTimeSlot`, timeSlot, timeSlot, `${timeSlot}.id = ${booking}.timeSlotId`)
+            .leftJoinAndMapOne(`${timeSlot}.sportGround`, sportGround, sportGround, `${sportGround}.id = ${timeSlot}.sportGroundId`)
+            .where(`${payment}.sportCenterId = :sportCenterId`, { sportCenterId })
+            .andWhere(`${booking}.bookingDate BETWEEN :startDate AND :endDate`, { startDate, endDate })
+            .getMany();
     }
 
     async getPaymentByTimeSlotId(timeSlotId: number, bookingDate: string) {
