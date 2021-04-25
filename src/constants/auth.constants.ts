@@ -1,4 +1,4 @@
 export enum RoleCode {
-    ADMIN = 'ADMIN',
-    PROVIDER = 'PROVIDER'
+  ADMIN = 'ADMIN',
+  PROVIDER = 'PROVIDER',
 }

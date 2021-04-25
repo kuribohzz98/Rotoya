@@ -2,22 +2,35 @@ import { SportEquipmentType } from './type/sport-equipment.type';
 import { SportEquipmentService } from './../service/sport-equipment.service';
 import { SportType } from './type/sport.type';
 import { SportDto } from './../dto/sport.dto';
-import { Controller, Get, Query, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Param,
+  Post,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BaseController } from './../base/BaseController';
 import { SportEquipment } from './../entity/SportEquipment.entity';
 
 @ApiTags('sport-equipment')
 @Controller('sport-equipment')
-export class SportEquipmentController extends BaseController<SportEquipmentService, SportEquipmentType, SportEquipment> {
-  constructor(
-    private readonly sportEquipmentService: SportEquipmentService
-  ) {
+export class SportEquipmentController extends BaseController<
+  SportEquipmentService,
+  SportEquipmentType,
+  SportEquipment
+> {
+  constructor(private readonly sportEquipmentService: SportEquipmentService) {
     super(sportEquipmentService);
   }
 
   @Get()
-  async get(@Query() query: SportEquipmentType): Promise<SportEquipment[] | [SportEquipment[], number]> {
+  async get(
+    @Query() query: SportEquipmentType,
+  ): Promise<SportEquipment[] | [SportEquipment[], number]> {
     const data = await this.getBase(query);
     return data;
   }

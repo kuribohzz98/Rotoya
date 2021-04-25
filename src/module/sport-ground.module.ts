@@ -5,11 +5,9 @@ import { SportGroundService } from './../service/sport-ground.service';
 import { SportGroundRepository } from './../repository/sport-ground.repository';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([SportGroundRepository])
-    ],
-    providers: [SportGroundService],
-    controllers: [SportGroundController],
-    exports: [SportGroundService]
+  imports: [TypeOrmModule.forFeature([SportGroundRepository])],
+  providers: [SportGroundService],
+  controllers: [SportGroundController],
+  exports: [SportGroundService],
 })
-export class SportGroundModule { }
+export class SportGroundModule {}

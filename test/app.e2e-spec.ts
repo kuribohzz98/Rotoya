@@ -25,11 +25,10 @@ describe('AppController (e2e)', () => {
   it('/sport/1 (GET)', () => {
     return request(app.getHttpServer())
       .get('/sport/1')
-      .expect(200)
-      .expect(`{
+      .expect(200).expect(`{
         "id": 1,
         "name": "soccer",
         "code": "SOCCER"
-      }`)
+      }`);
   });
 });

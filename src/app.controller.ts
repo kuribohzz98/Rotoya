@@ -6,9 +6,9 @@ import * as QRCode from 'qrcode/lib';
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService
-    // private readonly roleRepository: RoleRepository
-  ) { }
+    private readonly appService: AppService,
+  ) // private readonly roleRepository: RoleRepository
+  {}
 
   @Get()
   getHello(): string {
@@ -18,10 +18,12 @@ export class AppController {
   @Get('/a')
   async getA() {
     // return await this.roleRepository.getByOptions({id: 1});
-    QRCode.toDataURL('kdbfkjhdsafijhdasojfhjkldbnasbdmnavbdmhaskjhaskldhkjlash', function (err, url) {
-      console.log(url)
-    })
-    return 'a'
+    QRCode.toDataURL(
+      'kdbfkjhdsafijhdasojfhjkldbnasbdmnavbdmhaskjhaskldhkjlash',
+      function(err, url) {
+        console.log(url);
+      },
+    );
+    return 'a';
   }
-
 }

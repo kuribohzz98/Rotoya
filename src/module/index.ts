@@ -15,21 +15,21 @@ import { SportModule } from './sport.module';
 import { UserModule } from './user.module';
 
 const Modules = [
-    UserModule,
-    SportModule,
-    RpcModule,
-    PaymentModule,
-    MapModule,
-    BookingModule,
-    ImageModule,
-    SportCenterModule,
-    SportGroundModule,
-    SportGroundTimeSlotModule,
-    RequestCoOperateModule,
-    EmailModule,
-    SportCenterFavoriteModule,
-    SportCenterEquipmentModule,
-    SportEquipmentModule
+  UserModule,
+  SportModule,
+  RpcModule,
+  PaymentModule,
+  MapModule,
+  BookingModule,
+  ImageModule,
+  SportCenterModule,
+  SportGroundModule,
+  SportGroundTimeSlotModule,
+  RequestCoOperateModule,
+  EmailModule,
+  SportCenterFavoriteModule,
+  SportCenterEquipmentModule,
+  SportEquipmentModule,
 ];
 
 export default Modules;

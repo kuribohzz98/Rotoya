@@ -10,43 +10,53 @@ import { User } from './../entity/User.entity';
 import { RandomPassword } from './../helper/utils/common';
 
 type PasswordData = {
-  salt: string,
-  password: string,
-  iterations: number
-}
+  salt: string;
+  password: string;
+  iterations: number;
+};
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
-    private readonly emailService: EmailService
-  ) { }
+    private readonly emailService: EmailService,
+  ) {}
 
   async login(userLogin: UserLoginDto) {
     try {
-      const user = await this.userService.getInfoUser({ username: userLogin.username });
+      const user = await this.userService.getInfoUser({
+        username: userLogin.username,
+      });
       console.log(user);
       if (!user) {
         throw new Error('User not found');
       }
-      if (!this.isPasswordCorrect(user.password, userLogin.password, user.salt, user.iterations)) {
+      if (
+        !this.isPasswordCorrect(
+          user.password,
+          userLogin.password,
+          user.salt,
+          user.iterations,
+        )
+      ) {
         throw new Error('Incorrect password');
       }
       const payload = { username: user.username, sub: user.id };
       const userProfile = new UserProfileDto(user);
       return {
         access_token: this.jwtService.sign(payload),
-        user: userProfile
+        user: userProfile,
       };
-    }
-    catch (e) {
+    } catch (e) {
       return e.message;
     }
   }
 
   async signUp(userCreate: UserCreateDto): Promise<UserAttribute & User> {
-    const userInvaild = await this.userService.getUserByName(userCreate.username);
+    const userInvaild = await this.userService.getUserByName(
+      userCreate.username,
+    );
     if (userInvaild) {
       return;
     }
@@ -72,7 +82,10 @@ export class AuthService {
   async changePassword(data: UserLoginDto): Promise<boolean> {
     const hashPassword = this.hashPassword(data.password);
     try {
-      await this.userService.updateByAttribute({ username: data.username }, { ...hashPassword, isNew: null });
+      await this.userService.updateByAttribute(
+        { username: data.username },
+        { ...hashPassword, isNew: null },
+      );
     } catch (e) {
       return false;
     }
@@ -80,19 +93,23 @@ export class AuthService {
   }
 
   async forgetPassword(email: string) {
-    if (!email) throw new Error('email is undefine')
+    if (!email) throw new Error('email is undefine');
     const user = await this.userService.getUserByEmail(email);
     if (!user) throw new Error('Email chưa được đăng ký');
     const new_password = RandomPassword();
     const new_password_hash = this.hashPassword(new_password);
-    const update = await this.userService.update(user.id, {...new_password_hash, isNew: true});
+    const update = await this.userService.update(user.id, {
+      ...new_password_hash,
+      isNew: true,
+    });
     if (update) {
-      await this.emailService.sendMail([user.userInfo.email],
+      await this.emailService.sendMail(
+        [user.userInfo.email],
         'Rotoya Cấp lại mật khẩu',
         `Mật khẩu mới của bạn là:\n
         Tên đăng nhập: ${user.username}\n
         Mật Khẩu: ${new_password}\n
-        Vui lòng đăng nhập và đổi lại mật khẩu mới.`
+        Vui lòng đăng nhập và đổi lại mật khẩu mới.`,
       );
     }
     return true;
@@ -105,12 +122,19 @@ export class AuthService {
     return { salt, password: hash, iterations };
   }
 
-  private isPasswordCorrect(savedHash: string, password: any, salt: any, iterations: number): boolean {
+  private isPasswordCorrect(
+    savedHash: string,
+    password: any,
+    salt: any,
+    iterations: number,
+  ): boolean {
     return savedHash == this.hashString(password, salt, iterations);
   }
 
   private hashString(password: any, salt: any, iterations: number): string {
-    return crypto.pbkdf2Sync(password, salt, iterations, 64, 'sha512').toString('hex');
+    return crypto
+      .pbkdf2Sync(password, salt, iterations, 64, 'sha512')
+      .toString('hex');
   }
 
   private randomIterations(): number {

@@ -9,16 +9,13 @@ import { Module, forwardRef } from '@nestjs/common';
 import { PaymentModule } from './payment.module';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([
-            BookingRepository,
-            TimeSlotRepository
-        ]),
-        PaymentModule,
-        forwardRef(() => QueueModule)
-    ],
-    providers: [BookingService],
-    controllers: [BookingController],
-    exports: [BookingService]
+  imports: [
+    TypeOrmModule.forFeature([BookingRepository, TimeSlotRepository]),
+    PaymentModule,
+    forwardRef(() => QueueModule),
+  ],
+  providers: [BookingService],
+  controllers: [BookingController],
+  exports: [BookingService],
 })
-export class BookingModule { }
+export class BookingModule {}

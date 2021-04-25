@@ -1,4 +1,13 @@
-import { Controller, Get, Query, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Param,
+  Post,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SportCenterFavorite } from './../entity/SportCenterFavorite.entity';
 import { SportCenterFavoriteType } from './type/sport-center-favorite.type';
@@ -7,15 +16,20 @@ import { BaseController } from './../base/BaseController';
 
 @ApiTags('sport-center-favorite')
 @Controller('sport-center-favorite')
-export class SportCenterFavoriteController extends BaseController<SportCenterFavoriteService, SportCenterFavoriteType> {
+export class SportCenterFavoriteController extends BaseController<
+  SportCenterFavoriteService,
+  SportCenterFavoriteType
+> {
   constructor(
-    private readonly sportCenterFavoriteService: SportCenterFavoriteService
+    private readonly sportCenterFavoriteService: SportCenterFavoriteService,
   ) {
     super(sportCenterFavoriteService);
   }
 
   @Get()
-  async get(@Query() query: SportCenterFavoriteType): Promise<SportCenterFavorite[] | [SportCenterFavorite[], number]> {
+  async get(
+    @Query() query: SportCenterFavoriteType,
+  ): Promise<SportCenterFavorite[] | [SportCenterFavorite[], number]> {
     const data = await this.getBase(query);
     return data;
   }

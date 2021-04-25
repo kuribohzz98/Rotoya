@@ -10,16 +10,13 @@ import Modules from './module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({keepConnectionAlive: true,}),
+    TypeOrmModule.forRoot({ keepConnectionAlive: true }),
     ...Modules,
     ConfigModule,
     AuthModule,
-    QueueModule
+    QueueModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    ...ProvidersConfig
-  ]
+  providers: [AppService, ...ProvidersConfig],
 })
-export class AppModule { }
+export class AppModule {}

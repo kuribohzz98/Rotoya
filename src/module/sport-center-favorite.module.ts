@@ -4,13 +4,10 @@ import { SportCenterFavoriteController } from './../controller/sport-center-favo
 import { SportCenterFavoriteService } from './../service/sport-center-favorite.service';
 import { SportCenterFavoriteRepository } from './../repository/sport-center-favorite.repository';
 
-
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([SportCenterFavoriteRepository])
-    ],
-    providers: [SportCenterFavoriteService],
-    controllers: [SportCenterFavoriteController],
-    exports: [SportCenterFavoriteService]
+  imports: [TypeOrmModule.forFeature([SportCenterFavoriteRepository])],
+  providers: [SportCenterFavoriteService],
+  controllers: [SportCenterFavoriteController],
+  exports: [SportCenterFavoriteService],
 })
-export class SportCenterFavoriteModule { }
+export class SportCenterFavoriteModule {}

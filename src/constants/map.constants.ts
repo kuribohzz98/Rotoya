@@ -1,3 +1,3 @@
 export const HAVERSINE = {
-    R_Earth: 6371.0710
-}
+  R_Earth: 6371.071,
+};

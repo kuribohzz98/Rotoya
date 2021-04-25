@@ -1,40 +1,33 @@
 import { TypeWorkerData } from './../interface/type.interface';
-import {
-    isMainThread,
-    workerData,
-    parentPort
-} from 'worker_threads';
+import { isMainThread, workerData, parentPort } from 'worker_threads';
 
 export class BaseWorkerChild<T = any> {
-    private _workerData: TypeWorkerData<T>;
+  private _workerData: TypeWorkerData<T>;
 
-    constructor() {
-        this._workerData = workerData;
-        this.init();
-    }
+  constructor() {
+    this._workerData = workerData;
+    this.init();
+  }
 
-    init() {
-    }
+  init() {}
 
-    get WorkerData() {
-        return this._workerData;
-    }
+  get WorkerData() {
+    return this._workerData;
+  }
 
-    get isMainThread() {
-        return isMainThread;
-    }
+  get isMainThread() {
+    return isMainThread;
+  }
 
-    dataExit(dataExit) {
-        parentPort.postMessage(dataExit);
-        this.done();
-    }
+  dataExit(dataExit) {
+    parentPort.postMessage(dataExit);
+    this.done();
+  }
 
-    async done() {
-        await this.onDestroy();
-        process.exit(1);
-    }
+  async done() {
+    await this.onDestroy();
+    process.exit(1);
+  }
 
-    async onDestroy() {
-
-    }
+  async onDestroy() {}
 }
