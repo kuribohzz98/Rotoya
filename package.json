@@ -24,6 +24,11 @@
     "migration:run": "npm run typeorm migration:run",
     "entity:create": "typeorm entity:create -n"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "dependencies": {
     "@nestjs/common": "^6.7.2",
     "@nestjs/core": "^6.7.2",
@@ -63,6 +68,7 @@
     "@types/node": "^12.7.5",
     "@types/passport-jwt": "^3.0.3",
     "@types/supertest": "^2.0.8",
+    "husky": "^6.0.0",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
     "supertest": "^4.0.2",
