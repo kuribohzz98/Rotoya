@@ -22,7 +22,8 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:create": "typeorm migration:create -n",
     "migration:run": "npm run typeorm migration:run",
-    "entity:create": "typeorm entity:create -n"
+    "entity:create": "typeorm entity:create -n",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
