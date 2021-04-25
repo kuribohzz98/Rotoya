@@ -1,4 +1,13 @@
-import { Controller, Get, Query, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Param,
+  Post,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SportCenterEquipmentDto } from './../dto/sport-center-equipment.dto';
 import { SportCenterEquipmentType } from './type/sport-center-equipment.type';
@@ -7,15 +16,21 @@ import { BaseController } from './../base/BaseController';
 
 @ApiTags('sport-center-equipment')
 @Controller('sport-center-equipment')
-export class SportCenterEquipmentController extends BaseController<SportCenterEquipmentService, SportCenterEquipmentType, SportCenterEquipmentDto> {
+export class SportCenterEquipmentController extends BaseController<
+  SportCenterEquipmentService,
+  SportCenterEquipmentType,
+  SportCenterEquipmentDto
+> {
   constructor(
-    private readonly sportCenterEquipmentService: SportCenterEquipmentService
+    private readonly sportCenterEquipmentService: SportCenterEquipmentService,
   ) {
     super(sportCenterEquipmentService);
   }
 
   @Get()
-  async get(@Query() query: SportCenterEquipmentType): Promise<SportCenterEquipmentDto[] | [SportCenterEquipmentDto[], number]> {
+  async get(
+    @Query() query: SportCenterEquipmentType,
+  ): Promise<SportCenterEquipmentDto[] | [SportCenterEquipmentDto[], number]> {
     const data = await this.getBase(query);
     return data;
   }

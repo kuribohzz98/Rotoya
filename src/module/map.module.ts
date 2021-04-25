@@ -6,12 +6,9 @@ import { RpcModule } from './prc.module';
 import { Module } from '@nestjs/common';
 
 @Module({
-    imports: [
-        RpcModule,
-        TypeOrmModule.forFeature([SportCenterRepository])
-    ],
-    providers: [MapService],
-    controllers: [MapController],
-    exports: [MapService]
+  imports: [RpcModule, TypeOrmModule.forFeature([SportCenterRepository])],
+  providers: [MapService],
+  controllers: [MapController],
+  exports: [MapService],
 })
-export class MapModule { }
+export class MapModule {}

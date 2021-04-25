@@ -8,8 +8,8 @@ import { ApiTags, ApiQuery } from '@nestjs/swagger';
 export class MapController {
   constructor(
     private readonly rpcService: RpcService,
-    private readonly mapService: MapService
-  ) { }
+    private readonly mapService: MapService,
+  ) {}
 
   // @Get('getPointFourDirection')
   // @ApiQuery({ name: 'longitude' })

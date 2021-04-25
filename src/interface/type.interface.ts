@@ -1,4 +1,4 @@
 export interface TypeWorkerData<T> {
-    path: string;
-    data: T;
+  path: string;
+  data: T;
 }

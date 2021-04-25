@@ -9,30 +9,30 @@ import { ImageController } from './../controller/image.controller';
 import { ImageService } from './../service/image.service';
 
 const editFileName = (req, file, callback) => {
-    const filename = uuid() + extname(file.originalname);
-    callback(null, filename);
+  const filename = uuid() + extname(file.originalname);
+  callback(null, filename);
 };
 
 @Module({
-    imports: [
-        MulterModule.registerAsync({
-            imports: [ConfigModule],
-            useFactory: (configService: ConfigService) => ({
-                storage: diskStorage({
-                    destination: configService.get('path_file_upload'),
-                    filename: editFileName.bind(this)
-                }),
-                fileFilter: (req, file, callback) => {
-                    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-                        return callback(new Error('Only image files are allowed!'), false);
-                    }
-                    callback(null, true);
-                }
-            }),
-            inject: [ConfigService]
-        })
-    ],
-    providers: [ImageService],
-    controllers: [ImageController]
+  imports: [
+    MulterModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        storage: diskStorage({
+          destination: configService.get('path_file_upload'),
+          filename: editFileName.bind(this),
+        }),
+        fileFilter: (req, file, callback) => {
+          if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+            return callback(new Error('Only image files are allowed!'), false);
+          }
+          callback(null, true);
+        },
+      }),
+      inject: [ConfigService],
+    }),
+  ],
+  providers: [ImageService],
+  controllers: [ImageController],
 })
-export class ImageModule { }
+export class ImageModule {}

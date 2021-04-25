@@ -7,15 +7,13 @@ import { AuthModule } from './../auth/auth.module';
 import { EmailModule } from './email.module';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([RequestCoOperateRepository]),
-        AuthModule,
-        EmailModule
-    ],
-    providers: [
-        RequestCoOperateService
-    ],
-    controllers: [RequestCoOperateController],
-    exports: [RequestCoOperateService]
+  imports: [
+    TypeOrmModule.forFeature([RequestCoOperateRepository]),
+    AuthModule,
+    EmailModule,
+  ],
+  providers: [RequestCoOperateService],
+  controllers: [RequestCoOperateController],
+  exports: [RequestCoOperateService],
 })
-export class RequestCoOperateModule { }
+export class RequestCoOperateModule {}

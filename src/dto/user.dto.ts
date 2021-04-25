@@ -5,74 +5,77 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
 export class UserInfo extends DtoMapper {
-    @MapFrom()
-    firstName: string;
+  @MapFrom()
+  firstName: string;
 
-    @MapFrom()
-    lastName: string;
+  @MapFrom()
+  lastName: string;
 
-    @MapFrom()
-    phone: number;
+  @MapFrom()
+  phone: number;
 
-    @MapFrom()
-    address: string;
+  @MapFrom()
+  address: string;
 
-    @MapFrom()
-    email: string;
+  @MapFrom()
+  email: string;
 
-    @MapFrom()
-    gender: string;
+  @MapFrom()
+  gender: string;
 }
 
 export class UserMeta extends DtoMapper {
-    @MapFrom()
-    avatar: string;
+  @MapFrom()
+  avatar: string;
 }
 
 export class UserProfileDto extends DtoMapper {
-    @MapFrom()
-    id: number;
+  @MapFrom()
+  id: number;
 
-    @MapFrom()
-    username: string;
+  @MapFrom()
+  username: string;
 
-    @MapFrom()
-    isNew: boolean;
+  @MapFrom()
+  isNew: boolean;
 
-    @MapFrom('userInfo', UserInfo)
-    userInfo: UserInfo;
+  @MapFrom('userInfo', UserInfo)
+  userInfo: UserInfo;
 
-    @MapFrom('userMeta', UserMeta)
-    userMeta: UserMeta;
+  @MapFrom('userMeta', UserMeta)
+  userMeta: UserMeta;
 
-    @MapFrom('roles', role => {
-        if (role) return role.code;
-    }, true)
-    roles: string[];
+  @MapFrom(
+    'roles',
+    role => {
+      if (role) return role.code;
+    },
+    true,
+  )
+  roles: string[];
 }
 
 export class UserCreateDto {
-    @ApiProperty({ required: false })
-    username: string;
+  @ApiProperty({ required: false })
+  username: string;
 
-    @ApiProperty({ required: false })
-    password: string;
+  @ApiProperty({ required: false })
+  password: string;
 
-    @ApiProperty({ required: false })
-    type: string;
+  @ApiProperty({ required: false })
+  type: string;
 
-    @ApiProperty({ required: false })
-    userInfo: UserInfo;
+  @ApiProperty({ required: false })
+  userInfo: UserInfo;
 
-    @ApiProperty({ type: [String], enum: RoleCode, required: false })
-    roles: RoleCode[];
+  @ApiProperty({ type: [String], enum: RoleCode, required: false })
+  roles: RoleCode[];
 }
 
 export class UserLoginDto {
-    @ApiProperty()
-    username?: string;
+  @ApiProperty()
+  username?: string;
 
-    @ApiProperty()
-    password?: string;
-
+  @ApiProperty()
+  password?: string;
 }

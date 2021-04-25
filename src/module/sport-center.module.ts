@@ -7,15 +7,9 @@ import { SportCenterRepository } from './../repository/sportCenter.repository';
 import { SportCenterController } from './../controller/sport-center.controller';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([SportCenterRepository]),
-        RpcModule
-    ],
-    providers: [
-        SportCenterService,
-        SportHanderService
-    ],
-    controllers: [SportCenterController],
-    exports: [SportCenterService]
+  imports: [TypeOrmModule.forFeature([SportCenterRepository]), RpcModule],
+  providers: [SportCenterService, SportHanderService],
+  controllers: [SportCenterController],
+  exports: [SportCenterService],
 })
-export class SportCenterModule { }
+export class SportCenterModule {}

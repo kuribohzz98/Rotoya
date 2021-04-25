@@ -9,9 +9,7 @@ import { cloneFilterObject } from './../helper/utils/common';
 @ApiTags('Booking')
 @Controller('booking')
 export class BookingController {
-  constructor(
-    private readonly bookingService: BookingService
-  ) { }
+  constructor(private readonly bookingService: BookingService) {}
 
   @Post('bookSportGround')
   bookSportGround$(@Body() book: BookSportGroundBody) {

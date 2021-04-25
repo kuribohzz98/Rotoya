@@ -5,11 +5,9 @@ import { TimeSlotRepository } from './../repository/timeslot.repository';
 import { SportGroundTimeSlotController } from '../controller/sport-ground-time-slot.controller';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([TimeSlotRepository])
-    ],
-    providers: [SportGroundTimeSlotService],
-    controllers: [SportGroundTimeSlotController],
-    exports: [SportGroundTimeSlotService]
+  imports: [TypeOrmModule.forFeature([TimeSlotRepository])],
+  providers: [SportGroundTimeSlotService],
+  controllers: [SportGroundTimeSlotController],
+  exports: [SportGroundTimeSlotService],
 })
-export class SportGroundTimeSlotModule { }
+export class SportGroundTimeSlotModule {}

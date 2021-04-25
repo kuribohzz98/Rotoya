@@ -6,12 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module, HttpModule } from '@nestjs/common';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([PaymentRepository, BookingRepository]),
-        HttpModule
-    ],
-    providers: [PaymentService],
-    controllers: [PaymentController],
-    exports: [PaymentService]
+  imports: [
+    TypeOrmModule.forFeature([PaymentRepository, BookingRepository]),
+    HttpModule,
+  ],
+  providers: [PaymentService],
+  controllers: [PaymentController],
+  exports: [PaymentService],
 })
-export class PaymentModule { }
+export class PaymentModule {}

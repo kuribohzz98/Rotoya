@@ -1,4 +1,7 @@
-import { TypePositionMapAndDistance, TypePointFourDirection } from './../interface/map.interface';
+import {
+  TypePositionMapAndDistance,
+  TypePointFourDirection,
+} from './../interface/map.interface';
 import { ProviderRepository } from './../constants/provider.constants';
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -6,15 +9,21 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class RpcService {
-    constructor(
-        @Inject(ProviderRepository.PRC_REDIS_PROVIDER) private readonly client: ClientProxy
-    ) { }
+  constructor(
+    @Inject(ProviderRepository.PRC_REDIS_PROVIDER)
+    private readonly client: ClientProxy,
+  ) {
+    console.log('_____');
+    console.log(this.client);
+  }
 
-    sendTest(): Observable<any> {
-        return this.client.send('test', '___ahihi___');
-    }
+  sendTest(): Observable<any> {
+    return this.client.send('test', '___ahihi___');
+  }
 
-    getLimitPoints(data: TypePositionMapAndDistance): Observable<TypePointFourDirection> {
-        return this.client.send('GetLimitPoints', data);
-    }
+  getLimitPoints(
+    data: TypePositionMapAndDistance,
+  ): Observable<TypePointFourDirection> {
+    return this.client.send('GetLimitPoints', data);
+  }
 }

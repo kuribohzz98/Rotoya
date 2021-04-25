@@ -1,16 +1,16 @@
 export enum EUserStatus {
-    ACTIVE = "ACTIVE",
-    DEACTIVE = "DEACTIVE"
+  ACTIVE = 'ACTIVE',
+  DEACTIVE = 'DEACTIVE',
 }
 
 export enum EUserInfoGender {
-    Other = "Other",
-    Male = "Male",
-    Female = "Female"
+  Other = 'Other',
+  Male = 'Male',
+  Female = 'Female',
 }
 
 export enum ECoOperateStatus {
-    REJECTED = "REJECTED",
-    APPROVED = "APPROVED",
-    WAITTING = "WAITTING"
+  REJECTED = 'REJECTED',
+  APPROVED = 'APPROVED',
+  WAITTING = 'WAITTING',
 }

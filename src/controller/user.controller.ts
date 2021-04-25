@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Query, Post, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  Post,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserType } from './type/user.type';
 import { UserProfileDto } from './../dto/user.dto';
@@ -7,11 +16,13 @@ import { BaseController } from './../base/BaseController';
 
 @ApiTags('User')
 @Controller('user')
-export class UserController extends BaseController<UserService, UserType, UserProfileDto> {
-  constructor(
-    private readonly userService: UserService
-  ) {
-    super(userService)
+export class UserController extends BaseController<
+  UserService,
+  UserType,
+  UserProfileDto
+> {
+  constructor(private readonly userService: UserService) {
+    super(userService);
   }
 
   // @Get(':id')
@@ -21,7 +32,9 @@ export class UserController extends BaseController<UserService, UserType, UserPr
   // }
 
   @Get()
-  async get(@Query() query: UserType): Promise<UserProfileDto[] | [UserProfileDto[], number]> {
+  async get(
+    @Query() query: UserType,
+  ): Promise<UserProfileDto[] | [UserProfileDto[], number]> {
     const data = await this.getBase(query);
     return data;
   }
